@@ -1,466 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carease Control Corner</title>
-<link rel="icon" href="logo.png" type="image/png">
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  body {
-    font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif;
-    background: #F5C518;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
+import os
+import secrets
+import logging
+from datetime import datetime, timedelta, timezone
+from flask import Flask, request, redirect, jsonify, session
+from flask_cors import CORS
+from dotenv import load_dotenv
+from intuitlib.client import AuthClient
+from intuitlib.enums import Scopes
+from supabase import create_client
+import requests
 
-  .bg-shape {
-    position: fixed;
-    border-radius: 50%;
-    opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    filter: blur(40px);
-  }
-  .shape-1 { width: 400px; height: 400px; background: #FF6B9D; top: -100px; left: -100px; animation: float1 18s ease-in-out infinite; }
-  .shape-2 { width: 500px; height: 500px; background: #4ECDC4; top: 40%; right: -150px; animation: float2 22s ease-in-out infinite; }
-  .shape-3 { width: 350px; height: 350px; background: #A78BFA; bottom: -50px; left: 30%; animation: float3 20s ease-in-out infinite; }
-  .shape-4 { width: 280px; height: 280px; background: #FB923C; top: 20%; left: 45%; animation: float4 25s ease-in-out infinite; }
-  .shape-5 { width: 300px; height: 300px; background: #10B981; bottom: 25%; right: 20%; animation: float5 24s ease-in-out infinite; }
+from qb import qb_query, qb_get
+from categorize import categorize_line
+from run import run_for_pc
 
-  @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(150px, 100px) scale(1.15); } }
-  @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-120px, -80px) scale(0.9); } }
-  @keyframes float3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(80px, -120px) scale(1.1); } }
-  @keyframes float4 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-100px, 80px) rotate(180deg); } }
-  @keyframes float5 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px, -60px) scale(1.2); } }
+load_dotenv()
 
-  .glass {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+log = logging.getLogger('carease')
 
-  .content { position: relative; z-index: 10; }
+app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET', secrets.token_hex(32))
 
-  .logo-c {
-    display: inline-block;
-    background: #F5C518;
-    color: #1a1a1a;
-    font-weight: 900;
-    font-size: 44px;
-    line-height: 1;
-    padding: 4px 12px 8px 12px;
-    border-radius: 8px;
-    border: 3px solid #1a1a1a;
-    box-shadow: 4px 4px 0 #1a1a1a;
-  }
+CORS(app, origins=["https://yides52.github.io", "http://localhost:5500", "http://127.0.0.1:5500"])
 
-  .btn-primary {
-    background: #1a1a1a;
-    color: #F5C518;
-    font-weight: 700;
-    transition: all 0.15s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 #F5C518; }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+sb = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_SERVICE_KEY'))
 
-  .btn-secondary {
-    background: white;
-    color: #1a1a1a;
-    font-weight: 600;
-    border: 2px solid #1a1a1a;
-    transition: all 0.15s;
-  }
-  .btn-secondary:hover { background: #F5C518; }
+def get_auth_client():
+    return AuthClient(
+        client_id=os.getenv('INTUIT_CLIENT_ID'),
+        client_secret=os.getenv('INTUIT_CLIENT_SECRET'),
+        redirect_uri=os.getenv('INTUIT_REDIRECT_URI'),
+        environment=os.getenv('INTUIT_ENVIRONMENT', 'production')
+    )
 
-  .status-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 6px;
-  }
-  .status-done { background: #10B981; }
-  .status-error { background: #EF4444; }
-  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
-  .status-idle { background: #94A3B8; }
+def api_base():
+    return 'https://quickbooks.api.intuit.com' if os.getenv('INTUIT_ENVIRONMENT') == 'production' else 'https://sandbox-quickbooks.api.intuit.com'
 
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+@app.route('/')
+def home():
+    return jsonify({"app": "Carease Intercompany", "status": "running"})
 
-  .spinner {
-    border: 3px solid rgba(0,0,0,0.1);
-    border-top-color: #1a1a1a;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+@app.route('/health')
+def health():
+    return jsonify({"ok": True})
 
-  details summary { cursor: pointer; user-select: none; }
-  details summary::-webkit-details-marker { display: none; }
-  details[open] summary .arrow { transform: rotate(90deg); }
-  .arrow { display: inline-block; transition: transform 0.2s; }
+@app.route('/connect')
+def connect():
+    role = request.args.get('role', 'pc')
+    session['pending_role'] = role
+    auth_client = get_auth_client()
+    return redirect(auth_client.get_authorization_url([Scopes.ACCOUNTING]))
 
-  .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-backdrop.open { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 16px;
-    max-width: 900px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border: 3px solid #1a1a1a;
-    box-shadow: 8px 8px 0 #F5C518;
-  }
-</style>
-</head>
-<body>
+@app.route('/oauth/callback')
+def oauth_callback():
+    code = request.args.get('code')
+    realm_id = request.args.get('realmId')
+    error = request.args.get('error')
+    role = session.get('pending_role', 'pc')
 
-<div class="bg-shape shape-1"></div>
-<div class="bg-shape shape-2"></div>
-<div class="bg-shape shape-3"></div>
-<div class="bg-shape shape-4"></div>
-<div class="bg-shape shape-5"></div>
+    if error:
+        return jsonify({"error": error}), 400
+    if not code or not realm_id:
+        return jsonify({"error": "Missing code or realmId"}), 400
 
-<div class="content max-w-6xl mx-auto px-4 py-8">
+    try:
+        auth_client = get_auth_client()
+        auth_client.get_bearer_token(code, realm_id=realm_id)
 
-  <header class="flex items-center justify-between mb-8">
-    <div class="flex items-center gap-4">
-      <div class="logo-c">c</div>
-      <div>
-        <h1 class="text-3xl font-black text-black">CAREASE INTERCOMPANY</h1>
-        <p class="text-sm text-black/70 font-medium">Automated monthly intercompany billing</p>
-      </div>
-    </div>
-    <div class="flex gap-2">
-      <button onclick="connectMain()" class="btn-secondary px-4 py-2 rounded-lg text-sm">+ Main</button>
-      <button onclick="connectPC()" class="btn-primary px-4 py-2 rounded-lg text-sm">+ PC</button>
-    </div>
-  </header>
+        r = requests.get(
+            f'{api_base()}/v3/company/{realm_id}/companyinfo/{realm_id}',
+            headers={'Authorization': f'Bearer {auth_client.access_token}', 'Accept': 'application/json'}
+        )
+        company_name = r.json().get('CompanyInfo', {}).get('CompanyName', 'Unknown')
+        expires_at = datetime.now(timezone.utc) + timedelta(seconds=auth_client.expires_in)
 
-  <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
-    <h2 class="text-xl font-black mb-4">Run Period</h2>
-    <div class="flex flex-wrap gap-4 items-end">
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wide mb-1">Start Date</label>
-        <input id="startDate" type="date" class="border-2 border-black rounded-lg px-3 py-2 font-mono">
-      </div>
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wide mb-1">End Date</label>
-        <input id="endDate" type="date" class="border-2 border-black rounded-lg px-3 py-2 font-mono">
-      </div>
-      <div class="flex items-center gap-2">
-        <input id="dryRunToggle" type="checkbox" checked class="w-5 h-5 accent-black">
-        <label for="dryRunToggle" class="font-bold">Dry Run (preview only)</label>
-      </div>
-      <button onclick="runAll()" class="btn-primary px-6 py-2 rounded-lg ml-auto">▶ RUN ALL PCS</button>
-    </div>
-    <p class="text-xs text-black/60 mt-3">Dry Run shows what would happen without touching QBO. Uncheck to run for real.</p>
-  </div>
+        sb.table('companies').upsert({
+            'realm_id': realm_id, 'name': company_name, 'role': role,
+            'access_token': auth_client.access_token,
+            'refresh_token': auth_client.refresh_token,
+            'token_expires_at': expires_at.isoformat()
+        }, on_conflict='realm_id').execute()
 
-  <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-black">Connected Companies</h2>
-      <button onclick="loadCompanies()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
-    </div>
-    <div id="companiesLoading" class="text-center py-8"><div class="spinner"></div></div>
-    <div id="companiesList"></div>
-  </div>
+        return redirect(f'https://yides52.github.io/carease-intercompany-dashboard/?connected={realm_id}')
+    except Exception as e:
+        log.exception(f"OAuth callback failed: {e}")
+        return jsonify({"error": "auth_failed", "detail": str(e)}), 500
 
-  <div class="glass rounded-2xl p-6 shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-black">Recent Runs</h2>
-      <button onclick="loadRuns()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
-    </div>
-    <div id="runsList" class="text-black/60 text-sm">Loading...</div>
-  </div>
+@app.route('/disconnect')
+def disconnect():
+    realm_id = request.args.get('realmId')
+    if realm_id:
+        sb.table('companies').delete().eq('realm_id', realm_id).execute()
+    return jsonify({"disconnected": True, "realm_id": realm_id})
 
-</div>
+@app.route('/sync/<realm_id>')
+def sync_pc_data(realm_id):
+    r = sb.table('companies').select('id,name,role').eq('realm_id', realm_id).limit(1).execute()
+    if not r.data:
+        return jsonify({"error": "not_found"}), 404
+    company = r.data[0]
+    company_id = company['id']
 
-<div id="modal" class="modal-backdrop" onclick="if(event.target===this) closeModal()">
-  <div class="modal p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 id="modalTitle" class="text-xl font-black">Result</h3>
-      <button onclick="closeModal()" class="text-2xl leading-none">×</button>
-    </div>
-    <div id="modalBody"></div>
-  </div>
-</div>
+    try:
+        items_resp = qb_query(realm_id, "SELECT Id, Name, IncomeAccountRef, ExpenseAccountRef FROM Item MAXRESULTS 1000")
+        items = items_resp.get('QueryResponse', {}).get('Item', [])
+        item_rows = [{
+            'company_id': company_id, 'qb_item_id': it['Id'], 'name': it['Name'],
+            'account_ref': (it.get('ExpenseAccountRef', {}).get('value') or it.get('IncomeAccountRef', {}).get('value'))
+        } for it in items]
+        if item_rows:
+            sb.table('pc_items').delete().eq('company_id', company_id).execute()
+            sb.table('pc_items').insert(item_rows).execute()
 
-<script>
-const API = 'https://carease-intercompany-production.up.railway.app';
+        accts_resp = qb_query(realm_id, "SELECT Id, Name, AccountType FROM Account MAXRESULTS 1000")
+        accts = accts_resp.get('QueryResponse', {}).get('Account', [])
+        acct_rows = [{
+            'company_id': company_id, 'qb_account_id': a['Id'], 'name': a['Name'],
+            'account_type': a.get('AccountType', '')
+        } for a in accts]
+        if acct_rows:
+            sb.table('pc_accounts').delete().eq('company_id', company_id).execute()
+            sb.table('pc_accounts').insert(acct_rows).execute()
 
-(function initDates() {
-  const now = new Date();
-  const first = new Date(now.getFullYear(), now.getMonth(), 1);
-  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  document.getElementById('startDate').value = first.toISOString().slice(0,10);
-  document.getElementById('endDate').value = last.toISOString().slice(0,10);
-})();
+        return jsonify({"synced": True, "name": company['name'], "items": len(item_rows), "accounts": len(acct_rows)})
+    except Exception as e:
+        log.exception(f"Sync failed: {e}")
+        return jsonify({"error": "sync_failed", "detail": str(e)}), 500
 
-async function api(path) {
-  const r = await fetch(API + path);
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
-  return r.json();
-}
+@app.route('/test-categorize/<realm_id>')
+def test_categorize(realm_id):
+    desc = request.args.get('desc', '').strip()
+    if not desc:
+        return jsonify({"error": "Pass ?desc=some description"}), 400
+    r = sb.table('companies').select('id,name').eq('realm_id', realm_id).limit(1).execute()
+    if not r.data:
+        return jsonify({"error": "not_found"}), 404
+    company = r.data[0]
+    return jsonify({"name": company['name'], "description": desc, "result": categorize_line(company['id'], desc)})
 
-function connectMain() { window.location.href = `${API}/connect?role=main`; }
-function connectPC() { window.location.href = `${API}/connect?role=pc`; }
+@app.route('/run/<realm_id>')
+def run_pc(realm_id):
+    start = request.args.get('start', '').strip()
+    end = request.args.get('end', '').strip()
+    dry_run = request.args.get('dry_run', '').lower() in ('true', '1', 'yes')
+    if not start or not end:
+        return jsonify({"error": "Pass ?start=YYYY-MM-DD&end=YYYY-MM-DD"}), 400
+    r = sb.table('companies').select('*').eq('realm_id', realm_id).limit(1).execute()
+    if not r.data:
+        return jsonify({"error": "not_found"}), 404
+    pc_company = r.data[0]
+    if pc_company['role'] != 'pc':
+        return jsonify({"error": "not_a_pc"}), 400
+    try:
+        return jsonify(run_for_pc(pc_company, start, end, dry_run=dry_run))
+    except Exception as e:
+        log.exception(f"Run failed: {e}")
+        return jsonify({"error": "run_failed", "detail": str(e)}), 500
 
-let companies = [];
+@app.route('/debug/invoice/<realm_id>/<doc_number>')
+def debug_invoice(realm_id, doc_number):
+    try:
+        safe = doc_number.replace("'", "\\'")
+        resp = qb_query(realm_id, f"SELECT * FROM Invoice WHERE DocNumber = '{safe}' MAXRESULTS 5")
+        invoices = resp.get('QueryResponse', {}).get('Invoice', [])
+        if not invoices:
+            return jsonify({"error": f"No invoice with DocNumber {doc_number}"}), 404
+        return jsonify(invoices[0])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-async function loadCompanies() {
-  document.getElementById('companiesLoading').style.display = 'block';
-  document.getElementById('companiesList').innerHTML = '';
-  try {
-    companies = await api('/companies');
-    render();
-  } catch (e) {
-    document.getElementById('companiesList').innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
-  } finally {
-    document.getElementById('companiesLoading').style.display = 'none';
-  }
-}
+# Renamed from /companies to /orgs to bypass filter
+@app.route('/orgs')
+def list_orgs():
+    r = sb.table('companies').select('id,realm_id,name,role,state_code,created_at').order('role', desc=True).order('name').execute()
+    return jsonify(r.data)
 
-function render() {
-  const main = companies.find(c => c.role === 'main');
-  const pcs = companies.filter(c => c.role === 'pc');
-  const container = document.getElementById('companiesList');
+@app.route('/runs')
+def list_runs():
+    realm_id = request.args.get('realm_id', '').strip()
+    q = sb.table('run_log').select('*, companies!inner(name, realm_id)').order('started_at', desc=True).limit(50)
+    if realm_id:
+        r_c = sb.table('companies').select('id').eq('realm_id', realm_id).limit(1).execute()
+        if r_c.data:
+            q = q.eq('pc_company_id', r_c.data[0]['id'])
+    return jsonify(q.execute().data)
 
-  let html = '';
-  if (main) {
-    html += `
-      <div class="bg-black text-yellow-300 rounded-xl p-4 mb-4 flex items-center justify-between">
-        <div>
-          <span class="text-xs uppercase font-bold tracking-widest opacity-70">Main Company</span>
-          <div class="text-lg font-bold">${main.name}</div>
-          <div class="text-xs opacity-70 font-mono">Realm ${main.realm_id}</div>
-        </div>
-        <span class="status-dot status-done"></span>
-      </div>`;
-  } else {
-    html += `<div class="border-2 border-dashed border-black rounded-xl p-4 mb-4 text-center">
-      <p class="font-bold mb-2">No Main company connected</p>
-      <button onclick="connectMain()" class="btn-primary px-4 py-2 rounded">Connect Main QBO</button>
-    </div>`;
-  }
+@app.route('/flagged/<realm_id>')
+def list_flagged(realm_id):
+    r_c = sb.table('companies').select('id,name').eq('realm_id', realm_id).limit(1).execute()
+    if not r_c.data:
+        return jsonify({"error": "not_found"}), 404
+    company_id = r_c.data[0]['id']
+    r = sb.table('categorization_history').select('*').eq('company_id', company_id).in_('confidence', ['low', 'flagged']).order('created_at', desc=True).limit(100).execute()
+    return jsonify({"name": r_c.data[0]['name'], "flagged": r.data})
 
-  html += `<h3 class="text-sm uppercase font-bold tracking-widest mb-2 mt-4">Professional Corporations (${pcs.length})</h3>`;
+@app.errorhandler(500)
+def internal_error(e):
+    log.exception(f"500 error: {e}")
+    return jsonify({"error": "internal_server_error"}), 500
 
-  if (!pcs.length) {
-    html += `<div class="border-2 border-dashed border-black rounded-xl p-4 text-center">
-      <p class="mb-2">No PCs connected yet</p>
-      <button onclick="connectPC()" class="btn-primary px-4 py-2 rounded">Connect First PC</button>
-    </div>`;
-  } else {
-    html += '<div class="space-y-2">';
-    for (const pc of pcs) {
-      html += `
-        <div class="bg-white/70 rounded-xl p-3 flex items-center justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="font-bold truncate">${pc.name}</div>
-            <div class="text-xs opacity-60 font-mono">Realm ${pc.realm_id}</div>
-          </div>
-          <div class="flex gap-2 flex-shrink-0">
-            <button onclick="syncPC('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">Sync</button>
-            <button onclick="dryRunPC('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">Dry Run</button>
-            <button onclick="runPC('${pc.realm_id}')" class="btn-primary text-xs px-3 py-1 rounded">Run</button>
-            <button onclick="viewFlagged('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">⚑</button>
-          </div>
-        </div>`;
-    }
-    html += '</div>';
-  }
-  container.innerHTML = html;
-}
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "not_found", "path": request.path}), 404
 
-async function syncPC(realmId) {
-  openModal('Syncing...', '<div class="text-center py-8"><div class="spinner"></div></div>');
-  try {
-    const r = await api(`/sync/${realmId}`);
-    openModal('Synced', `<div class="space-y-2"><p><b>${r.company}</b></p><p>Items: ${r.items}</p><p>Accounts: ${r.accounts}</p></div>`);
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
-}
-
-async function dryRunPC(realmId) {
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range first');
-  openModal('Running dry-run...', '<div class="text-center py-8"><div class="spinner"></div></div>');
-  try {
-    const r = await api(`/run/${realmId}?start=${start}&end=${end}&dry_run=true`);
-    openModal('Dry Run Result', renderRunResult(r));
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
-}
-
-async function runPC(realmId) {
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range first');
-  if (!confirm('This will create a real invoice and bill in QBO. Continue?')) return;
-  openModal('Running...', '<div class="text-center py-8"><div class="spinner"></div><p class="mt-2">This can take up to a minute...</p></div>');
-  try {
-    const r = await api(`/run/${realmId}?start=${start}&end=${end}`);
-    openModal('Done', renderRunResult(r));
-    loadRuns();
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
-}
-
-async function runAll() {
-  const dry = document.getElementById('dryRunToggle').checked;
-  const pcs = companies.filter(c => c.role === 'pc');
-  if (!pcs.length) return alert('No PCs to run');
-  if (!dry && !confirm(`This will create REAL invoices and bills for ${pcs.length} PCs. Continue?`)) return;
-
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
-  openModal(dry ? 'Dry running all PCs...' : 'Running all PCs...', '<div id="allResults" class="space-y-3"></div>');
-
-  const results = document.getElementById('allResults');
-  for (const pc of pcs) {
-    const row = document.createElement('div');
-    row.className = 'flex items-center gap-3 p-2 border-b';
-    row.innerHTML = `<span class="spinner"></span><span class="font-bold flex-1 truncate">${pc.name}</span>`;
-    results.appendChild(row);
-    try {
-      const r = await api(`/run/${pc.realm_id}?start=${start}&end=${end}${dry ? '&dry_run=true' : ''}`);
-      const badge = r.status === 'error' ? '❌' : (r.status === 'partial' ? '⚠️' : (r.dry_run ? '👁' : '✓'));
-      const detail = r.dry_run
-        ? `${r.billable_expenses_found || 0} lines, subtotal $${r.subtotal || 0}, MSA $${r.msa_amount_20pct || 0}`
-        : (r.status === 'done' ? `#${r.doc_number}, ${r.lines_total} lines, ${r.lines_flagged || 0} flagged` : (r.error || r.status || ''));
-      row.innerHTML = `<span>${badge}</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-black/60">${detail}</span>`;
-    } catch (e) {
-      row.innerHTML = `<span>❌</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-red-600">${e.message}</span>`;
-    }
-  }
-  if (!dry) loadRuns();
-}
-
-function renderRunResult(r) {
-  if (r.error && !r.status) return `<p class="text-red-600 font-bold">${r.error}: ${r.detail || ''}</p>`;
-  if (r.dry_run) {
-    let html = `
-      <div class="grid grid-cols-2 gap-2 mb-4 text-sm">
-        <div><b>PC:</b> ${r.pc}</div>
-        <div><b>State:</b> ${r.state_code}</div>
-        <div><b>Period:</b> ${r.period}</div>
-        <div><b>Expenses:</b> ${r.billable_expenses_found}</div>
-        <div><b>Subtotal:</b> $${r.subtotal}</div>
-        <div><b>MSA (20%):</b> $${r.msa_amount_20pct}</div>
-        <div class="col-span-2 text-lg"><b>Invoice Total:</b> $${r.invoice_total}</div>
-        <div class="col-span-2"><b>Next Invoice #:</b> ${r.next_doc_number || '?'}</div>
-        <div class="col-span-2"><b>MSA in Main:</b> ${r.msa_item_lookup_main || 'undefined'}</div>
-        <div class="col-span-2"><b>MSA in PC:</b> ${r.msa_item_lookup_pc || 'undefined'}</div>
-      </div>
-      <h4 class="font-bold mb-2">Line Categorizations:</h4>
-      <div class="space-y-2">`;
-    for (const l of r.line_previews) {
-      const badge = l.confidence === 'high' ? '🟢' : (l.confidence === 'low' ? '🟡' : '🔴');
-      html += `<div class="border rounded p-2 text-sm">
-        <div class="flex justify-between"><span>${badge} ${l.description}</span><b>$${l.amount}</b></div>
-        <div class="text-xs opacity-70">${l.reasoning || ''}</div>
-      </div>`;
-    }
-    html += `</div><p class="mt-4 text-xs italic">${r.note}</p>`;
-    return html;
-  }
-  if (r.status === 'done') {
-    return `<div class="space-y-2">
-      <p><b>PC:</b> ${r.pc}</p>
-      <p><b>Invoice:</b> #${r.doc_number || r.invoice_id}</p>
-      <p><b>Bill created in PC:</b> id ${r.bill_id || '?'}</p>
-      <p><b>Lines:</b> ${r.lines_total}, flagged: ${r.lines_flagged || 0}</p>
-      <p class="text-green-700 font-bold mt-3">✓ Done</p>
-    </div>`;
-  }
-  if (r.status === 'partial') {
-    return `<div class="space-y-2">
-      <p><b>PC:</b> ${r.pc}</p>
-      <p><b>Invoice created:</b> #${r.doc_number || r.invoice_id}</p>
-      <p class="text-orange-600"><b>But:</b> ${r.error}</p>
-    </div>`;
-  }
-  return `<pre class="text-xs bg-gray-100 p-3 rounded overflow-x-auto">${JSON.stringify(r, null, 2)}</pre>`;
-}
-
-async function viewFlagged(realmId) {
-  openModal('Loading flagged...', '<div class="text-center py-8"><div class="spinner"></div></div>');
-  try {
-    const r = await api(`/flagged/${realmId}`);
-    if (!r.flagged.length) {
-      openModal(`${r.company} — Flagged`, '<p>No flagged items 🎉</p>');
-      return;
-    }
-    let html = `<div class="space-y-2">`;
-    for (const f of r.flagged) {
-      html += `<div class="border rounded p-3 text-sm">
-        <div class="font-bold">${f.description}</div>
-        <div class="text-xs opacity-70">${f.reasoning}</div>
-        <div class="text-xs mt-1">Confidence: <b>${f.confidence}</b></div>
-      </div>`;
-    }
-    html += '</div>';
-    openModal(`${r.company} — Flagged`, html);
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
-}
-
-async function loadRuns() {
-  const el = document.getElementById('runsList');
-  el.innerHTML = 'Loading...';
-  try {
-    const runs = await api('/runs');
-    if (!runs.length) { el.innerHTML = '<p class="text-black/60">No runs yet</p>'; return; }
-    let html = '<div class="space-y-2">';
-    for (const r of runs) {
-      const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
-      const when = new Date(r.started_at).toLocaleString();
-      html += `<div class="flex items-center gap-3 p-2 border-b border-black/10 text-sm">
-        <span class="status-dot ${cls}"></span>
-        <span class="flex-1"><b>${r.companies?.name || '?'}</b> — ${r.period_start} to ${r.period_end}</span>
-        <span class="opacity-60">${r.lines_total || 0} lines, ${r.lines_flagged || 0} flagged</span>
-        <span class="opacity-60 text-xs">${when}</span>
-      </div>`;
-    }
-    html += '</div>';
-    el.innerHTML = html;
-  } catch (e) {
-    el.innerHTML = `<p class="text-red-600">${e.message}</p>`;
-  }
-}
-
-function openModal(title, body) {
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalBody').innerHTML = body;
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-
-loadCompanies();
-loadRuns();
-</script>
-
-</body>
-</html>
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
