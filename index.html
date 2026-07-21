@@ -8,18 +8,18 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #F5C518; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
-  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #F5C518 0%, #FFD449 100%); }
-  .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: drift 26s ease-in-out infinite; }
-  .orb1 { width: 500px; height: 500px; background: #FF6B9D; top: -120px; left: -120px; animation-duration: 22s; }
-  .orb2 { width: 600px; height: 600px; background: #4ECDC4; top: 25%; right: -200px; animation-duration: 28s; animation-delay: -5s; }
-  .orb3 { width: 450px; height: 450px; background: #A78BFA; bottom: -100px; left: 25%; animation-duration: 24s; animation-delay: -10s; }
-  .orb4 { width: 400px; height: 400px; background: #FB923C; top: 20%; left: 45%; animation-duration: 32s; animation-delay: -15s; opacity: 0.4; }
+  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #FAF6E8; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
+  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #FAF6E8; }
+  .bg-wash { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; animation: drift 32s ease-in-out infinite; }
+  .wash1 { width: 700px; height: 700px; background: #E8B4B8; top: -180px; left: -180px; animation-duration: 26s; }
+  .wash2 { width: 800px; height: 800px; background: #9BB5C4; top: 20%; right: -250px; animation-duration: 30s; animation-delay: -5s; }
+  .wash3 { width: 600px; height: 600px; background: #C9B896; bottom: -150px; left: 25%; animation-duration: 28s; animation-delay: -10s; }
+  .wash4 { width: 550px; height: 550px; background: #A8C4A2; top: 25%; left: 45%; animation-duration: 34s; animation-delay: -15s; opacity: 0.3; }
   @keyframes drift {
     0%,100% { transform: translate(0,0) scale(1); }
-    25% { transform: translate(140px,-100px) scale(1.15); }
-    50% { transform: translate(-120px,140px) scale(0.9); }
-    75% { transform: translate(100px,80px) scale(1.1); }
+    25% { transform: translate(160px,-120px) scale(1.15); }
+    50% { transform: translate(-140px,160px) scale(0.9); }
+    75% { transform: translate(120px,100px) scale(1.1); }
   }
   .content { position: relative; z-index: 10; }
   .btn-primary { background: #1a1a1a; color: #F5C518; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
@@ -28,39 +28,39 @@
   .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
 
-  /* Logo wrappers — black bg baked into logo so wrap in black rounded card */
-  .logo-pill { background: #1a1a1a; padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
-  .logo-pill img { height: 44px; display: block; }
-  .logo-pill-small img { height: 32px; }
-  .logo-splash-wrap { background: #1a1a1a; padding: 30px 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: logoIn 1s cubic-bezier(0.34,1.56,0.64,1); }
-  .logo-splash-wrap img { width: 260px; max-width: 70vw; display: block; }
+  /* HUGE header logo */
+  .logo-header { background: #1a1a1a; padding: 24px 40px; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 28px rgba(0,0,0,0.22); flex: 1; max-width: 100%; }
+  .logo-header img { height: 90px; display: block; max-width: 100%; }
 
-  .run-bar { background: #1a1a1a; color: #F5C518; border-radius: 18px; padding: 14px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-  .run-bar-label { font-size: 12px; font-weight: 800; letter-spacing: 0.15em; color: #F5C518; }
-  .run-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 8px 12px; border-radius: 8px; font-family: inherit; font-weight: 600; font-size: 13px; }
-  .run-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
+  /* WHEEL — SDG-style ring around black hub */
+  .wheel-container { position: relative; width: 100%; max-width: 720px; aspect-ratio: 1 / 1; margin: 30px auto 20px; }
+  .wheel-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .wheel-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 46%; height: 46%; background: #1a1a1a; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 0 40px rgba(245,197,24,0.08); color: #F5C518; z-index: 5; }
+  .hub-label { font-size: 10px; font-weight: 800; letter-spacing: 0.3em; opacity: 0.7; }
+  .hub-name { font-size: 15px; font-weight: 800; margin: 6px 0 14px; }
+  .hub-dates { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .hub-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 6px 8px; border-radius: 6px; font-family: inherit; font-weight: 600; font-size: 11px; width: 108px; }
+  .hub-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
+  .hub-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; margin-bottom: 14px; cursor: pointer; }
+  .hub-toggle input { width: 14px; height: 14px; accent-color: #F5C518; }
+  .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 12px 22px; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.5); }
+  .hub-run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,24,0.7); }
 
-  /* ORBIT — circles floating around Main */
-  .orbit-container { position: relative; width: 100%; max-width: 720px; aspect-ratio: 1 / 1; margin: 20px auto; }
-  .orb-circle { position: absolute; border-radius: 50%; background: rgba(15,15,15,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid rgba(245,197,24,0.55); color: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; padding: 8px; box-shadow: 0 8px 26px rgba(0,0,0,0.28); transition: box-shadow 0.25s, border-color 0.25s, background 0.25s; will-change: transform; }
-  .orb-main { left: 50%; top: 50%; margin-left: -90px; margin-top: -90px; width: 180px; height: 180px; border: 3px solid rgba(245,197,24,0.9); background: rgba(0,0,0,0.9); box-shadow: 0 14px 44px rgba(0,0,0,0.42); animation: floatMain 6s ease-in-out infinite; z-index: 5; }
-  .orb-pc { width: 96px; height: 96px; animation: floatPc 5s ease-in-out infinite; }
-  .orb-circle:hover { box-shadow: 0 0 40px rgba(245,197,24,0.9); border-color: #F5C518; background: rgba(0,0,0,0.95); z-index: 20; }
-  @keyframes floatPc { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-  @keyframes floatMain { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-  .orb-label { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.75; margin-bottom: 3px; }
-  .orb-name { font-size: 15px; font-weight: 800; line-height: 1.15; }
-  .orb-sub { font-size: 10px; opacity: 0.7; margin-top: 2px; font-family: monospace; }
-  .orb-dot-status { width: 7px; height: 7px; background: #10B981; border-radius: 50%; margin-top: 5px; box-shadow: 0 0 8px #10B981; }
-  .orb-main .orb-label { font-size: 11px; margin-bottom: 6px; }
-  .orb-main .orb-name { font-size: 15px; line-height: 1.2; padding: 0 4px; }
-  .orb-main .orb-sub { font-size: 10px; margin-top: 4px; }
-  .orb-main .orb-dot-status { width: 10px; height: 10px; margin-top: 6px; }
+  /* PC segments */
+  .wheel-segment { cursor: pointer; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; transform-origin: center; opacity: 0; animation: segIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+  .wheel-segment:hover { transform: scale(1.06); filter: brightness(1.1) drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
+  .wheel-segment text { fill: white; font-weight: 800; pointer-events: none; user-select: none; }
+  .seg-code { font-size: 15px; }
+  .seg-num { font-size: 10px; opacity: 0.85; }
+  @keyframes segIn {
+    from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
+    to { opacity: 1; transform: scale(1) rotate(0); }
+  }
 
   /* Recent runs — clean vertical list */
   .runs-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
-  .run-strip { background: rgba(15,15,15,0.88); color: #F5C518; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.25); }
-  .run-strip:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); background: rgba(0,0,0,0.95); border-color: rgba(245,197,24,0.6); }
+  .run-strip { background: #1a1a1a; color: #F5C518; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.25); }
+  .run-strip:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); border-color: rgba(245,197,24,0.6); }
   .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .status-done { background: #10B981; box-shadow: 0 0 8px #10B981; }
   .status-error { background: #EF4444; box-shadow: 0 0 8px #EF4444; }
@@ -85,9 +85,16 @@
 
   .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
   .modal-minimized.show { display: flex; }
-  .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
-  @keyframes logoIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  @keyframes splashFade { 0%,70% { opacity: 1; pointer-events: auto; } 100% { opacity: 0; pointer-events: none; visibility: hidden; } }
+
+  /* NEW intro — segments fly in around a growing hub */
+  .splash { position: fixed; inset: 0; z-index: 200; background: #FAF6E8; display: flex; align-items: center; justify-content: center; animation: splashFade 0.6s forwards; animation-delay: 2.6s; }
+  .splash-wheel { position: relative; width: 340px; height: 340px; }
+  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 140px; height: 140px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: hubScale 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.6s forwards; }
+  .splash-hub img { width: 80%; max-width: 100px; }
+  .splash-seg { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; opacity: 0; }
+  @keyframes hubScale { to { transform: translate(-50%,-50%) scale(1); } }
+  @keyframes splashFade { to { opacity: 0; pointer-events: none; visibility: hidden; } }
+
   .login-card { max-width: 400px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
   .input-field { width: 100%; background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
   .input-field:focus { box-shadow: 4px 4px 0 #F5C518; transform: translate(-1px,-1px); }
@@ -97,23 +104,28 @@
   .badge-error { background: #EF4444; color: white; }
   .badge-partial { background: #F59E0B; color: white; }
 
+  .top-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .top-actions { display: flex; gap: 8px; align-items: center; }
+
   @media (max-width: 640px) {
-    .orb-pc { width: 74px; height: 74px; }
-    .orb-main { width: 130px; height: 130px; margin-left: -65px; margin-top: -65px; }
-    .orb-name { font-size: 12px; }
-    .orb-sub { font-size: 8px; }
-    .orb-main .orb-name { font-size: 13px; }
-    .logo-pill img { height: 36px; }
-    .logo-pill-small img { height: 28px; }
+    .logo-header { padding: 16px 24px; }
+    .logo-header img { height: 64px; }
+    .wheel-container { max-width: 380px; }
+    .hub-name { font-size: 12px; }
+    .hub-input { width: 88px; font-size: 10px; }
+    .hub-run-btn { padding: 10px 16px; font-size: 12px; }
+    .seg-code { font-size: 12px; }
+    .seg-num { font-size: 8px; }
   }
 </style>
 </head>
 <body>
-<div class="splash" id="splash"><div class="logo-splash-wrap"><img src="logo.png" alt="Carease Command Corner"></div></div>
-<div class="bg-container"><div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div><div class="bg-orb orb4"></div></div>
+<div class="splash" id="splash"><div class="splash-wheel" id="splashWheel"><div class="splash-hub"><img src="logo.png" alt=""></div></div></div>
+<div class="bg-container"><div class="bg-wash wash1"></div><div class="bg-wash wash2"></div><div class="bg-wash wash3"></div><div class="bg-wash wash4"></div></div>
+
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><div class="logo-pill" style="background:#1a1a1a;padding:16px 20px;"><img src="logo.png" alt="Carease Command Corner" style="height:80px;"></div></div>
+    <div class="text-center mb-6"><div style="background:#1a1a1a;padding:20px;border-radius:16px;display:inline-block;"><img src="logo.png" alt="Carease Command Corner" style="height:100px;"></div></div>
     <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
@@ -123,29 +135,28 @@
     </div>
   </div>
 </div>
+
 <div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
-  <header class="flex items-center justify-between mb-6 flex-wrap gap-3">
-    <div class="logo-pill logo-pill-small"><img src="logo.png" alt="Carease Command Corner"></div>
-    <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs mr-2 font-bold"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
-  </header>
-  <div class="run-bar mb-6">
-    <span class="run-bar-label">RUN PERIOD</span>
-    <input id="startDate" type="date" class="run-input">
-    <span style="opacity:0.5;">→</span>
-    <input id="endDate" type="date" class="run-input">
-    <label class="flex items-center gap-2 text-sm font-bold cursor-pointer" style="color:#F5C518;"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4">Dry Run</label>
-    <button onclick="askRunAll()" class="ml-auto" style="background:#F5C518;color:#1a1a1a;font-weight:800;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:all 0.15s;">▶ Run All PCs</button>
+  <div class="top-bar">
+    <div class="logo-header"><img src="logo.png" alt="Carease Command Corner"></div>
   </div>
-  <div class="mb-8">
-    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Connected Organizations</h2><button onclick="loadOrgs()" class="btn-secondary text-xs">↻ Refresh</button></div>
-    <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
-    <div id="orgsContainer"></div>
+  <div class="top-actions mb-6 flex-wrap">
+    <span id="loggedInAs" class="text-xs mr-2 font-bold"></span>
+    <button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button>
+    <button onclick="connectPC()" class="btn-primary text-sm">+ PC</button>
+    <button onclick="doLogout()" class="btn-secondary text-sm">Logout</button>
+    <button onclick="loadOrgs()" class="btn-secondary text-sm ml-auto">↻ Refresh</button>
   </div>
-  <div class="mb-6">
+
+  <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
+  <div id="orgsContainer"></div>
+
+  <div class="mb-6 mt-8">
     <h2 class="text-lg font-bold mb-3">Recent Runs</h2>
     <div id="runsList" class="runs-list">Loading...</div>
   </div>
 </div>
+
 <div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
 <div id="modal" class="modal-backdrop"><div class="modal p-6"><div class="flex items-center justify-between mb-4"><h3 id="modalTitle" class="text-xl font-bold">Result</h3><div class="flex gap-2"><button onclick="minimizeModal()" class="btn-secondary text-sm">−</button><button onclick="closeModal()" class="btn-secondary text-sm">×</button></div></div><div id="modalBody"></div></div></div>
 <div id="modalChip" class="modal-minimized" onclick="reopenModal()"><span id="modalChipText">Results ready</span><span style="opacity:0.7;">↗</span></div><script>
@@ -157,19 +168,48 @@ let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
 
+// SDG-style rich jewel palette (17 colors, muted/serious)
+const SEG_COLORS = [
+  '#C9433E', '#D6A429', '#4C9F38', '#26BDE2', '#FD6925', '#A21942', '#FCC30B',
+  '#FD9D24', '#DDA63A', '#3F7E44', '#0A97D9', '#56C02B', '#00689D', '#19486A',
+  '#8F1838', '#E5243B', '#7F4E80'
+];
+
+// Intro segments animation
+function playIntroSegments() {
+  const wheel = document.getElementById('splashWheel');
+  if (!wheel) return;
+  const n = 14;
+  const R = 130;
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+    const x = Math.cos(angle) * R;
+    const y = Math.sin(angle) * R;
+    const seg = document.createElement('div');
+    seg.className = 'splash-seg';
+    seg.style.background = SEG_COLORS[i % SEG_COLORS.length];
+    const delay = i * 80;
+    seg.animate([
+      { transform: 'translate(0,0) scale(0.3)', opacity: 0 },
+      { transform: 'translate(' + x + 'px,' + y + 'px) scale(1)', opacity: 1 }
+    ], { duration: 700, delay: delay, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' });
+    wheel.appendChild(seg);
+  }
+}
+playIntroSegments();
+
 setTimeout(() => {
   document.getElementById('splash').style.display = 'none';
   if (sessionToken) checkSession(); else showLogin();
-}, 3800);
+}, 3300);
 
 function initDates() {
   const now = new Date();
   const first = new Date(now.getFullYear(), now.getMonth(), 1);
   const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  document.getElementById('startDate').value = first.toISOString().slice(0,10);
-  document.getElementById('endDate').value = last.toISOString().slice(0,10);
+  return { start: first.toISOString().slice(0,10), end: last.toISOString().slice(0,10) };
 }
-initDates();
+let defaultDates = initDates();
 
 async function checkSession() {
   try {
@@ -245,7 +285,7 @@ function connectPC() { window.location.href = API + '/connect?role=pc'; }
 async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
   document.getElementById('orgsContainer').innerHTML = '';
-  try { orgs = await api('/orgs'); renderOrbit(); }
+  try { orgs = await api('/orgs'); renderWheel(); }
   catch (e) { document.getElementById('orgsContainer').innerHTML = '<p class="text-red-500 text-center">' + e.message + '</p>'; }
   finally { document.getElementById('orgsLoading').style.display = 'none'; }
 }
@@ -253,12 +293,26 @@ async function loadOrgs() {
 function shortLabel(name) {
   const stateMatch = name.match(/\b([A-Z]{2})\b/);
   const pcMatch = name.match(/(PC|P\.C\.|P\.A\.)\s*(\d+)/i);
-  const top = stateMatch ? stateMatch[1] : (name.length > 8 ? name.slice(0,7)+'…' : name);
+  const top = stateMatch ? stateMatch[1] : (name.length > 8 ? name.slice(0,7) : name);
   const bottom = pcMatch ? pcMatch[0].replace(/\s+/g,' ').toUpperCase() : '';
   return { top, bottom };
 }
 
-function renderOrbit() {
+function polarToCart(cx, cy, r, angle) {
+  return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
+}
+
+// Build donut-slice path
+function slicePath(cx, cy, rIn, rOut, a1, a2) {
+  const p1 = polarToCart(cx, cy, rOut, a1);
+  const p2 = polarToCart(cx, cy, rOut, a2);
+  const p3 = polarToCart(cx, cy, rIn, a2);
+  const p4 = polarToCart(cx, cy, rIn, a1);
+  const large = (a2 - a1) > Math.PI ? 1 : 0;
+  return `M ${p1.x} ${p1.y} A ${rOut} ${rOut} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rIn} ${rIn} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
+}
+
+function renderWheel() {
   const main = orgs.find(c => c.role === 'main');
   const pcs = orgs.filter(c => c.role === 'pc');
   const container = document.getElementById('orgsContainer');
@@ -268,68 +322,51 @@ function renderOrbit() {
     return;
   }
 
-  let html = '<div class="orbit-container" id="orbit">';
+  const size = 720;
+  const cx = size / 2, cy = size / 2;
+  const rOut = 340;
+  const rIn = 195;
+  const gap = 0.012; // radians between segs
+  const n = Math.max(pcs.length, 1);
 
-  // Main in center
-  if (main) {
-    html += '<div class="orb-circle orb-main" onclick="openPCActions(\'' + main.realm_id + '\')" title="' + main.name + '">';
-    html += '<div class="orb-label">MAIN</div>';
-    html += '<div class="orb-name">Carease</div>';
-    html += '<div class="orb-name">Health LLC</div>';
-    html += '<div class="orb-dot-status"></div>';
-    html += '</div>';
-  } else {
-    html += '<div class="orb-circle orb-main" onclick="connectMain()"><div class="orb-name">+ Connect<br>Main</div></div>';
-  }
-
-  // PCs distributed in concentric rings around main
-  const positions = computeOrbitPositions(pcs.length);
+  let svgSegs = '';
+  let labels = '';
   for (let i = 0; i < pcs.length; i++) {
-    const pc = pcs[i];
-    const s = shortLabel(pc.name);
-    const p = positions[i];
-    const delay = (i * 0.4) % 3;
-    const dur = 4.5 + (i % 3) * 0.7;
-    const style = 'left:' + p.x + '%;top:' + p.y + '%;margin-left:-48px;margin-top:-48px;animation-delay:-' + delay + 's;animation-duration:' + dur + 's;';
-    html += '<div class="orb-circle orb-pc" style="' + style + '" onclick="openPCActions(\'' + pc.realm_id + '\')" title="' + pc.name.replace(/"/g,'&quot;') + '">';
-    html += '<div class="orb-name">' + s.top + '</div>';
-    if (s.bottom) html += '<div class="orb-sub">' + s.bottom + '</div>';
-    html += '<div class="orb-dot-status"></div>';
-    html += '</div>';
+    const a1 = (i / n) * Math.PI * 2 - Math.PI / 2 + gap;
+    const a2 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2 - gap;
+    const color = SEG_COLORS[i % SEG_COLORS.length];
+    const path = slicePath(cx, cy, rIn, rOut, a1, a2);
+    const mid = (a1 + a2) / 2;
+    const labelR = (rIn + rOut) / 2;
+    const lp = polarToCart(cx, cy, labelR, mid);
+    const s = shortLabel(pcs[i].name);
+    const delay = (i * 0.04);
+    const escapedName = pcs[i].name.replace(/'/g, "\\'").replace(/"/g,'&quot;');
+    svgSegs += `<g class="wheel-segment" style="animation-delay:${delay}s;" onclick="openPCActions('${pcs[i].realm_id}')">`
+      + `<title>${escapedName}</title>`
+      + `<path d="${path}" fill="${color}"/>`
+      + `<text class="seg-code" x="${lp.x}" y="${lp.y - 4}" text-anchor="middle" dominant-baseline="middle">${s.top}</text>`
+      + (s.bottom ? `<text class="seg-num" x="${lp.x}" y="${lp.y + 12}" text-anchor="middle" dominant-baseline="middle">${s.bottom}</text>` : '')
+      + `</g>`;
   }
 
+  const mainName = main ? main.name : 'No Main';
+  let html = '<div class="wheel-container">';
+  html += `<svg class="wheel-svg" viewBox="0 0 ${size} ${size}">${svgSegs}</svg>`;
+  html += '<div class="wheel-hub">';
+  html += `<div class="hub-label">MAIN</div>`;
+  html += `<div class="hub-name">${mainName}</div>`;
+  html += '<div class="hub-dates">';
+  html += `<input id="startDate" type="date" class="hub-input" value="${defaultDates.start}">`;
+  html += `<span style="opacity:0.5;font-size:12px;">→</span>`;
+  html += `<input id="endDate" type="date" class="hub-input" value="${defaultDates.end}">`;
   html += '</div>';
+  html += '<label class="hub-toggle"><input id="dryRunToggle" type="checkbox" checked>Dry Run</label>';
+  html += `<button class="hub-run-btn" onclick="askRunAll()">▶ RUN ALL PCs</button>`;
+  html += '</div>';
+  html += '</div>';
+
   container.innerHTML = html;
-}
-
-// Distribute N circles on 1-2 rings around center (50,50)
-function computeOrbitPositions(n) {
-  const positions = [];
-  if (n === 0) return positions;
-  // Ring capacities based on radius
-  const ring1Max = 8; // inner ring
-  const ring1Count = Math.min(n, ring1Max);
-  const ring2Count = n - ring1Count;
-
-  const ring1Radius = 32; // % of container
-  const ring2Radius = 46;
-
-  for (let i = 0; i < ring1Count; i++) {
-    const angle = (i / ring1Count) * Math.PI * 2 - Math.PI / 2;
-    positions.push({
-      x: 50 + Math.cos(angle) * ring1Radius,
-      y: 50 + Math.sin(angle) * ring1Radius
-    });
-  }
-  for (let i = 0; i < ring2Count; i++) {
-    // Offset outer ring by half-step
-    const angle = ((i + 0.5) / ring2Count) * Math.PI * 2 - Math.PI / 2;
-    positions.push({
-      x: 50 + Math.cos(angle) * ring2Radius,
-      y: 50 + Math.sin(angle) * ring2Radius
-    });
-  }
-  return positions;
 }
 
 let selectedPC = null;
@@ -370,24 +407,26 @@ function askRunAll() {
   else showConfirm('REAL Run All PCs', 'Create REAL invoices and bills for ALL ' + pcs.length + ' PCs?', '⚠', runAll);
 }
 
+function getDates() {
+  return { start: document.getElementById('startDate').value, end: document.getElementById('endDate').value };
+}
+
 async function dryRunPC(realmId) {
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range');
+  const d = getDates();
+  if (!d.start || !d.end) return alert('Pick a date range');
   openModal('Running dry-run...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Analyzing expenses...</p></div>');
   try {
-    const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end + '&dry_run=true');
+    const r = await api('/run/' + realmId + '?start=' + d.start + '&end=' + d.end + '&dry_run=true');
     openModal('Dry Run Result', renderRunResult(r));
   } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
 async function runPC(realmId) {
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range');
+  const d = getDates();
+  if (!d.start || !d.end) return alert('Pick a date range');
   openModal('Running...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Creating invoice and bill...</p></div>');
   try {
-    const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end);
+    const r = await api('/run/' + realmId + '?start=' + d.start + '&end=' + d.end);
     if (r.status === 'done') playDing();
     openModal('Done ✓', renderRunResult(r));
     loadRuns();
@@ -397,8 +436,7 @@ async function runPC(realmId) {
 async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = orgs.filter(c => c.role === 'pc');
-  const start = document.getElementById('startDate').value;
-  const end = document.getElementById('endDate').value;
+  const d = getDates();
   openModal(dry ? 'Dry Running All PCs' : 'Running All PCs', '<div id="allResults" class="space-y-2"></div>');
   const results = document.getElementById('allResults');
   const summary = { success: 0, error: 0, partial: 0 };
@@ -408,7 +446,7 @@ async function runAll() {
     row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs opacity-60">running...</span>';
     results.appendChild(row);
     try {
-      const r = await api('/run/' + pc.realm_id + '?start=' + start + '&end=' + end + (dry ? '&dry_run=true' : ''));
+      const r = await api('/run/' + pc.realm_id + '?start=' + d.start + '&end=' + d.end + (dry ? '&dry_run=true' : ''));
       let badge, detail;
       if (r.status === 'error') { badge = '<span class="badge badge-error">Error</span>'; detail = r.error || 'Failed'; summary.error++; }
       else if (r.status === 'partial') { badge = '<span class="badge badge-partial">Partial</span>'; detail = r.error || 'Partial'; summary.partial++; }
