@@ -28,11 +28,12 @@
   .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
 
-  /* HUGE header logo */
-  .logo-header { background: #1a1a1a; padding: 14px 40px; border-radius: 26px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 32px rgba(0,0,0,0.28); margin: 0 auto; max-width: 500px; }
-  .logo-header img { height: 180px; display: block; max-width: 100%; }
+  /* Logo — corner, no wrapper */
+  .logo-corner { position: fixed; top: 20px; left: 20px; z-index: 55; }
+  .logo-corner img { height: 78px; display: block; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: transform 0.2s; }
+  .logo-corner img:hover { transform: scale(1.05); }
 
-  /* Floating menu button — replaces the top-actions row */
+  /* Floating menu button */
   .fab-menu { position: fixed; top: 20px; right: 20px; z-index: 60; }
   .fab-btn { width: 52px; height: 52px; border-radius: 50%; background: #1a1a1a; color: #F5C518; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.2s; }
   .fab-btn:hover { transform: rotate(90deg) scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
@@ -44,36 +45,31 @@
   .fab-item.primary:hover { background: #333; }
   .fab-user { padding: 8px 14px; font-size: 12px; opacity: 0.6; border-bottom: 1px solid #eee; margin-bottom: 4px; font-weight: 700; }
 
-  /* 3D WHEEL */
-  .wheel-outer { perspective: 1400px; margin: 20px auto 30px; max-width: 720px; }
-  .wheel-container { position: relative; width: 100%; aspect-ratio: 1 / 1; transform: rotateX(18deg); animation: breathe 5s ease-in-out infinite; filter: drop-shadow(0 14px 0 rgba(0,0,0,0.35)) drop-shadow(0 22px 30px rgba(0,0,0,0.4)); }
+  /* Main stage — wheel centered, huge */
+  .wheel-stage { min-height: calc(100vh - 260px); display: flex; align-items: center; justify-content: center; padding: 20px 0; }
+  .wheel-outer { perspective: 1600px; width: 100%; max-width: min(92vw, 880px); margin: 0 auto; }
+  .wheel-container { position: relative; width: 100%; aspect-ratio: 1 / 1; transform: rotateX(18deg); animation: breathe 5s ease-in-out infinite; filter: drop-shadow(0 16px 0 rgba(0,0,0,0.35)) drop-shadow(0 26px 34px rgba(0,0,0,0.42)); }
   @keyframes breathe { 0%,100% { transform: rotateX(18deg) scale(1); } 50% { transform: rotateX(18deg) scale(1.015); } }
   .wheel-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .wheel-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 46%; height: 46%; background: radial-gradient(circle at 35% 30%, #2a2a2a 0%, #0a0a0a 100%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; box-shadow: 0 14px 40px rgba(0,0,0,0.5), inset 0 4px 20px rgba(245,197,24,0.08), inset 0 -4px 20px rgba(0,0,0,0.5); color: #F5C518; z-index: 5; border: 3px solid #F5C518; }
-  .hub-label { font-size: 10px; font-weight: 800; letter-spacing: 0.3em; opacity: 0.7; }
-  .hub-name { font-size: 15px; font-weight: 800; margin: 6px 0 14px; }
-  .hub-dates { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-  .hub-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 6px 8px; border-radius: 6px; font-family: inherit; font-weight: 600; font-size: 11px; width: 108px; }
+  .wheel-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 46%; height: 46%; background: radial-gradient(circle at 35% 30%, #2a2a2a 0%, #0a0a0a 100%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; text-align: center; box-shadow: 0 14px 40px rgba(0,0,0,0.5), inset 0 4px 20px rgba(245,197,24,0.08), inset 0 -4px 20px rgba(0,0,0,0.5); color: #F5C518; z-index: 5; border: 3px solid #F5C518; }
+  .hub-label { font-size: 11px; font-weight: 800; letter-spacing: 0.3em; opacity: 0.7; }
+  .hub-name { font-size: 17px; font-weight: 800; margin: 8px 0 18px; }
+  .hub-dates { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .hub-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 7px 10px; border-radius: 6px; font-family: inherit; font-weight: 600; font-size: 12px; width: 122px; }
   .hub-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
-  .hub-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; margin-bottom: 14px; cursor: pointer; }
+  .hub-toggle { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; margin-bottom: 18px; cursor: pointer; }
   .hub-toggle input { width: 14px; height: 14px; accent-color: #F5C518; }
-  .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 12px 22px; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.6); }
+  .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 13px 26px; cursor: pointer; font-size: 14px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.6); }
   .hub-run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,24,0.8); }
 
   /* PC segments */
   .wheel-segment { cursor: pointer; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; transform-origin: center; opacity: 0; animation: segIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards, segWave 4s ease-in-out infinite; }
   .wheel-segment:hover { transform: scale(1.06); filter: brightness(1.15) drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
   .wheel-segment text { fill: white; font-weight: 800; pointer-events: none; user-select: none; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
-  .seg-code { font-size: 15px; }
-  .seg-num { font-size: 10px; opacity: 0.85; }
-  @keyframes segIn {
-    from { opacity: 0; transform: scale(0.3); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  @keyframes segWave {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.12); }
-  }
+  .seg-code { font-size: 16px; }
+  .seg-num { font-size: 11px; opacity: 0.85; }
+  @keyframes segIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+  @keyframes segWave { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.12); } }
 
   /* Recent runs */
   .runs-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
@@ -101,14 +97,25 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
 
-  .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
-  .modal-minimized.show { display: flex; }
+  /* Floating result card — replaces the tiny pill */
+  .result-float { position: fixed; bottom: 20px; right: 20px; width: 320px; max-width: calc(100vw - 40px); background: #1a1a1a; color: #F5C518; border: 2px solid #F5C518; border-radius: 16px; padding: 14px 16px; z-index: 99; box-shadow: 0 12px 32px rgba(0,0,0,0.4); cursor: pointer; display: none; animation: slideUp 0.3s ease-out; transition: all 0.2s; }
+  .result-float:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5); }
+  .result-float.show { display: block; }
+  .result-float-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .result-float-title { font-weight: 800; font-size: 14px; flex: 1; }
+  .result-float-status { font-size: 10px; padding: 2px 8px; border-radius: 999px; font-weight: 700; }
+  .result-float-status.running { background: #F59E0B; color: white; }
+  .result-float-status.done { background: #10B981; color: white; }
+  .result-float-status.error { background: #EF4444; color: white; }
+  .result-float-body { font-size: 12px; opacity: 0.85; line-height: 1.4; }
+  .result-float-cta { font-size: 11px; margin-top: 8px; opacity: 0.6; font-weight: 700; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* NEW intro: hub scales, then segments fan out */
+  /* Splash intro */
   .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; align-items: center; justify-content: center; animation: splashFade 0.6s forwards; animation-delay: 2.8s; }
   .splash-wheel { position: relative; width: 360px; height: 360px; }
-  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 160px; height: 160px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(0,0,0,0.3); animation: hubScale 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards; border: 3px solid #F5C518; }
-  .splash-hub img { width: 80%; max-width: 120px; }
+  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 160px; height: 160px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(0,0,0,0.3); animation: hubScale 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards; overflow: hidden; }
+  .splash-hub img { width: 100%; height: 100%; object-fit: cover; }
   .splash-seg { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; opacity: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
   @keyframes hubScale { to { transform: translate(-50%,-50%) scale(1); } }
   @keyframes splashFade { to { opacity: 0; pointer-events: none; visibility: hidden; } }
@@ -122,17 +129,23 @@
   .badge-error { background: #EF4444; color: white; }
   .badge-partial { background: #F59E0B; color: white; }
 
+  .modal-close-btn { display: inline-block; }
+  .modal-close-btn.hidden { display: none !important; }
+
+  .runs-section { padding: 0 20px; }
+
   @media (max-width: 640px) {
-    .logo-header { padding: 10px 24px; }
-    .logo-header img { height: 110px; }
-    .wheel-outer { max-width: 380px; }
-    .hub-name { font-size: 12px; }
-    .hub-input { width: 88px; font-size: 10px; }
-    .hub-run-btn { padding: 10px 16px; font-size: 12px; }
-    .seg-code { font-size: 12px; }
-    .seg-num { font-size: 8px; }
+    .logo-corner img { height: 56px; }
+    .logo-corner { top: 12px; left: 12px; }
     .fab-menu { top: 12px; right: 12px; }
     .fab-btn { width: 44px; height: 44px; font-size: 20px; }
+    .wheel-stage { min-height: calc(100vh - 200px); }
+    .hub-name { font-size: 13px; margin: 6px 0 12px; }
+    .hub-input { width: 92px; font-size: 10px; padding: 5px 8px; }
+    .hub-run-btn { padding: 10px 18px; font-size: 12px; }
+    .seg-code { font-size: 12px; }
+    .seg-num { font-size: 8px; }
+    .result-float { width: calc(100vw - 24px); bottom: 12px; right: 12px; }
   }
 </style>
 </head>
@@ -142,7 +155,7 @@
 
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><div style="background:#1a1a1a;padding:20px;border-radius:16px;display:inline-block;"><img src="logo.png" alt="Carease Command Corner" style="height:120px;"></div></div>
+    <div class="text-center mb-6"><img src="logo.png" alt="Carease Command Corner" style="height:140px; border-radius:16px; margin:0 auto; box-shadow:0 8px 24px rgba(0,0,0,0.2);"></div>
     <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
@@ -153,8 +166,8 @@
   </div>
 </div>
 
-<div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
-  <div class="logo-header"><img src="logo.png" alt="Carease Command Corner"></div>
+<div id="app" class="content" style="display:none;">
+  <div class="logo-corner"><img src="logo.png" alt="Carease Command Corner"></div>
 
   <div class="fab-menu" id="fabMenu">
     <button class="fab-btn" onclick="toggleFab()" title="Menu">⋮</button>
@@ -167,18 +180,28 @@
     </div>
   </div>
 
-  <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
-  <div id="orgsContainer"></div>
+  <div class="wheel-stage">
+    <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
+    <div id="orgsContainer" class="w-full"></div>
+  </div>
 
-  <div class="mb-6 mt-8">
+  <div class="runs-section max-w-6xl mx-auto mb-8">
     <h2 class="text-lg font-bold mb-3">Recent Runs</h2>
     <div id="runsList" class="runs-list">Loading...</div>
   </div>
 </div>
 
 <div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
-<div id="modal" class="modal-backdrop"><div class="modal p-6"><div class="flex items-center justify-between mb-4"><h3 id="modalTitle" class="text-xl font-bold">Result</h3><div class="flex gap-2"><button onclick="minimizeModal()" class="btn-secondary text-sm">−</button><button onclick="closeModal()" class="btn-secondary text-sm">×</button></div></div><div id="modalBody"></div></div></div>
-<div id="modalChip" class="modal-minimized" onclick="reopenModal()"><span id="modalChipText">Results ready</span><span style="opacity:0.7;">↗</span></div><script>
+<div id="modal" class="modal-backdrop"><div class="modal p-6"><div class="flex items-center justify-between mb-4"><h3 id="modalTitle" class="text-xl font-bold">Result</h3><div class="flex gap-2"><button onclick="minimizeModal()" class="btn-secondary text-sm">−</button><button id="modalCloseBtn" onclick="closeModal()" class="btn-secondary text-sm modal-close-btn">×</button></div></div><div id="modalBody"></div></div></div>
+
+<div id="resultFloat" class="result-float" onclick="reopenModal()">
+  <div class="result-float-header">
+    <span id="resultFloatTitle" class="result-float-title">Working...</span>
+    <span id="resultFloatStatus" class="result-float-status running">Running</span>
+  </div>
+  <div id="resultFloatBody" class="result-float-body">Task in progress...</div>
+  <div class="result-float-cta">Click to expand ↗</div>
+</div><script>
 const API = 'https://carease-intercompany-production.up.railway.app';
 const TOKEN_KEY = 'carease_session_token';
 let sessionToken = localStorage.getItem(TOKEN_KEY) || null;
@@ -186,26 +209,13 @@ let orgs = [];
 let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
+let isTaskRunning = false; // blocks closing modal during dry-run/run
 
-// DEEP jewel palette — NO yellow-adjacent tones (contrasts against yellow bg)
+// DEEP jewel palette
 const SEG_COLORS = [
-  '#B71C1C', // deep crimson
-  '#4A148C', // deep purple
-  '#01579B', // deep sky
-  '#004D40', // deep teal
-  '#3E2723', // dark cocoa
-  '#880E4F', // deep magenta
-  '#0D47A1', // navy
-  '#1B5E20', // forest
-  '#4E342E', // walnut
-  '#311B92', // indigo
-  '#00695C', // pine
-  '#4A148C', // violet
-  '#37474F', // slate
-  '#6A1B9A', // eggplant
-  '#0277BD', // ocean
-  '#33691E', // moss
-  '#78909C'  // cool grey
+  '#B71C1C','#4A148C','#01579B','#004D40','#3E2723','#880E4F','#0D47A1',
+  '#1B5E20','#4E342E','#311B92','#00695C','#4A148C','#37474F','#6A1B9A',
+  '#0277BD','#33691E','#78909C'
 ];
 
 // Intro segments animation — fan out from hub
@@ -351,7 +361,6 @@ function slicePath(cx, cy, rIn, rOut, a1, a2) {
   return `M ${p1.x} ${p1.y} A ${rOut} ${rOut} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rIn} ${rIn} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
 }
 
-// Darken/lighten hex color for 3D bevel gradients
 function shade(hex, pct) {
   const n = parseInt(hex.slice(1), 16);
   let r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
@@ -379,7 +388,6 @@ function renderWheel() {
   const gap = 0.010;
   const n = Math.max(pcs.length, 1);
 
-  // Build gradient defs for 3D bevel
   let defs = '<defs>';
   for (let i = 0; i < pcs.length; i++) {
     const c = SEG_COLORS[i % SEG_COLORS.length];
@@ -391,7 +399,6 @@ function renderWheel() {
       + `<stop offset="100%" stop-color="${dark}"/>`
       + `</radialGradient>`;
   }
-  // Inner ring shadow (creates hub depth)
   defs += `<radialGradient id="innerShadow" cx="50%" cy="50%" r="50%">`
     + `<stop offset="80%" stop-color="rgba(0,0,0,0)"/>`
     + `<stop offset="100%" stop-color="rgba(0,0,0,0.5)"/>`
@@ -418,7 +425,6 @@ function renderWheel() {
       + (s.bottom ? `<text class="seg-num" x="${lp.x}" y="${lp.y + 12}" text-anchor="middle" dominant-baseline="middle">${s.bottom}</text>` : '')
       + `</g>`;
   }
-  // Inner shadow ring overlay for hub depth
   svgSegs += `<circle cx="${cx}" cy="${cy}" r="${rIn + 3}" fill="url(#innerShadow)" pointer-events="none"/>`;
 
   const mainName = main ? main.name : 'No Main';
@@ -461,15 +467,48 @@ function openPCActions(realmId) {
   openModal(org.name, html);
 }
 
+// ---- Running state — locks close button ----
+function setRunning(flag, title, body) {
+  isTaskRunning = flag;
+  const closeBtn = document.getElementById('modalCloseBtn');
+  if (flag) {
+    closeBtn.classList.add('hidden');
+    showFloat(title || 'Working...', body || 'Task in progress...', 'running');
+  } else {
+    closeBtn.classList.remove('hidden');
+  }
+}
+
+function showFloat(title, body, statusClass) {
+  const el = document.getElementById('resultFloat');
+  document.getElementById('resultFloatTitle').textContent = title;
+  document.getElementById('resultFloatBody').innerHTML = body;
+  const statusEl = document.getElementById('resultFloatStatus');
+  statusEl.className = 'result-float-status ' + statusClass;
+  statusEl.textContent = statusClass === 'running' ? 'Running' : (statusClass === 'error' ? 'Error' : 'Done');
+  el.classList.add('show');
+}
+function hideFloat() {
+  document.getElementById('resultFloat').classList.remove('show');
+}
+
 async function syncPC(realmId) {
+  setRunning(true, 'Syncing', 'Fetching items & accounts...');
   openModal('Syncing...', '<div class="text-center py-8"><div class="loader-ring"></div></div>');
   try {
     const r = await api('/sync/' + realmId);
-    openModal('Synced ✓', '<div class="space-y-2"><p class="font-bold text-lg">' + r.name + '</p><p>Items: ' + r.items + '</p><p>Accounts: ' + r.accounts + '</p></div>');
-  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
+    setRunning(false);
+    const body = '<div class="space-y-2"><p class="font-bold text-lg">' + r.name + '</p><p>Items: ' + r.items + '</p><p>Accounts: ' + r.accounts + '</p></div>';
+    openModal('Synced ✓', body);
+    showFloat('Synced: ' + r.name, r.items + ' items · ' + r.accounts + ' accounts', 'done');
+  } catch (e) {
+    setRunning(false);
+    openModal('Error', '<p class="text-red-600">' + e.message + '</p>');
+    showFloat('Sync failed', e.message, 'error');
+  }
 }
 
-function askRunPC(realmId, name) { showConfirm('Confirm Real Run', 'This will create a real invoice and bill in QBO for <b>' + name + '</b>. Continue?', '⚠', () => runPC(realmId)); }
+function askRunPC(realmId, name) { showConfirm('Confirm Real Run', 'This will create a real invoice and bill in QBO for <b>' + name + '</b>. Continue?', '⚠', () => runPC(realmId, name)); }
 function askRunAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = orgs.filter(c => c.role === 'pc');
@@ -485,32 +524,53 @@ function getDates() {
 async function dryRunPC(realmId) {
   const d = getDates();
   if (!d.start || !d.end) return alert('Pick a date range');
+  const org = orgs.find(c => c.realm_id === realmId);
+  const name = org ? org.name : realmId;
+  setRunning(true, 'Dry Run: ' + name, 'Analyzing expenses...');
   openModal('Running dry-run...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Analyzing expenses...</p></div>');
   try {
     const r = await api('/run/' + realmId + '?start=' + d.start + '&end=' + d.end + '&dry_run=true');
+    setRunning(false);
     openModal('Dry Run Result', renderRunResult(r));
-  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
+    const summary = (r.billable_expenses_found || 0) + ' lines · $' + (r.subtotal || 0).toFixed(2);
+    showFloat('Dry Run Done: ' + name, summary, 'done');
+  } catch (e) {
+    setRunning(false);
+    openModal('Error', '<p class="text-red-600">' + e.message + '</p>');
+    showFloat('Dry Run failed', e.message, 'error');
+  }
 }
 
-async function runPC(realmId) {
+async function runPC(realmId, name) {
   const d = getDates();
   if (!d.start || !d.end) return alert('Pick a date range');
+  const orgName = name || (orgs.find(c => c.realm_id === realmId) || {}).name || realmId;
+  setRunning(true, 'Running: ' + orgName, 'Creating invoice and bill...');
   openModal('Running...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Creating invoice and bill...</p></div>');
   try {
     const r = await api('/run/' + realmId + '?start=' + d.start + '&end=' + d.end);
+    setRunning(false);
     if (r.status === 'done') playDing();
     openModal('Done ✓', renderRunResult(r));
+    const summary = '#' + (r.doc_number || r.invoice_id) + ' · ' + (r.lines_total || 0) + ' lines';
+    showFloat('Done: ' + orgName, summary, r.status === 'done' ? 'done' : 'error');
     loadRuns();
-  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
+  } catch (e) {
+    setRunning(false);
+    openModal('Error', '<p class="text-red-600">' + e.message + '</p>');
+    showFloat('Run failed', e.message, 'error');
+  }
 }
 
 async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = orgs.filter(c => c.role === 'pc');
   const d = getDates();
+  setRunning(true, dry ? 'Dry Run All' : 'Run All', '0 / ' + pcs.length + ' complete');
   openModal(dry ? 'Dry Running All PCs' : 'Running All PCs', '<div id="allResults" class="space-y-2"></div>');
   const results = document.getElementById('allResults');
   const summary = { success: 0, error: 0, partial: 0 };
+  let done = 0;
   for (const pc of pcs) {
     const row = document.createElement('div');
     row.className = 'p-3 rounded-lg border-2 border-black bg-white flex items-center gap-3';
@@ -528,12 +588,16 @@ async function runAll() {
       row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-red-600">' + e.message + '</span>';
       summary.error++;
     }
+    done++;
+    showFloat(dry ? 'Dry Run All' : 'Run All', done + ' / ' + pcs.length + ' complete', 'running');
   }
+  setRunning(false);
   const banner = document.createElement('div');
   banner.className = 'mt-4 p-4 rounded-xl';
   banner.style = 'background: #1a1a1a; color: #F5C518; border: 3px solid #1a1a1a;';
   banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm font-bold"><span>✓ ' + summary.success + ' success</span><span>⚠ ' + summary.partial + ' partial</span><span>✗ ' + summary.error + ' failed</span></div>';
   results.appendChild(banner);
+  showFloat(dry ? 'Dry Run All Done' : 'Run All Done', '✓ ' + summary.success + ' · ⚠ ' + summary.partial + ' · ✗ ' + summary.error, summary.error ? 'error' : 'done');
   if (!dry) loadRuns();
 }
 
@@ -616,24 +680,22 @@ function openModal(title, body) {
   document.getElementById('modalBody').innerHTML = body;
   document.getElementById('modal').classList.add('open');
   currentModalContent = {title: title, body: body};
-  document.getElementById('modalChip').classList.remove('show');
 }
 function closeModal() {
+  if (isTaskRunning) return;
   document.getElementById('modal').classList.remove('open');
-  document.getElementById('modalChip').classList.remove('show');
+  hideFloat();
   currentModalContent = null;
 }
 function minimizeModal() {
   document.getElementById('modal').classList.remove('open');
-  if (currentModalContent) {
-    document.getElementById('modalChipText').textContent = currentModalContent.title;
-    document.getElementById('modalChip').classList.add('show');
+  if (currentModalContent && !document.getElementById('resultFloat').classList.contains('show')) {
+    showFloat(currentModalContent.title, 'Click to expand', 'done');
   }
 }
 function reopenModal() {
   if (currentModalContent) {
     document.getElementById('modal').classList.add('open');
-    document.getElementById('modalChip').classList.remove('show');
   }
 }
 
