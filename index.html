@@ -4,64 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carease Intercompany</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232a2a2a'/%3E%3Ctext x='50' y='72' font-family='sans-serif' font-size='55' font-weight='900' fill='white' text-anchor='middle'%3Ec%3C/text%3E%3Cpath d='M 42 22 Q 50 18 58 22 L 55 32 L 45 32 Z' fill='%23F5C518'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23F5C518'/%3E%3Ctext x='50' y='72' font-family='sans-serif' font-size='55' font-weight='900' fill='%231a1a1a' text-anchor='middle'%3Ec%3C/text%3E%3Cpath d='M 42 22 L 50 12 L 58 22 Z' fill='%231a1a1a'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #1a1a1a; color: #f5f5f5; overflow-x: hidden; min-height: 100vh; margin: 0; }
-  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #1a1a1a 0%, #2a2517 50%, #1a1a1a 100%); }
-  .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: drift 30s ease-in-out infinite; }
-  .orb1 { width: 500px; height: 500px; background: #F5C518; top: -100px; left: -100px; animation-duration: 25s; }
-  .orb2 { width: 600px; height: 600px; background: #FF9500; top: 30%; right: -200px; animation-duration: 35s; animation-delay: -5s; }
-  .orb3 { width: 400px; height: 400px; background: #F5C518; bottom: -100px; left: 30%; animation-duration: 28s; animation-delay: -10s; }
-  .orb4 { width: 350px; height: 350px; background: #FFB800; top: 50%; left: 40%; animation-duration: 32s; animation-delay: -15s; }
-  @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 25% { transform: translate(100px, -80px) scale(1.1); } 50% { transform: translate(-80px, 100px) scale(0.95); } 75% { transform: translate(80px, 80px) scale(1.05); } }
+  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #F5C518; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
+  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #F5C518; }
+  .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: drift 30s ease-in-out infinite; }
+  .orb1 { width: 400px; height: 400px; background: #FF6B9D; top: -100px; left: -100px; animation-duration: 18s; }
+  .orb2 { width: 500px; height: 500px; background: #4ECDC4; top: 40%; right: -150px; animation-duration: 22s; animation-delay: -5s; }
+  .orb3 { width: 350px; height: 350px; background: #A78BFA; bottom: -50px; left: 30%; animation-duration: 20s; animation-delay: -10s; }
+  .orb4 { width: 280px; height: 280px; background: #FB923C; top: 20%; left: 45%; animation-duration: 25s; animation-delay: -15s; }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(100px,-80px) scale(1.1); } 50% { transform: translate(-80px,100px) scale(0.95); } 75% { transform: translate(80px,80px) scale(1.05); } }
   .content { position: relative; z-index: 10; }
-  .glass { background: rgba(30, 30, 30, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(245, 197, 24, 0.15); border-radius: 16px; }
-  .btn-primary { background: #F5C518; color: #1a1a1a; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
-  .btn-primary:hover { background: #FFD230; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,197,24,0.35); }
+  .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+  .btn-primary { background: #1a1a1a; color: #F5C518; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 rgba(0,0,0,0.15); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
-  .btn-secondary { background: rgba(255,255,255,0.08); color: #f5f5f5; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
-  .btn-secondary:hover { background: rgba(245,197,24,0.15); border-color: rgba(245,197,24,0.4); }
+  .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
+  .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
   .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
-  .status-done { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
-  .status-error { background: #EF4444; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
-  .status-running { background: #F5C518; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .status-done { background: #10B981; }
+  .status-error { background: #EF4444; }
+  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .loader-ring { display: inline-block; width: 60px; height: 60px; position: relative; }
   .loader-ring::before, .loader-ring::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; }
-  .loader-ring::before { border-top-color: #F5C518; border-right-color: #F5C518; animation: spin 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-  .loader-ring::after { border-bottom-color: #FFD230; animation: spin 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite reverse; inset: 6px; }
+  .loader-ring::before { border-top-color: #1a1a1a; border-right-color: #1a1a1a; animation: spin 1.2s cubic-bezier(0.4,0,0.6,1) infinite; }
+  .loader-ring::after { border-bottom-color: #F5C518; animation: spin 1.8s cubic-bezier(0.4,0,0.6,1) infinite reverse; inset: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(245,197,24,0.2); border-top-color: #F5C518; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-backdrop.open { display: flex; }
-  .modal { background: linear-gradient(180deg, #252525 0%, #1e1e1e 100%); border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(245,197,24,0.25); box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
-  .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #F5C518, #FFD230); color: #1a1a1a; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 0 8px 24px rgba(245,197,24,0.4); display: none; align-items: center; gap: 8px; }
+  .modal { background: white; border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 3px solid #1a1a1a; box-shadow: 8px 8px 0 #F5C518; color: #1a1a1a; }
+  .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
   .modal-minimized.show { display: flex; }
-  .splash { position: fixed; inset: 0; z-index: 200; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
-  .splash-logo { font-size: 64px; font-weight: 900; color: white; letter-spacing: -0.03em; display: flex; align-items: center; animation: logoIn 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
+  .splash-logo { font-size: 64px; font-weight: 900; color: #1a1a1a; letter-spacing: -0.03em; display: flex; align-items: center; animation: logoIn 1s cubic-bezier(0.34,1.56,0.64,1); }
   .splash-c { position: relative; display: inline-block; margin-right: 2px; }
-  .splash-crown { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) rotate(-15deg); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 16px solid #F5C518; animation: crownDrop 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .splash-sub { color: rgba(245,197,24,0.9); font-size: 14px; letter-spacing: 0.3em; margin-top: 20px; text-transform: uppercase; animation: fadeInUp 1s ease 0.4s both; }
+  .splash-crown { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) rotate(-15deg); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 16px solid #1a1a1a; animation: crownDrop 1s cubic-bezier(0.34,1.56,0.64,1); }
+  .splash-sub { color: #1a1a1a; font-size: 14px; letter-spacing: 0.3em; margin-top: 20px; text-transform: uppercase; animation: fadeInUp 1s ease 0.4s both; font-weight: 700; }
   @keyframes logoIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   @keyframes crownDrop { from { transform: translateX(-50%) rotate(-15deg) translateY(-30px); opacity: 0; } to { transform: translateX(-50%) rotate(-15deg) translateY(0); opacity: 1; } }
   @keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes splashFade { 0%, 70% { opacity: 1; pointer-events: auto; } 100% { opacity: 0; pointer-events: none; visibility: hidden; } }
-  .login-card { max-width: 400px; width: 100%; padding: 40px; background: linear-gradient(180deg, rgba(35,35,35,0.9), rgba(25,25,25,0.9)); border: 1px solid rgba(245,197,24,0.25); border-radius: 20px; backdrop-filter: blur(30px); }
-  .input-field { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
-  .input-field:focus { border-color: #F5C518; background: rgba(255,255,255,0.08); }
-  .date-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 8px 12px; border-radius: 8px; font-family: inherit; color-scheme: dark; }
-  .date-input:focus { border-color: #F5C518; outline: none; }
-  .pc-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.15s; }
-  .pc-row:hover { background: rgba(255,255,255,0.05); border-color: rgba(245,197,24,0.2); }
-  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-  .badge-done { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); }
-  .badge-error { background: rgba(239,68,68,0.15); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
-  .badge-partial { background: rgba(245,158,11,0.15); color: #FBBF24; border: 1px solid rgba(245,158,11,0.3); }
-  .run-item { padding: 12px 16px; border-radius: 10px; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
-  .run-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(245,197,24,0.2); }
-  .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #F5C518, #FFD230); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 0 8px 24px rgba(245,197,24,0.4); }
+  @keyframes splashFade { 0%,70% { opacity: 1; pointer-events: auto; } 100% { opacity: 0; pointer-events: none; visibility: hidden; } }
+  .login-card { max-width: 400px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
+  .input-field { width: 100%; background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
+  .input-field:focus { box-shadow: 4px 4px 0 #F5C518; transform: translate(-1px,-1px); }
+  .date-input { background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 8px 12px; border-radius: 8px; font-family: inherit; font-weight: 600; }
+  .date-input:focus { outline: none; box-shadow: 3px 3px 0 #F5C518; }
+  .pc-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: white; border: 2px solid #1a1a1a; border-radius: 12px; transition: all 0.15s; color: #1a1a1a; }
+  .pc-row:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; border: 2px solid #1a1a1a; }
+  .badge-done { background: #10B981; color: white; }
+  .badge-error { background: #EF4444; color: white; }
+  .badge-partial { background: #F59E0B; color: white; }
+  .run-item { padding: 12px 16px; border-radius: 10px; cursor: pointer; transition: all 0.15s; border: 2px solid transparent; color: #1a1a1a; }
+  .run-item:hover { background: white; border-color: #1a1a1a; transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #1a1a1a; }
+  .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: #F5C518; border: 3px solid #1a1a1a; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 4px 4px 0 #1a1a1a; }
+  h1, h2, h3, h4 { color: #1a1a1a; }
+  .text-yellow-400 { color: #b8860b !important; }
+  .text-gray-400 { color: #64748b !important; }
+  .text-gray-500 { color: #475569 !important; }
+  .text-gray-300 { color: #475569 !important; }
+  .text-red-400 { color: #dc2626 !important; }
+  .text-orange-400 { color: #ea580c !important; }
+  .text-white { color: #1a1a1a !important; }
+  .border-gray-700 { border-color: #cbd5e1 !important; }
+  .bg-black\/40 { background: #f1f5f9 !important; color: #1a1a1a; }
 </style>
 </head>
 <body>
@@ -69,27 +79,27 @@
 <div class="bg-container"><div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div><div class="bg-orb orb4"></div></div>
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><div class="splash-logo" style="font-size: 40px; justify-content: center;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:8px;border-right-width:8px;border-bottom-width:11px;top:-5px;"></span></span>arease</div><div class="text-xs text-yellow-400 tracking-widest uppercase mt-2">Intercompany</div></div>
-    <div id="loginError" class="text-red-400 text-sm mb-3 text-center" style="display:none;"></div>
+    <div class="text-center mb-6"><div class="splash-logo" style="font-size: 40px; justify-content: center;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:8px;border-right-width:8px;border-bottom-width:11px;top:-5px;"></span></span>arease</div><div class="text-xs tracking-widest uppercase mt-2 font-bold">Intercompany</div></div>
+    <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
       <input id="loginPass" type="password" class="input-field" placeholder="Password" autocomplete="current-password">
-      <label class="flex items-center gap-2 text-sm text-gray-300"><input id="rememberMe" type="checkbox" class="w-4 h-4 accent-yellow-400" checked>Remember me for 30 days</label>
+      <label class="flex items-center gap-2 text-sm"><input id="rememberMe" type="checkbox" class="w-4 h-4 accent-black" checked>Remember me for 30 days</label>
       <button onclick="doLogin()" id="loginBtn" class="btn-primary w-full">Sign In</button>
     </div>
   </div>
 </div>
 <div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
   <header class="flex items-center justify-between mb-6 flex-wrap gap-3">
-    <div class="flex items-center gap-3"><div class="splash-logo" style="font-size: 30px;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:6px;border-right-width:6px;border-bottom-width:8px;top:-4px;"></span></span>arease</div><div class="hidden md:block"><div class="text-xs text-yellow-400 tracking-widest uppercase">Intercompany</div></div></div>
-    <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs text-gray-400 mr-2"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
+    <div class="flex items-center gap-3"><div class="splash-logo" style="font-size: 30px;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:6px;border-right-width:6px;border-bottom-width:8px;top:-4px;"></span></span>arease</div><div class="hidden md:block"><div class="text-xs tracking-widest uppercase font-bold">Intercompany</div></div></div>
+    <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs mr-2 font-bold"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
   </header>
   <div class="glass p-5 mb-5">
-    <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold">Run Period</h2><div class="text-xs text-gray-400">Set your billing window</div></div>
+    <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold">Run Period</h2><div class="text-xs opacity-60">Set your billing window</div></div>
     <div class="flex flex-wrap gap-3 items-end">
-      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1 text-gray-400">Start</label><input id="startDate" type="date" class="date-input"></div>
-      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1 text-gray-400">End</label><input id="endDate" type="date" class="date-input"></div>
-      <label class="flex items-center gap-2 text-sm cursor-pointer"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4 accent-yellow-400"><span>Dry Run</span></label>
+      <div><label class="block text-xs font-bold uppercase tracking-wider mb-1">Start</label><input id="startDate" type="date" class="date-input"></div>
+      <div><label class="block text-xs font-bold uppercase tracking-wider mb-1">End</label><input id="endDate" type="date" class="date-input"></div>
+      <label class="flex items-center gap-2 text-sm font-bold cursor-pointer"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4 accent-black"><span>Dry Run</span></label>
       <button onclick="askRunAll()" class="btn-primary ml-auto">▶ Run All PCs</button>
     </div>
   </div>
@@ -100,10 +110,10 @@
   </div>
   <div class="glass p-5">
     <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Recent Runs</h2><button onclick="loadRuns()" class="btn-secondary text-xs">↻</button></div>
-    <div id="runsList" class="text-gray-400 text-sm">Loading...</div>
+    <div id="runsList" class="text-sm">Loading...</div>
   </div>
 </div>
-<div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center text-gray-300 mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
+<div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
 <div id="modal" class="modal-backdrop"><div class="modal p-6"><div class="flex items-center justify-between mb-4"><h3 id="modalTitle" class="text-xl font-bold">Result</h3><div class="flex gap-2"><button onclick="minimizeModal()" class="btn-secondary text-sm">−</button><button onclick="closeModal()" class="btn-secondary text-sm">×</button></div></div><div id="modalBody"></div></div></div>
 <div id="modalChip" class="modal-minimized" onclick="reopenModal()"><span id="modalChipText">Results ready</span><span style="opacity:0.7;">↗</span></div><script>
 const API = 'https://carease-intercompany-production.up.railway.app';
@@ -203,7 +213,7 @@ async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
   document.getElementById('orgsList').innerHTML = '';
   try { orgs = await api('/orgs'); renderOrgs(); }
-  catch (e) { document.getElementById('orgsList').innerHTML = '<p class="text-red-400">' + e.message + '</p>'; }
+  catch (e) { document.getElementById('orgsList').innerHTML = '<p class="text-red-500">' + e.message + '</p>'; }
   finally { document.getElementById('orgsLoading').style.display = 'none'; }
 }
 
@@ -212,18 +222,18 @@ function renderOrgs() {
   const pcs = orgs.filter(c => c.role === 'pc');
   let html = '';
   if (main) {
-    html += '<div class="p-4 rounded-xl mb-4 flex items-center justify-between" style="background:linear-gradient(135deg,rgba(245,197,24,0.15),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.3);"><div><div class="text-xs text-yellow-400 tracking-widest uppercase font-bold">Main</div><div class="text-lg font-bold text-white">' + main.name + '</div><div class="text-xs text-gray-400 font-mono">Realm ' + main.realm_id + '</div></div><span class="status-dot status-done"></span></div>';
+    html += '<div class="p-4 rounded-xl mb-4 flex items-center justify-between" style="background:#1a1a1a;color:#F5C518;border:3px solid #1a1a1a;"><div><div class="text-xs tracking-widest uppercase font-bold" style="color:#F5C518;">Main</div><div class="text-lg font-bold" style="color:#F5C518;">' + main.name + '</div><div class="text-xs font-mono" style="color:#F5C518;opacity:0.7;">Realm ' + main.realm_id + '</div></div><span class="status-dot status-done"></span></div>';
   } else {
-    html += '<div class="border-2 border-dashed border-yellow-500/30 rounded-xl p-4 mb-4 text-center"><p class="font-bold mb-2 text-gray-300">No Main connected</p><button onclick="connectMain()" class="btn-primary">Connect Main QBO</button></div>';
+    html += '<div class="border-2 border-dashed border-black rounded-xl p-4 mb-4 text-center"><p class="font-bold mb-2">No Main connected</p><button onclick="connectMain()" class="btn-primary">Connect Main QBO</button></div>';
   }
-  html += '<h3 class="text-xs uppercase font-bold tracking-widest mb-3 mt-4 text-gray-400">Professional Corporations (' + pcs.length + ')</h3>';
+  html += '<h3 class="text-xs uppercase font-bold tracking-widest mb-3 mt-4">Professional Corporations (' + pcs.length + ')</h3>';
   if (!pcs.length) {
-    html += '<div class="border-2 border-dashed border-yellow-500/30 rounded-xl p-4 text-center"><p class="mb-2 text-gray-300">No PCs connected yet</p><button onclick="connectPC()" class="btn-primary">Connect First PC</button></div>';
+    html += '<div class="border-2 border-dashed border-black rounded-xl p-4 text-center"><p class="mb-2">No PCs connected yet</p><button onclick="connectPC()" class="btn-primary">Connect First PC</button></div>';
   } else {
     html += '<div class="space-y-2">';
     for (const pc of pcs) {
       const safeName = pc.name.replace(/'/g, "\\'");
-      html += '<div class="pc-row"><div class="flex-1 min-w-0"><div class="font-bold text-white truncate">' + pc.name + '</div><div class="text-xs text-gray-500 font-mono">' + pc.realm_id + '</div></div><div class="flex gap-2 flex-shrink-0"><button onclick="syncPC(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">Sync</button><button onclick="askDryRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-secondary text-xs">Dry Run</button><button onclick="askRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-primary text-xs">Run</button><button onclick="viewFlagged(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">⚑</button></div></div>';
+      html += '<div class="pc-row"><div class="flex-1 min-w-0"><div class="font-bold truncate">' + pc.name + '</div><div class="text-xs opacity-60 font-mono">' + pc.realm_id + '</div></div><div class="flex gap-2 flex-shrink-0"><button onclick="syncPC(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">Sync</button><button onclick="askDryRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-secondary text-xs">Dry Run</button><button onclick="askRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-primary text-xs">Run</button><button onclick="viewFlagged(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">⚑</button></div></div>';
     }
     html += '</div>';
   }
@@ -235,7 +245,7 @@ async function syncPC(realmId) {
   try {
     const r = await api('/sync/' + realmId);
     openModal('Synced ✓', '<div class="space-y-2"><p class="font-bold text-lg">' + r.name + '</p><p>Items: ' + r.items + '</p><p>Accounts: ' + r.accounts + '</p></div>');
-  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
+  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
 function askDryRunPC(realmId, name) { showConfirm('Dry Run', 'Preview what would happen for <b>' + name + '</b>? Nothing will be posted to QBO.', '👁', () => dryRunPC(realmId)); }
@@ -252,24 +262,24 @@ async function dryRunPC(realmId) {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
   if (!start || !end) return alert('Pick a date range');
-  openModal('Running dry-run...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4 text-gray-400">Analyzing expenses...</p></div>');
+  openModal('Running dry-run...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Analyzing expenses...</p></div>');
   try {
     const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end + '&dry_run=true');
     openModal('Dry Run Result', renderRunResult(r));
-  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
+  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
 async function runPC(realmId) {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
   if (!start || !end) return alert('Pick a date range');
-  openModal('Running...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4 text-gray-400">Creating invoice and bill...</p></div>');
+  openModal('Running...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Creating invoice and bill...</p></div>');
   try {
     const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end);
     if (r.status === 'done') playDing();
     openModal('Done ✓', renderRunResult(r));
     loadRuns();
-  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
+  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
 async function runAll() {
@@ -283,7 +293,7 @@ async function runAll() {
   for (const pc of pcs) {
     const row = document.createElement('div');
     row.className = 'pc-row';
-    row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-gray-400">running...</span>';
+    row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs opacity-60">running...</span>';
     results.appendChild(row);
     try {
       const r = await api('/run/' + pc.realm_id + '?start=' + start + '&end=' + end + (dry ? '&dry_run=true' : ''));
@@ -292,38 +302,38 @@ async function runAll() {
       else if (r.status === 'partial') { badge = '<span class="badge badge-partial">Partial</span>'; detail = r.error || 'Partial'; summary.partial++; }
       else if (r.dry_run) { badge = '<span class="badge badge-done">Preview</span>'; detail = (r.billable_expenses_found||0) + ' lines · $' + (r.subtotal||0).toFixed(2) + ' · MSA $' + (r.msa_amount_20pct||0).toFixed(2); summary.success++; }
       else { badge = '<span class="badge badge-done">Done</span>'; detail = '#' + r.doc_number + ' · ' + r.lines_total + ' lines · ' + (r.lines_flagged||0) + ' flagged'; summary.success++; playDing(); }
-      row.innerHTML = badge + '<span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-gray-400">' + detail + '</span>';
+      row.innerHTML = badge + '<span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs opacity-70">' + detail + '</span>';
     } catch (e) {
-      row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-red-400">' + e.message + '</span>';
+      row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-red-600">' + e.message + '</span>';
       summary.error++;
     }
   }
   const banner = document.createElement('div');
   banner.className = 'mt-4 p-4 rounded-xl';
-  banner.style = 'background: linear-gradient(135deg, rgba(245,197,24,0.1), rgba(245,197,24,0.05)); border: 1px solid rgba(245,197,24,0.3);';
-  banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm"><span>✓ <b>' + summary.success + '</b> success</span><span class="text-orange-400">⚠ <b>' + summary.partial + '</b> partial</span><span class="text-red-400">✗ <b>' + summary.error + '</b> failed</span></div>';
+  banner.style = 'background: #1a1a1a; color: #F5C518; border: 3px solid #1a1a1a;';
+  banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm font-bold"><span>✓ ' + summary.success + ' success</span><span>⚠ ' + summary.partial + ' partial</span><span>✗ ' + summary.error + ' failed</span></div>';
   results.appendChild(banner);
   if (!dry) loadRuns();
 }
 
 function renderRunResult(r) {
-  if (r.error && !r.status) return '<p class="text-red-400 font-bold">' + r.error + ': ' + (r.detail || '') + '</p>';
+  if (r.error && !r.status) return '<p class="text-red-600 font-bold">' + r.error + ': ' + (r.detail || '') + '</p>';
   if (r.dry_run) {
-    let html = '<div class="grid grid-cols-2 gap-3 mb-4 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">State:</span> <b>' + r.state_code + '</b></div><div><span class="text-gray-400">Period:</span> ' + r.period + '</div><div><span class="text-gray-400">Expenses:</span> ' + r.billable_expenses_found + '</div><div><span class="text-gray-400">Subtotal:</span> $' + r.subtotal.toFixed(2) + '</div><div><span class="text-gray-400">MSA (20%):</span> $' + r.msa_amount_20pct.toFixed(2) + '</div><div class="col-span-2 pt-2 border-t border-gray-700"><span class="text-gray-400">Invoice Total:</span> <span class="text-lg text-yellow-400 font-bold">$' + r.invoice_total.toFixed(2) + '</span></div><div class="col-span-2 text-xs text-gray-400">Next #: <span class="text-white">' + (r.next_doc_number || '?') + '</span></div><div class="col-span-2 text-xs text-gray-400">MSA Main: <span class="text-white">' + (r.msa_item_lookup_main || '?') + '</span></div><div class="col-span-2 text-xs text-gray-400">MSA PC: <span class="text-white">' + (r.msa_item_lookup_pc || '?') + '</span></div></div><h4 class="font-bold mb-2 text-sm text-yellow-400 uppercase tracking-wide">Line Items</h4><div class="space-y-2">';
+    let html = '<div class="grid grid-cols-2 gap-3 mb-4 text-sm"><div><span class="opacity-60">PC:</span> <b>' + r.pc + '</b></div><div><span class="opacity-60">State:</span> <b>' + r.state_code + '</b></div><div><span class="opacity-60">Period:</span> ' + r.period + '</div><div><span class="opacity-60">Expenses:</span> ' + r.billable_expenses_found + '</div><div><span class="opacity-60">Subtotal:</span> $' + r.subtotal.toFixed(2) + '</div><div><span class="opacity-60">MSA (20%):</span> $' + r.msa_amount_20pct.toFixed(2) + '</div><div class="col-span-2 pt-2 border-t border-black"><span class="opacity-60">Invoice Total:</span> <span class="text-lg font-bold">$' + r.invoice_total.toFixed(2) + '</span></div><div class="col-span-2 text-xs opacity-70">Next #: <b>' + (r.next_doc_number || '?') + '</b></div><div class="col-span-2 text-xs opacity-70">MSA Main: <b>' + (r.msa_item_lookup_main || '?') + '</b></div><div class="col-span-2 text-xs opacity-70">MSA PC: <b>' + (r.msa_item_lookup_pc || '?') + '</b></div></div><h4 class="font-bold mb-2 text-sm uppercase tracking-wide">Line Items</h4><div class="space-y-2">';
     for (const l of r.line_previews) {
       const dot = l.confidence === 'high' ? '🟢' : (l.confidence === 'low' ? '🟡' : '🔴');
-      html += '<div class="p-3 rounded-lg" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);"><div class="flex justify-between items-start gap-2"><span class="text-sm">' + dot + ' ' + l.description + '</span><b class="text-yellow-400">$' + l.amount.toFixed(2) + '</b></div><div class="text-xs text-gray-500 mt-1">' + (l.reasoning || '') + '</div></div>';
+      html += '<div class="p-3 rounded-lg border-2 border-black"><div class="flex justify-between items-start gap-2"><span class="text-sm">' + dot + ' ' + l.description + '</span><b>$' + l.amount.toFixed(2) + '</b></div><div class="text-xs opacity-70 mt-1">' + (l.reasoning || '') + '</div></div>';
     }
-    html += '</div><p class="mt-4 text-xs italic text-gray-500 text-center">' + r.note + '</p>';
+    html += '</div><p class="mt-4 text-xs italic opacity-60 text-center">' + r.note + '</p>';
     return html;
   }
   if (r.status === 'done') {
-    return '<div class="space-y-3 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">Invoice:</span> <b class="text-yellow-400">#' + (r.doc_number || r.invoice_id) + '</b></div><div><span class="text-gray-400">Bill created:</span> id ' + (r.bill_id || '?') + '</div><div><span class="text-gray-400">Lines:</span> ' + r.lines_total + ' · <span class="text-orange-400">' + (r.lines_flagged || 0) + ' flagged</span></div><div class="pt-3 mt-3 border-t border-gray-700 text-center"><span class="badge badge-done">✓ Complete</span></div></div>';
+    return '<div class="space-y-3 text-sm"><div><span class="opacity-60">PC:</span> <b>' + r.pc + '</b></div><div><span class="opacity-60">Invoice:</span> <b>#' + (r.doc_number || r.invoice_id) + '</b></div><div><span class="opacity-60">Bill created:</span> id ' + (r.bill_id || '?') + '</div><div><span class="opacity-60">Lines:</span> ' + r.lines_total + ' · ' + (r.lines_flagged || 0) + ' flagged</div><div class="pt-3 mt-3 border-t border-black text-center"><span class="badge badge-done">✓ Complete</span></div></div>';
   }
   if (r.status === 'partial') {
-    return '<div class="space-y-2 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">Invoice created:</span> <b>#' + (r.doc_number || r.invoice_id) + '</b></div><div class="text-orange-400"><b>Issue:</b> ' + r.error + '</div></div>';
+    return '<div class="space-y-2 text-sm"><div><span class="opacity-60">PC:</span> <b>' + r.pc + '</b></div><div><span class="opacity-60">Invoice created:</span> <b>#' + (r.doc_number || r.invoice_id) + '</b></div><div class="text-orange-600"><b>Issue:</b> ' + r.error + '</div></div>';
   }
-  return '<pre class="text-xs bg-black/40 p-3 rounded overflow-x-auto text-gray-300">' + JSON.stringify(r, null, 2) + '</pre>';
+  return '<pre class="text-xs bg-gray-100 p-3 rounded overflow-x-auto">' + JSON.stringify(r, null, 2) + '</pre>';
 }
 
 async function viewFlagged(realmId) {
@@ -333,11 +343,11 @@ async function viewFlagged(realmId) {
     if (!r.flagged.length) { openModal(r.name + ' — Flagged', '<p class="text-center py-4">No flagged items 🎉</p>'); return; }
     let html = '<div class="space-y-2">';
     for (const f of r.flagged) {
-      html += '<div class="p-3 rounded-lg" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);"><div class="font-bold text-sm">' + f.description + '</div><div class="text-xs text-gray-400 mt-1">' + f.reasoning + '</div><div class="text-xs mt-2">Confidence: <b class="' + (f.confidence==='low'?'text-orange-400':'text-red-400') + '">' + f.confidence + '</b></div></div>';
+      html += '<div class="p-3 rounded-lg border-2 border-black"><div class="font-bold text-sm">' + f.description + '</div><div class="text-xs opacity-70 mt-1">' + f.reasoning + '</div><div class="text-xs mt-2">Confidence: <b>' + f.confidence + '</b></div></div>';
     }
     html += '</div>';
     openModal(r.name + ' — Flagged', html);
-  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
+  } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
 async function loadRuns() {
@@ -345,30 +355,30 @@ async function loadRuns() {
   el.innerHTML = '<div class="text-center py-4"><div class="loader-small"></div></div>';
   try {
     const runs = await api('/runs');
-    if (!runs.length) { el.innerHTML = '<p class="text-gray-500 text-center py-4">No runs yet</p>'; return; }
+    if (!runs.length) { el.innerHTML = '<p class="text-center py-4 opacity-60">No runs yet</p>'; return; }
     let html = '<div class="space-y-1">';
     for (const r of runs) {
       const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
       const when = new Date(r.started_at).toLocaleString();
       const org = r.companies || {};
       const runData = encodeURIComponent(JSON.stringify(r));
-      html += '<div class="run-item flex items-center gap-3 text-sm" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs text-gray-500">' + r.period_start + ' to ' + r.period_end + '</div></div><div class="text-xs text-gray-400 text-right flex-shrink-0"><div>' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged</div><div class="opacity-70">' + when + '</div></div></div>';
+      html += '<div class="run-item flex items-center gap-3 text-sm" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs opacity-70">' + r.period_start + ' to ' + r.period_end + '</div></div><div class="text-xs opacity-70 text-right flex-shrink-0"><div>' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged</div><div>' + when + '</div></div></div>';
     }
     html += '</div>';
     el.innerHTML = html;
-  } catch (e) { el.innerHTML = '<p class="text-red-400">' + e.message + '</p>'; }
+  } catch (e) { el.innerHTML = '<p class="text-red-600">' + e.message + '</p>'; }
 }
 
 function viewRunDetail(encoded) {
   const r = JSON.parse(decodeURIComponent(encoded));
   const org = r.companies || {};
   const cls = r.status === 'done' ? 'badge-done' : (r.status === 'error' ? 'badge-error' : 'badge-partial');
-  let html = '<div class="space-y-3 text-sm"><div><span class="text-gray-400">Company:</span> <b>' + (org.name || '?') + '</b></div><div><span class="text-gray-400">Period:</span> ' + r.period_start + ' to ' + r.period_end + '</div><div><span class="text-gray-400">Status:</span> <span class="badge ' + cls + '">' + r.status + '</span></div><div><span class="text-gray-400">Started:</span> ' + new Date(r.started_at).toLocaleString() + '</div>';
-  if (r.finished_at) html += '<div><span class="text-gray-400">Finished:</span> ' + new Date(r.finished_at).toLocaleString() + '</div>';
-  if (r.invoice_id) html += '<div><span class="text-gray-400">Invoice ID:</span> <b>' + r.invoice_id + '</b></div>';
-  if (r.bill_id) html += '<div><span class="text-gray-400">Bill ID:</span> <b>' + r.bill_id + '</b></div>';
-  html += '<div><span class="text-gray-400">Lines total:</span> ' + (r.lines_total || 0) + '</div><div><span class="text-gray-400">Lines flagged:</span> ' + (r.lines_flagged || 0) + '</div>';
-  if (r.error_message) html += '<div class="text-red-400 pt-2 border-t border-gray-700"><b>Error:</b> ' + r.error_message + '</div>';
+  let html = '<div class="space-y-3 text-sm"><div><span class="opacity-60">Company:</span> <b>' + (org.name || '?') + '</b></div><div><span class="opacity-60">Period:</span> ' + r.period_start + ' to ' + r.period_end + '</div><div><span class="opacity-60">Status:</span> <span class="badge ' + cls + '">' + r.status + '</span></div><div><span class="opacity-60">Started:</span> ' + new Date(r.started_at).toLocaleString() + '</div>';
+  if (r.finished_at) html += '<div><span class="opacity-60">Finished:</span> ' + new Date(r.finished_at).toLocaleString() + '</div>';
+  if (r.invoice_id) html += '<div><span class="opacity-60">Invoice ID:</span> <b>' + r.invoice_id + '</b></div>';
+  if (r.bill_id) html += '<div><span class="opacity-60">Bill ID:</span> <b>' + r.bill_id + '</b></div>';
+  html += '<div><span class="opacity-60">Lines total:</span> ' + (r.lines_total || 0) + '</div><div><span class="opacity-60">Lines flagged:</span> ' + (r.lines_flagged || 0) + '</div>';
+  if (r.error_message) html += '<div class="text-red-600 pt-2 border-t border-black"><b>Error:</b> ' + r.error_message + '</div>';
   html += '</div>';
   openModal('Run Details', html);
 }
