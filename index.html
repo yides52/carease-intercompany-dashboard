@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carease Intercompany</title>
+<title>Carease Control Corner</title>
+<link rel="icon" href="logo.png" type="image/png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body {
@@ -13,7 +14,6 @@
     min-height: 100vh;
   }
 
-  /* Animated background shapes */
   .bg-shape {
     position: fixed;
     border-radius: 50%;
@@ -137,7 +137,6 @@
 
 <div class="content max-w-6xl mx-auto px-4 py-8">
 
-  <!-- Header -->
   <header class="flex items-center justify-between mb-8">
     <div class="flex items-center gap-4">
       <div class="logo-c">c</div>
@@ -152,7 +151,6 @@
     </div>
   </header>
 
-  <!-- Run controls -->
   <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
     <h2 class="text-xl font-black mb-4">Run Period</h2>
     <div class="flex flex-wrap gap-4 items-end">
@@ -173,7 +171,6 @@
     <p class="text-xs text-black/60 mt-3">Dry Run shows what would happen without touching QBO. Uncheck to run for real.</p>
   </div>
 
-  <!-- Companies -->
   <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-black">Connected Companies</h2>
@@ -183,7 +180,6 @@
     <div id="companiesList"></div>
   </div>
 
-  <!-- Runs -->
   <div class="glass rounded-2xl p-6 shadow-xl">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-black">Recent Runs</h2>
@@ -194,7 +190,6 @@
 
 </div>
 
-<!-- Result modal -->
 <div id="modal" class="modal-backdrop" onclick="if(event.target===this) closeModal()">
   <div class="modal p-6">
     <div class="flex items-center justify-between mb-4">
@@ -208,7 +203,6 @@
 <script>
 const API = 'https://carease-intercompany-production.up.railway.app';
 
-// Default dates: current month
 (function initDates() {
   const now = new Date();
   const first = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -320,7 +314,7 @@ async function runPC(realmId) {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
   if (!start || !end) return alert('Pick a date range first');
-  if (!confirm('This will create a real invoice and modify PC books. Continue?')) return;
+  if (!confirm('This will create a real invoice and bill in QBO. Continue?')) return;
   openModal('Running...', '<div class="text-center py-8"><div class="spinner"></div><p class="mt-2">This can take up to a minute...</p></div>');
   try {
     const r = await api(`/run/${realmId}?start=${start}&end=${end}`);
@@ -335,7 +329,7 @@ async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = companies.filter(c => c.role === 'pc');
   if (!pcs.length) return alert('No PCs to run');
-  if (!dry && !confirm(`This will create REAL invoices for ${pcs.length} PCs. Continue?`)) return;
+  if (!dry && !confirm(`This will create REAL invoices and bills for ${pcs.length} PCs. Continue?`)) return;
 
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
@@ -349,10 +343,10 @@ async function runAll() {
     results.appendChild(row);
     try {
       const r = await api(`/run/${pc.realm_id}?start=${start}&end=${end}${dry ? '&dry_run=true' : ''}`);
-      const badge = r.status === 'error' ? '❌' : (r.dry_run ? '👁' : '✓');
+      const badge = r.status === 'error' ? '❌' : (r.status === 'partial' ? '⚠️' : (r.dry_run ? '👁' : '✓'));
       const detail = r.dry_run
         ? `${r.billable_expenses_found || 0} lines, subtotal $${r.subtotal || 0}, MSA $${r.msa_amount_20pct || 0}`
-        : (r.status === 'done' ? `${r.lines_total} lines, ${r.lines_flagged} flagged` : (r.status || r.error || ''));
+        : (r.status === 'done' ? `#${r.doc_number}, ${r.lines_total} lines, ${r.lines_flagged || 0} flagged` : (r.error || r.status || ''));
       row.innerHTML = `<span>${badge}</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-black/60">${detail}</span>`;
     } catch (e) {
       row.innerHTML = `<span>❌</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-red-600">${e.message}</span>`;
@@ -362,7 +356,7 @@ async function runAll() {
 }
 
 function renderRunResult(r) {
-  if (r.error) return `<p class="text-red-600 font-bold">${r.error}: ${r.detail || ''}</p>`;
+  if (r.error && !r.status) return `<p class="text-red-600 font-bold">${r.error}: ${r.detail || ''}</p>`;
   if (r.dry_run) {
     let html = `
       <div class="grid grid-cols-2 gap-2 mb-4 text-sm">
@@ -373,7 +367,9 @@ function renderRunResult(r) {
         <div><b>Subtotal:</b> $${r.subtotal}</div>
         <div><b>MSA (20%):</b> $${r.msa_amount_20pct}</div>
         <div class="col-span-2 text-lg"><b>Invoice Total:</b> $${r.invoice_total}</div>
-        <div class="col-span-2"><b>MSA Item:</b> ${r.msa_item_lookup}</div>
+        <div class="col-span-2"><b>Next Invoice #:</b> ${r.next_doc_number || '?'}</div>
+        <div class="col-span-2"><b>MSA in Main:</b> ${r.msa_item_lookup_main || 'undefined'}</div>
+        <div class="col-span-2"><b>MSA in PC:</b> ${r.msa_item_lookup_pc || 'undefined'}</div>
       </div>
       <h4 class="font-bold mb-2">Line Categorizations:</h4>
       <div class="space-y-2">`;
@@ -381,11 +377,27 @@ function renderRunResult(r) {
       const badge = l.confidence === 'high' ? '🟢' : (l.confidence === 'low' ? '🟡' : '🔴');
       html += `<div class="border rounded p-2 text-sm">
         <div class="flex justify-between"><span>${badge} ${l.description}</span><b>$${l.amount}</b></div>
-        <div class="text-xs opacity-70">${l.reasoning}</div>
+        <div class="text-xs opacity-70">${l.reasoning || ''}</div>
       </div>`;
     }
     html += `</div><p class="mt-4 text-xs italic">${r.note}</p>`;
     return html;
+  }
+  if (r.status === 'done') {
+    return `<div class="space-y-2">
+      <p><b>PC:</b> ${r.pc}</p>
+      <p><b>Invoice:</b> #${r.doc_number || r.invoice_id}</p>
+      <p><b>Bill created in PC:</b> id ${r.bill_id || '?'}</p>
+      <p><b>Lines:</b> ${r.lines_total}, flagged: ${r.lines_flagged || 0}</p>
+      <p class="text-green-700 font-bold mt-3">✓ Done</p>
+    </div>`;
+  }
+  if (r.status === 'partial') {
+    return `<div class="space-y-2">
+      <p><b>PC:</b> ${r.pc}</p>
+      <p><b>Invoice created:</b> #${r.doc_number || r.invoice_id}</p>
+      <p class="text-orange-600"><b>But:</b> ${r.error}</p>
+    </div>`;
   }
   return `<pre class="text-xs bg-gray-100 p-3 rounded overflow-x-auto">${JSON.stringify(r, null, 2)}</pre>`;
 }
