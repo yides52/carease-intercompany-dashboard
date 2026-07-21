@@ -3,49 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carease Intercompany</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23F5C518'/%3E%3Ctext x='50' y='72' font-family='sans-serif' font-size='55' font-weight='900' fill='%231a1a1a' text-anchor='middle'%3Ec%3C/text%3E%3Cpath d='M 42 22 L 50 12 L 58 22 Z' fill='%231a1a1a'/%3E%3C/svg%3E">
+<title>Carease Command Corner</title>
+<link rel="icon" type="image/png" href="logo.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #F5C518; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
   .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #F5C518 0%, #FFD449 100%); }
-  .bg-orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; animation: drift 30s ease-in-out infinite; }
-  .orb1 { width: 500px; height: 500px; background: #FFF3C4; top: -100px; left: -100px; animation-duration: 24s; }
-  .orb2 { width: 600px; height: 600px; background: #FFCB77; top: 30%; right: -200px; animation-duration: 28s; animation-delay: -5s; }
-  .orb3 { width: 450px; height: 450px; background: #FFE5B4; bottom: -100px; left: 30%; animation-duration: 26s; animation-delay: -10s; }
-  .orb4 { width: 380px; height: 380px; background: #FFB88C; top: 15%; left: 50%; animation-duration: 32s; animation-delay: -15s; opacity: 0.4; }
-  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(120px,-80px) scale(1.15); } 50% { transform: translate(-100px,120px) scale(0.9); } 75% { transform: translate(80px,80px) scale(1.1); } }
+  .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: drift 26s ease-in-out infinite; }
+  .orb1 { width: 500px; height: 500px; background: #FF6B9D; top: -120px; left: -120px; animation-duration: 22s; }
+  .orb2 { width: 600px; height: 600px; background: #4ECDC4; top: 25%; right: -200px; animation-duration: 28s; animation-delay: -5s; }
+  .orb3 { width: 450px; height: 450px; background: #A78BFA; bottom: -100px; left: 25%; animation-duration: 24s; animation-delay: -10s; }
+  .orb4 { width: 400px; height: 400px; background: #FB923C; top: 20%; left: 45%; animation-duration: 32s; animation-delay: -15s; opacity: 0.4; }
+  @keyframes drift {
+    0%,100% { transform: translate(0,0) scale(1); }
+    25% { transform: translate(140px,-100px) scale(1.15); }
+    50% { transform: translate(-120px,140px) scale(0.9); }
+    75% { transform: translate(100px,80px) scale(1.1); }
+  }
   .content { position: relative; z-index: 10; }
   .btn-primary { background: #1a1a1a; color: #F5C518; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 rgba(0,0,0,0.15); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
   .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
+
+  /* Logo wrappers — black bg baked into logo so wrap in black rounded card */
+  .logo-pill { background: #1a1a1a; padding: 8px 14px; border-radius: 14px; display: inline-flex; align-items: center; box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
+  .logo-pill img { height: 44px; display: block; }
+  .logo-pill-small img { height: 32px; }
+  .logo-splash-wrap { background: #1a1a1a; padding: 30px 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: logoIn 1s cubic-bezier(0.34,1.56,0.64,1); }
+  .logo-splash-wrap img { width: 260px; max-width: 70vw; display: block; }
+
   .run-bar { background: #1a1a1a; color: #F5C518; border-radius: 18px; padding: 14px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
   .run-bar-label { font-size: 12px; font-weight: 800; letter-spacing: 0.15em; color: #F5C518; }
   .run-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 8px 12px; border-radius: 8px; font-family: inherit; font-weight: 600; font-size: 13px; }
   .run-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
-  .honeycomb { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 30px 0; }
-  .hex-row { display: flex; gap: 8px; margin-top: -38px; }
-  .hex-row:first-child { margin-top: 0; }
-  .hex-row.offset { margin-left: 74px; }
-  .hex-wrap { position: relative; width: 140px; height: 160px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3)); }
-  .hex-wrap::before { content: ''; position: absolute; inset: 0; background: #F5C518; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); z-index: 0; }
-  .hex-face { position: absolute; inset: 3px; background: rgba(15, 15, 15, 0.82); backdrop-filter: blur(6px); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #F5C518; padding: 12px 8px; text-align: center; z-index: 1; }
-  .hex-wrap:hover { transform: translateY(-8px) scale(1.06); filter: drop-shadow(0 14px 24px rgba(0,0,0,0.4)); }
-  .hex-wrap:hover .hex-face { background: rgba(0, 0, 0, 0.92); }
-  .hex-main { width: 220px; height: 254px; margin-bottom: 20px; }
-  .hex-main::before { background: #F5C518; }
-  .hex-main .hex-face { background: rgba(0, 0, 0, 0.95); inset: 4px; }
-  .hex-label-mini { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 4px; }
-  .hex-name { font-size: 11px; font-weight: 800; line-height: 1.15; margin-bottom: 4px; word-break: break-word; }
-  .hex-id { font-size: 9px; font-family: monospace; opacity: 0.55; margin-bottom: 6px; }
-  .hex-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; }
-  .hex-main .hex-label-mini { font-size: 11px; margin-bottom: 8px; }
-  .hex-main .hex-name { font-size: 15px; margin-bottom: 8px; }
-  .hex-main .hex-id { font-size: 10px; }
-  .hex-main .hex-dot { width: 10px; height: 10px; }
+
+  /* ORBIT — circles floating around Main */
+  .orbit-container { position: relative; width: 100%; max-width: 720px; aspect-ratio: 1 / 1; margin: 20px auto; }
+  .orb-circle { position: absolute; border-radius: 50%; background: rgba(15,15,15,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 2px solid rgba(245,197,24,0.55); color: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; padding: 8px; box-shadow: 0 8px 26px rgba(0,0,0,0.28); transition: box-shadow 0.25s, border-color 0.25s, background 0.25s; will-change: transform; }
+  .orb-main { left: 50%; top: 50%; margin-left: -90px; margin-top: -90px; width: 180px; height: 180px; border: 3px solid rgba(245,197,24,0.9); background: rgba(0,0,0,0.9); box-shadow: 0 14px 44px rgba(0,0,0,0.42); animation: floatMain 6s ease-in-out infinite; z-index: 5; }
+  .orb-pc { width: 96px; height: 96px; animation: floatPc 5s ease-in-out infinite; }
+  .orb-circle:hover { box-shadow: 0 0 40px rgba(245,197,24,0.9); border-color: #F5C518; background: rgba(0,0,0,0.95); z-index: 20; }
+  @keyframes floatPc { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes floatMain { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .orb-label { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.75; margin-bottom: 3px; }
+  .orb-name { font-size: 15px; font-weight: 800; line-height: 1.15; }
+  .orb-sub { font-size: 10px; opacity: 0.7; margin-top: 2px; font-family: monospace; }
+  .orb-dot-status { width: 7px; height: 7px; background: #10B981; border-radius: 50%; margin-top: 5px; box-shadow: 0 0 8px #10B981; }
+  .orb-main .orb-label { font-size: 11px; margin-bottom: 6px; }
+  .orb-main .orb-name { font-size: 15px; line-height: 1.2; padding: 0 4px; }
+  .orb-main .orb-sub { font-size: 10px; margin-top: 4px; }
+  .orb-main .orb-dot-status { width: 10px; height: 10px; margin-top: 6px; }
+
+  /* Recent runs — clean vertical list */
+  .runs-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+  .run-strip { background: rgba(15,15,15,0.88); color: #F5C518; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.25); }
+  .run-strip:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); background: rgba(0,0,0,0.95); border-color: rgba(245,197,24,0.6); }
+  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .status-done { background: #10B981; box-shadow: 0 0 8px #10B981; }
+  .status-error { background: #EF4444; box-shadow: 0 0 8px #EF4444; }
+  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
   .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-backdrop.open { display: flex; }
   .modal { background: white; border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 3px solid #1a1a1a; box-shadow: 8px 8px 0 #F5C518; color: #1a1a1a; }
@@ -61,23 +82,11 @@
   .loader-ring::after { border-bottom-color: #F5C518; animation: spin 1.8s cubic-bezier(0.4,0,0.6,1) infinite reverse; inset: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
-  .run-strip { background: rgba(15,15,15,0.85); color: #F5C518; padding: 14px 18px; border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.3); }
-  .run-strip:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); background: rgba(0,0,0,0.95); }
-  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
-  .status-done { background: #10B981; }
-  .status-error { background: #EF4444; }
-  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
   .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
   .modal-minimized.show { display: flex; }
   .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
-  .splash-logo { font-size: 64px; font-weight: 900; color: #1a1a1a; letter-spacing: -0.03em; display: flex; align-items: center; animation: logoIn 1s cubic-bezier(0.34,1.56,0.64,1); }
-  .splash-c { position: relative; display: inline-block; margin-right: 2px; }
-  .splash-crown { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) rotate(-15deg); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 16px solid #1a1a1a; animation: crownDrop 1s cubic-bezier(0.34,1.56,0.64,1); }
-  .splash-sub { color: #1a1a1a; font-size: 14px; letter-spacing: 0.3em; margin-top: 20px; text-transform: uppercase; animation: fadeInUp 1s ease 0.4s both; font-weight: 700; }
   @keyframes logoIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  @keyframes crownDrop { from { transform: translateX(-50%) rotate(-15deg) translateY(-30px); opacity: 0; } to { transform: translateX(-50%) rotate(-15deg) translateY(0); opacity: 1; } }
-  @keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   @keyframes splashFade { 0%,70% { opacity: 1; pointer-events: auto; } 100% { opacity: 0; pointer-events: none; visibility: hidden; } }
   .login-card { max-width: 400px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
   .input-field { width: 100%; background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
@@ -87,22 +96,24 @@
   .badge-done { background: #10B981; color: white; }
   .badge-error { background: #EF4444; color: white; }
   .badge-partial { background: #F59E0B; color: white; }
-  @media (max-width: 768px) {
-    .hex-wrap { width: 105px; height: 121px; }
-    .hex-row.offset { margin-left: 57px; }
-    .hex-row { margin-top: -28px; gap: 4px; }
-    .hex-main { width: 150px; height: 173px; }
-    .hex-name { font-size: 10px; }
-    .hex-id { font-size: 8px; }
+
+  @media (max-width: 640px) {
+    .orb-pc { width: 74px; height: 74px; }
+    .orb-main { width: 130px; height: 130px; margin-left: -65px; margin-top: -65px; }
+    .orb-name { font-size: 12px; }
+    .orb-sub { font-size: 8px; }
+    .orb-main .orb-name { font-size: 13px; }
+    .logo-pill img { height: 36px; }
+    .logo-pill-small img { height: 28px; }
   }
 </style>
 </head>
 <body>
-<div class="splash" id="splash"><div class="splash-logo"><span class="splash-c">c<span class="splash-crown"></span></span>arease</div><div class="splash-sub">Intercompany</div></div>
+<div class="splash" id="splash"><div class="logo-splash-wrap"><img src="logo.png" alt="Carease Command Corner"></div></div>
 <div class="bg-container"><div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div><div class="bg-orb orb4"></div></div>
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><div class="splash-logo" style="font-size: 40px; justify-content: center;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:8px;border-right-width:8px;border-bottom-width:11px;top:-5px;"></span></span>arease</div><div class="text-xs tracking-widest uppercase mt-2 font-bold">Intercompany</div></div>
+    <div class="text-center mb-6"><div class="logo-pill" style="background:#1a1a1a;padding:16px 20px;"><img src="logo.png" alt="Carease Command Corner" style="height:80px;"></div></div>
     <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
@@ -114,7 +125,7 @@
 </div>
 <div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
   <header class="flex items-center justify-between mb-6 flex-wrap gap-3">
-    <div class="flex items-center gap-3"><div class="splash-logo" style="font-size: 30px;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:6px;border-right-width:6px;border-bottom-width:8px;top:-4px;"></span></span>arease</div><div class="hidden md:block"><div class="text-xs tracking-widest uppercase font-bold">Intercompany</div></div></div>
+    <div class="logo-pill logo-pill-small"><img src="logo.png" alt="Carease Command Corner"></div>
     <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs mr-2 font-bold"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
   </header>
   <div class="run-bar mb-6">
@@ -125,14 +136,14 @@
     <label class="flex items-center gap-2 text-sm font-bold cursor-pointer" style="color:#F5C518;"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4">Dry Run</label>
     <button onclick="askRunAll()" class="ml-auto" style="background:#F5C518;color:#1a1a1a;font-weight:800;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:all 0.15s;">▶ Run All PCs</button>
   </div>
-  <div class="mb-6">
+  <div class="mb-8">
     <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Connected Organizations</h2><button onclick="loadOrgs()" class="btn-secondary text-xs">↻ Refresh</button></div>
     <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
     <div id="orgsContainer"></div>
   </div>
   <div class="mb-6">
     <h2 class="text-lg font-bold mb-3">Recent Runs</h2>
-    <div id="runsList" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">Loading...</div>
+    <div id="runsList" class="runs-list">Loading...</div>
   </div>
 </div>
 <div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
@@ -145,7 +156,6 @@ let orgs = [];
 let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
-let selectedPC = null;
 
 setTimeout(() => {
   document.getElementById('splash').style.display = 'none';
@@ -235,82 +245,94 @@ function connectPC() { window.location.href = API + '/connect?role=pc'; }
 async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
   document.getElementById('orgsContainer').innerHTML = '';
-  try { orgs = await api('/orgs'); renderHoneycomb(); }
+  try { orgs = await api('/orgs'); renderOrbit(); }
   catch (e) { document.getElementById('orgsContainer').innerHTML = '<p class="text-red-500 text-center">' + e.message + '</p>'; }
   finally { document.getElementById('orgsLoading').style.display = 'none'; }
 }
 
-function shortName(name) {
-  // Try to extract state code or short id
+function shortLabel(name) {
   const stateMatch = name.match(/\b([A-Z]{2})\b/);
   const pcMatch = name.match(/(PC|P\.C\.|P\.A\.)\s*(\d+)/i);
-  if (stateMatch && pcMatch) return { top: stateMatch[1], bottom: pcMatch[0] };
-  if (stateMatch) return { top: stateMatch[1], bottom: name.length > 20 ? name.slice(0,18)+'…' : name };
-  return { top: name.length > 12 ? name.slice(0,11)+'…' : name, bottom: '' };
+  const top = stateMatch ? stateMatch[1] : (name.length > 8 ? name.slice(0,7)+'…' : name);
+  const bottom = pcMatch ? pcMatch[0].replace(/\s+/g,' ').toUpperCase() : '';
+  return { top, bottom };
 }
 
-function renderHoneycomb() {
+function renderOrbit() {
   const main = orgs.find(c => c.role === 'main');
   const pcs = orgs.filter(c => c.role === 'pc');
   const container = document.getElementById('orgsContainer');
-  let html = '<div class="honeycomb">';
 
-  if (main) {
-    html += '<div class="hex-wrap hex-main" onclick="openPCActions(\'' + main.realm_id + '\')">';
-    html += '<div class="hex-face">';
-    html += '<div class="hex-label-mini">MAIN</div>';
-    html += '<div class="hex-name">' + main.name + '</div>';
-    html += '<div class="hex-id">' + main.realm_id + '</div>';
-    html += '<div class="hex-dot"></div>';
-    html += '</div></div>';
-  } else {
-    html += '<div class="hex-wrap hex-main" onclick="connectMain()"><div class="hex-face"><div class="hex-name">+ Connect Main</div></div></div>';
+  if (!main && !pcs.length) {
+    container.innerHTML = '<p class="text-center py-8 opacity-70">No organizations connected. Click <b>+ Main</b> and <b>+ PC</b> above.</p>';
+    return;
   }
 
-  // Split PCs into honeycomb rows: 5, 6, 6 for 17 (or adjust)
-  // Actually let's compute automatically based on count
-  const rowSizes = computeRowSizes(pcs.length);
-  let pcIdx = 0;
-  for (let r = 0; r < rowSizes.length; r++) {
-    const size = rowSizes[r];
-    const offset = r % 2 === 1 ? ' offset' : '';
-    html += '<div class="hex-row' + offset + '">';
-    for (let i = 0; i < size && pcIdx < pcs.length; i++, pcIdx++) {
-      const pc = pcs[pcIdx];
-      const s = shortName(pc.name);
-      const safeName = pc.name.replace(/'/g, "\\'");
-      html += '<div class="hex-wrap" onclick="openPCActions(\'' + pc.realm_id + '\')" title="' + pc.name + '">';
-      html += '<div class="hex-face">';
-      html += '<div class="hex-name">' + s.top + '</div>';
-      if (s.bottom) html += '<div class="hex-id" style="opacity:0.75;margin-top:2px;">' + s.bottom + '</div>';
-      html += '<div class="hex-dot" style="margin-top:6px;"></div>';
-      html += '</div></div>';
-    }
+  let html = '<div class="orbit-container" id="orbit">';
+
+  // Main in center
+  if (main) {
+    html += '<div class="orb-circle orb-main" onclick="openPCActions(\'' + main.realm_id + '\')" title="' + main.name + '">';
+    html += '<div class="orb-label">MAIN</div>';
+    html += '<div class="orb-name">Carease</div>';
+    html += '<div class="orb-name">Health LLC</div>';
+    html += '<div class="orb-dot-status"></div>';
+    html += '</div>';
+  } else {
+    html += '<div class="orb-circle orb-main" onclick="connectMain()"><div class="orb-name">+ Connect<br>Main</div></div>';
+  }
+
+  // PCs distributed in concentric rings around main
+  const positions = computeOrbitPositions(pcs.length);
+  for (let i = 0; i < pcs.length; i++) {
+    const pc = pcs[i];
+    const s = shortLabel(pc.name);
+    const p = positions[i];
+    const delay = (i * 0.4) % 3;
+    const dur = 4.5 + (i % 3) * 0.7;
+    const style = 'left:' + p.x + '%;top:' + p.y + '%;margin-left:-48px;margin-top:-48px;animation-delay:-' + delay + 's;animation-duration:' + dur + 's;';
+    html += '<div class="orb-circle orb-pc" style="' + style + '" onclick="openPCActions(\'' + pc.realm_id + '\')" title="' + pc.name.replace(/"/g,'&quot;') + '">';
+    html += '<div class="orb-name">' + s.top + '</div>';
+    if (s.bottom) html += '<div class="orb-sub">' + s.bottom + '</div>';
+    html += '<div class="orb-dot-status"></div>';
     html += '</div>';
   }
 
   html += '</div>';
-  if (!main && !pcs.length) html = '<p class="text-center py-8 opacity-70">No organizations connected. Click <b>+ Main</b> and <b>+ PC</b> above.</p>';
   container.innerHTML = html;
 }
 
-function computeRowSizes(n) {
-  // Build honeycomb rows alternating between size k and k+1
-  // For 17: 5+6+6 = 17 or 6+5+6
-  if (n === 0) return [];
-  if (n <= 4) return [n];
-  if (n <= 9) return [Math.ceil(n/2), Math.floor(n/2)];
-  const rows = [];
-  let remaining = n;
-  let base = Math.ceil(Math.sqrt(n));
-  while (remaining > 0) {
-    const take = Math.min(base, remaining);
-    rows.push(take);
-    remaining -= take;
+// Distribute N circles on 1-2 rings around center (50,50)
+function computeOrbitPositions(n) {
+  const positions = [];
+  if (n === 0) return positions;
+  // Ring capacities based on radius
+  const ring1Max = 8; // inner ring
+  const ring1Count = Math.min(n, ring1Max);
+  const ring2Count = n - ring1Count;
+
+  const ring1Radius = 32; // % of container
+  const ring2Radius = 46;
+
+  for (let i = 0; i < ring1Count; i++) {
+    const angle = (i / ring1Count) * Math.PI * 2 - Math.PI / 2;
+    positions.push({
+      x: 50 + Math.cos(angle) * ring1Radius,
+      y: 50 + Math.sin(angle) * ring1Radius
+    });
   }
-  return rows;
+  for (let i = 0; i < ring2Count; i++) {
+    // Offset outer ring by half-step
+    const angle = ((i + 0.5) / ring2Count) * Math.PI * 2 - Math.PI / 2;
+    positions.push({
+      x: 50 + Math.cos(angle) * ring2Radius,
+      y: 50 + Math.sin(angle) * ring2Radius
+    });
+  }
+  return positions;
 }
 
+let selectedPC = null;
 function openPCActions(realmId) {
   const org = orgs.find(c => c.realm_id === realmId);
   if (!org) return;
@@ -325,7 +347,7 @@ function openPCActions(realmId) {
     html += '<div class="action-btn primary" onclick="closeModal();askRunPC(\'' + realmId + '\',\'' + safeName + '\')"><span class="action-icon">▶</span>Run for Real</div>';
     html += '<div class="action-btn" onclick="closeModal();viewFlagged(\'' + realmId + '\')"><span class="action-icon">⚑</span>View Flagged</div>';
   } else {
-    html += '<div class="action-btn"><span class="action-icon">👑</span>Main Company<div class="text-xs opacity-60 mt-1">Runs affect this org as source</div></div>';
+    html += '<div class="action-btn" style="grid-column:1/-1;"><span class="action-icon">👑</span>Main Company<div class="text-xs opacity-60 mt-1">Runs affect this org as source</div></div>';
   }
   html += '</div>';
   openModal(org.name, html);
@@ -339,7 +361,6 @@ async function syncPC(realmId) {
   } catch (e) { openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); }
 }
 
-function askDryRunPC(realmId, name) { showConfirm('Dry Run', 'Preview what would happen for <b>' + name + '</b>? Nothing will be posted to QBO.', '👁', () => dryRunPC(realmId)); }
 function askRunPC(realmId, name) { showConfirm('Confirm Real Run', 'This will create a real invoice and bill in QBO for <b>' + name + '</b>. Continue?', '⚠', () => runPC(realmId)); }
 function askRunAll() {
   const dry = document.getElementById('dryRunToggle').checked;
@@ -443,20 +464,28 @@ async function viewFlagged(realmId) {
 
 async function loadRuns() {
   const el = document.getElementById('runsList');
-  el.innerHTML = '<div class="text-center py-4 col-span-full"><div class="loader-small"></div></div>';
+  el.innerHTML = '<div class="text-center py-4"><div class="loader-small"></div></div>';
   try {
     const runs = await api('/runs');
-    if (!runs.length) { el.innerHTML = '<p class="text-center py-4 opacity-60 col-span-full">No runs yet</p>'; return; }
+    if (!runs.length) { el.innerHTML = '<p class="text-center py-4 opacity-60">No runs yet</p>'; return; }
     let html = '';
     for (const r of runs) {
       const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
       const when = new Date(r.started_at).toLocaleString();
       const org = r.companies || {};
       const runData = encodeURIComponent(JSON.stringify(r));
-      html += '<div class="run-strip" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs opacity-70">' + r.period_start + ' → ' + r.period_end + '</div><div class="text-xs opacity-60 mt-1">' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged · ' + when + '</div></div></div>';
+      const docLabel = r.invoice_id ? ('Invoice #' + (r.doc_number || r.invoice_id)) : ('Run ' + r.id);
+      html += '<div class="run-strip" onclick="viewRunDetail(\'' + runData + '\')">'
+        + '<span class="status-dot ' + cls + '"></span>'
+        + '<div class="flex-1 min-w-0">'
+          + '<div class="font-bold truncate">' + docLabel + ' · ' + (org.name || '?') + '</div>'
+          + '<div class="text-xs opacity-70">' + r.period_start + ' → ' + r.period_end + ' · ' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged</div>'
+        + '</div>'
+        + '<div class="text-xs opacity-60 text-right flex-shrink-0 hidden sm:block">' + when + '</div>'
+        + '</div>';
     }
     el.innerHTML = html;
-  } catch (e) { el.innerHTML = '<p class="text-red-600 col-span-full">' + e.message + '</p>'; }
+  } catch (e) { el.innerHTML = '<p class="text-red-600">' + e.message + '</p>'; }
 }
 
 function viewRunDetail(encoded) {
