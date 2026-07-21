@@ -9,34 +9,65 @@
 <style>
   * { box-sizing: border-box; }
   body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #F5C518; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
-  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #F5C518; }
-  .bg-orb { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; animation: drift 30s ease-in-out infinite; }
-  .orb1 { width: 400px; height: 400px; background: #FF6B9D; top: -100px; left: -100px; animation-duration: 18s; }
-  .orb2 { width: 500px; height: 500px; background: #4ECDC4; top: 40%; right: -150px; animation-duration: 22s; animation-delay: -5s; }
-  .orb3 { width: 350px; height: 350px; background: #A78BFA; bottom: -50px; left: 30%; animation-duration: 20s; animation-delay: -10s; }
-  .orb4 { width: 280px; height: 280px; background: #FB923C; top: 20%; left: 45%; animation-duration: 25s; animation-delay: -15s; }
-  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(100px,-80px) scale(1.1); } 50% { transform: translate(-80px,100px) scale(0.95); } 75% { transform: translate(80px,80px) scale(1.05); } }
+  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #F5C518 0%, #FFD449 100%); }
+  .bg-orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.55; animation: drift 30s ease-in-out infinite; }
+  .orb1 { width: 500px; height: 500px; background: #FFF3C4; top: -100px; left: -100px; animation-duration: 24s; }
+  .orb2 { width: 600px; height: 600px; background: #FFCB77; top: 30%; right: -200px; animation-duration: 28s; animation-delay: -5s; }
+  .orb3 { width: 450px; height: 450px; background: #FFE5B4; bottom: -100px; left: 30%; animation-duration: 26s; animation-delay: -10s; }
+  .orb4 { width: 380px; height: 380px; background: #FFB88C; top: 15%; left: 50%; animation-duration: 32s; animation-delay: -15s; opacity: 0.4; }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(120px,-80px) scale(1.15); } 50% { transform: translate(-100px,120px) scale(0.9); } 75% { transform: translate(80px,80px) scale(1.1); } }
   .content { position: relative; z-index: 10; }
-  .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.5); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
   .btn-primary { background: #1a1a1a; color: #F5C518; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 rgba(0,0,0,0.15); }
   .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
   .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
-  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
-  .status-done { background: #10B981; }
-  .status-error { background: #EF4444; }
-  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .run-bar { background: #1a1a1a; color: #F5C518; border-radius: 18px; padding: 14px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .run-bar-label { font-size: 12px; font-weight: 800; letter-spacing: 0.15em; color: #F5C518; }
+  .run-input { background: #2a2a2a; border: 1px solid #F5C518; color: #F5C518; padding: 8px 12px; border-radius: 8px; font-family: inherit; font-weight: 600; font-size: 13px; }
+  .run-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
+  .honeycomb { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 30px 0; }
+  .hex-row { display: flex; gap: 8px; margin-top: -38px; }
+  .hex-row:first-child { margin-top: 0; }
+  .hex-row.offset { margin-left: 74px; }
+  .hex-wrap { position: relative; width: 140px; height: 160px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.3)); }
+  .hex-wrap::before { content: ''; position: absolute; inset: 0; background: #F5C518; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); z-index: 0; }
+  .hex-face { position: absolute; inset: 3px; background: rgba(15, 15, 15, 0.82); backdrop-filter: blur(6px); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #F5C518; padding: 12px 8px; text-align: center; z-index: 1; }
+  .hex-wrap:hover { transform: translateY(-8px) scale(1.06); filter: drop-shadow(0 14px 24px rgba(0,0,0,0.4)); }
+  .hex-wrap:hover .hex-face { background: rgba(0, 0, 0, 0.92); }
+  .hex-main { width: 220px; height: 254px; margin-bottom: 20px; }
+  .hex-main::before { background: #F5C518; }
+  .hex-main .hex-face { background: rgba(0, 0, 0, 0.95); inset: 4px; }
+  .hex-label-mini { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 4px; }
+  .hex-name { font-size: 11px; font-weight: 800; line-height: 1.15; margin-bottom: 4px; word-break: break-word; }
+  .hex-id { font-size: 9px; font-family: monospace; opacity: 0.55; margin-bottom: 6px; }
+  .hex-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; }
+  .hex-main .hex-label-mini { font-size: 11px; margin-bottom: 8px; }
+  .hex-main .hex-name { font-size: 15px; margin-bottom: 8px; }
+  .hex-main .hex-id { font-size: 10px; }
+  .hex-main .hex-dot { width: 10px; height: 10px; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: white; border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 3px solid #1a1a1a; box-shadow: 8px 8px 0 #F5C518; color: #1a1a1a; }
+  .pc-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 20px 0; }
+  .action-btn { padding: 20px; border-radius: 14px; border: 2px solid #1a1a1a; background: white; cursor: pointer; transition: all 0.15s; text-align: center; font-weight: 700; font-size: 14px; }
+  .action-btn:hover { background: #F5C518; transform: translateY(-2px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .action-btn.primary { background: #1a1a1a; color: #F5C518; }
+  .action-btn.primary:hover { background: #333; color: #F5C518; }
+  .action-icon { font-size: 24px; display: block; margin-bottom: 6px; }
   .loader-ring { display: inline-block; width: 60px; height: 60px; position: relative; }
   .loader-ring::before, .loader-ring::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; }
   .loader-ring::before { border-top-color: #1a1a1a; border-right-color: #1a1a1a; animation: spin 1.2s cubic-bezier(0.4,0,0.6,1) infinite; }
   .loader-ring::after { border-bottom-color: #F5C518; animation: spin 1.8s cubic-bezier(0.4,0,0.6,1) infinite reverse; inset: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
-  .modal-backdrop.open { display: flex; }
-  .modal { background: white; border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 3px solid #1a1a1a; box-shadow: 8px 8px 0 #F5C518; color: #1a1a1a; }
+  .run-strip { background: rgba(15,15,15,0.85); color: #F5C518; padding: 14px 18px; border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.3); }
+  .run-strip:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); background: rgba(0,0,0,0.95); }
+  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  .status-done { background: #10B981; }
+  .status-error { background: #EF4444; }
+  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
   .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
   .modal-minimized.show { display: flex; }
   .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
@@ -51,27 +82,19 @@
   .login-card { max-width: 400px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
   .input-field { width: 100%; background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
   .input-field:focus { box-shadow: 4px 4px 0 #F5C518; transform: translate(-1px,-1px); }
-  .date-input { background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 8px 12px; border-radius: 8px; font-family: inherit; font-weight: 600; }
-  .date-input:focus { outline: none; box-shadow: 3px 3px 0 #F5C518; }
-  .pc-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: white; border: 2px solid #1a1a1a; border-radius: 12px; transition: all 0.15s; color: #1a1a1a; }
-  .pc-row:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 #1a1a1a; }
+  .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: #F5C518; border: 3px solid #1a1a1a; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 4px 4px 0 #1a1a1a; }
   .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; border: 2px solid #1a1a1a; }
   .badge-done { background: #10B981; color: white; }
   .badge-error { background: #EF4444; color: white; }
   .badge-partial { background: #F59E0B; color: white; }
-  .run-item { padding: 12px 16px; border-radius: 10px; cursor: pointer; transition: all 0.15s; border: 2px solid transparent; color: #1a1a1a; }
-  .run-item:hover { background: white; border-color: #1a1a1a; transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #1a1a1a; }
-  .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: #F5C518; border: 3px solid #1a1a1a; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 4px 4px 0 #1a1a1a; }
-  h1, h2, h3, h4 { color: #1a1a1a; }
-  .text-yellow-400 { color: #b8860b !important; }
-  .text-gray-400 { color: #64748b !important; }
-  .text-gray-500 { color: #475569 !important; }
-  .text-gray-300 { color: #475569 !important; }
-  .text-red-400 { color: #dc2626 !important; }
-  .text-orange-400 { color: #ea580c !important; }
-  .text-white { color: #1a1a1a !important; }
-  .border-gray-700 { border-color: #cbd5e1 !important; }
-  .bg-black\/40 { background: #f1f5f9 !important; color: #1a1a1a; }
+  @media (max-width: 768px) {
+    .hex-wrap { width: 105px; height: 121px; }
+    .hex-row.offset { margin-left: 57px; }
+    .hex-row { margin-top: -28px; gap: 4px; }
+    .hex-main { width: 150px; height: 173px; }
+    .hex-name { font-size: 10px; }
+    .hex-id { font-size: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -94,23 +117,22 @@
     <div class="flex items-center gap-3"><div class="splash-logo" style="font-size: 30px;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:6px;border-right-width:6px;border-bottom-width:8px;top:-4px;"></span></span>arease</div><div class="hidden md:block"><div class="text-xs tracking-widest uppercase font-bold">Intercompany</div></div></div>
     <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs mr-2 font-bold"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
   </header>
-  <div class="glass p-5 mb-5">
-    <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold">Run Period</h2><div class="text-xs opacity-60">Set your billing window</div></div>
-    <div class="flex flex-wrap gap-3 items-end">
-      <div><label class="block text-xs font-bold uppercase tracking-wider mb-1">Start</label><input id="startDate" type="date" class="date-input"></div>
-      <div><label class="block text-xs font-bold uppercase tracking-wider mb-1">End</label><input id="endDate" type="date" class="date-input"></div>
-      <label class="flex items-center gap-2 text-sm font-bold cursor-pointer"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4 accent-black"><span>Dry Run</span></label>
-      <button onclick="askRunAll()" class="btn-primary ml-auto">▶ Run All PCs</button>
-    </div>
+  <div class="run-bar mb-6">
+    <span class="run-bar-label">RUN PERIOD</span>
+    <input id="startDate" type="date" class="run-input">
+    <span style="opacity:0.5;">→</span>
+    <input id="endDate" type="date" class="run-input">
+    <label class="flex items-center gap-2 text-sm font-bold cursor-pointer" style="color:#F5C518;"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4">Dry Run</label>
+    <button onclick="askRunAll()" class="ml-auto" style="background:#F5C518;color:#1a1a1a;font-weight:800;padding:10px 20px;border-radius:10px;border:none;cursor:pointer;transition:all 0.15s;">▶ Run All PCs</button>
   </div>
-  <div class="glass p-5 mb-5">
-    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Connected Organizations</h2><button onclick="loadOrgs()" class="btn-secondary text-xs">↻</button></div>
+  <div class="mb-6">
+    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Connected Organizations</h2><button onclick="loadOrgs()" class="btn-secondary text-xs">↻ Refresh</button></div>
     <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
-    <div id="orgsList"></div>
+    <div id="orgsContainer"></div>
   </div>
-  <div class="glass p-5">
-    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Recent Runs</h2><button onclick="loadRuns()" class="btn-secondary text-xs">↻</button></div>
-    <div id="runsList" class="text-sm">Loading...</div>
+  <div class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Recent Runs</h2>
+    <div id="runsList" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">Loading...</div>
   </div>
 </div>
 <div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
@@ -123,6 +145,7 @@ let orgs = [];
 let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
+let selectedPC = null;
 
 setTimeout(() => {
   document.getElementById('splash').style.display = 'none';
@@ -211,33 +234,101 @@ function connectPC() { window.location.href = API + '/connect?role=pc'; }
 
 async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
-  document.getElementById('orgsList').innerHTML = '';
-  try { orgs = await api('/orgs'); renderOrgs(); }
-  catch (e) { document.getElementById('orgsList').innerHTML = '<p class="text-red-500">' + e.message + '</p>'; }
+  document.getElementById('orgsContainer').innerHTML = '';
+  try { orgs = await api('/orgs'); renderHoneycomb(); }
+  catch (e) { document.getElementById('orgsContainer').innerHTML = '<p class="text-red-500 text-center">' + e.message + '</p>'; }
   finally { document.getElementById('orgsLoading').style.display = 'none'; }
 }
 
-function renderOrgs() {
+function shortName(name) {
+  // Try to extract state code or short id
+  const stateMatch = name.match(/\b([A-Z]{2})\b/);
+  const pcMatch = name.match(/(PC|P\.C\.|P\.A\.)\s*(\d+)/i);
+  if (stateMatch && pcMatch) return { top: stateMatch[1], bottom: pcMatch[0] };
+  if (stateMatch) return { top: stateMatch[1], bottom: name.length > 20 ? name.slice(0,18)+'…' : name };
+  return { top: name.length > 12 ? name.slice(0,11)+'…' : name, bottom: '' };
+}
+
+function renderHoneycomb() {
   const main = orgs.find(c => c.role === 'main');
   const pcs = orgs.filter(c => c.role === 'pc');
-  let html = '';
+  const container = document.getElementById('orgsContainer');
+  let html = '<div class="honeycomb">';
+
   if (main) {
-    html += '<div class="p-4 rounded-xl mb-4 flex items-center justify-between" style="background:#1a1a1a;color:#F5C518;border:3px solid #1a1a1a;"><div><div class="text-xs tracking-widest uppercase font-bold" style="color:#F5C518;">Main</div><div class="text-lg font-bold" style="color:#F5C518;">' + main.name + '</div><div class="text-xs font-mono" style="color:#F5C518;opacity:0.7;">Realm ' + main.realm_id + '</div></div><span class="status-dot status-done"></span></div>';
+    html += '<div class="hex-wrap hex-main" onclick="openPCActions(\'' + main.realm_id + '\')">';
+    html += '<div class="hex-face">';
+    html += '<div class="hex-label-mini">MAIN</div>';
+    html += '<div class="hex-name">' + main.name + '</div>';
+    html += '<div class="hex-id">' + main.realm_id + '</div>';
+    html += '<div class="hex-dot"></div>';
+    html += '</div></div>';
   } else {
-    html += '<div class="border-2 border-dashed border-black rounded-xl p-4 mb-4 text-center"><p class="font-bold mb-2">No Main connected</p><button onclick="connectMain()" class="btn-primary">Connect Main QBO</button></div>';
+    html += '<div class="hex-wrap hex-main" onclick="connectMain()"><div class="hex-face"><div class="hex-name">+ Connect Main</div></div></div>';
   }
-  html += '<h3 class="text-xs uppercase font-bold tracking-widest mb-3 mt-4">Professional Corporations (' + pcs.length + ')</h3>';
-  if (!pcs.length) {
-    html += '<div class="border-2 border-dashed border-black rounded-xl p-4 text-center"><p class="mb-2">No PCs connected yet</p><button onclick="connectPC()" class="btn-primary">Connect First PC</button></div>';
-  } else {
-    html += '<div class="space-y-2">';
-    for (const pc of pcs) {
+
+  // Split PCs into honeycomb rows: 5, 6, 6 for 17 (or adjust)
+  // Actually let's compute automatically based on count
+  const rowSizes = computeRowSizes(pcs.length);
+  let pcIdx = 0;
+  for (let r = 0; r < rowSizes.length; r++) {
+    const size = rowSizes[r];
+    const offset = r % 2 === 1 ? ' offset' : '';
+    html += '<div class="hex-row' + offset + '">';
+    for (let i = 0; i < size && pcIdx < pcs.length; i++, pcIdx++) {
+      const pc = pcs[pcIdx];
+      const s = shortName(pc.name);
       const safeName = pc.name.replace(/'/g, "\\'");
-      html += '<div class="pc-row"><div class="flex-1 min-w-0"><div class="font-bold truncate">' + pc.name + '</div><div class="text-xs opacity-60 font-mono">' + pc.realm_id + '</div></div><div class="flex gap-2 flex-shrink-0"><button onclick="syncPC(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">Sync</button><button onclick="askDryRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-secondary text-xs">Dry Run</button><button onclick="askRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-primary text-xs">Run</button><button onclick="viewFlagged(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">⚑</button></div></div>';
+      html += '<div class="hex-wrap" onclick="openPCActions(\'' + pc.realm_id + '\')" title="' + pc.name + '">';
+      html += '<div class="hex-face">';
+      html += '<div class="hex-name">' + s.top + '</div>';
+      if (s.bottom) html += '<div class="hex-id" style="opacity:0.75;margin-top:2px;">' + s.bottom + '</div>';
+      html += '<div class="hex-dot" style="margin-top:6px;"></div>';
+      html += '</div></div>';
     }
     html += '</div>';
   }
-  document.getElementById('orgsList').innerHTML = html;
+
+  html += '</div>';
+  if (!main && !pcs.length) html = '<p class="text-center py-8 opacity-70">No organizations connected. Click <b>+ Main</b> and <b>+ PC</b> above.</p>';
+  container.innerHTML = html;
+}
+
+function computeRowSizes(n) {
+  // Build honeycomb rows alternating between size k and k+1
+  // For 17: 5+6+6 = 17 or 6+5+6
+  if (n === 0) return [];
+  if (n <= 4) return [n];
+  if (n <= 9) return [Math.ceil(n/2), Math.floor(n/2)];
+  const rows = [];
+  let remaining = n;
+  let base = Math.ceil(Math.sqrt(n));
+  while (remaining > 0) {
+    const take = Math.min(base, remaining);
+    rows.push(take);
+    remaining -= take;
+  }
+  return rows;
+}
+
+function openPCActions(realmId) {
+  const org = orgs.find(c => c.realm_id === realmId);
+  if (!org) return;
+  selectedPC = org;
+  const isMain = org.role === 'main';
+  const safeName = org.name.replace(/'/g, "\\'");
+  let html = '<p class="text-center opacity-70 mb-3">Realm <span class="font-mono">' + org.realm_id + '</span></p>';
+  html += '<div class="pc-actions">';
+  if (!isMain) {
+    html += '<div class="action-btn" onclick="closeModal();syncPC(\'' + realmId + '\')"><span class="action-icon">🔄</span>Sync Items & Accounts</div>';
+    html += '<div class="action-btn" onclick="closeModal();dryRunPC(\'' + realmId + '\')"><span class="action-icon">👁</span>Dry Run</div>';
+    html += '<div class="action-btn primary" onclick="closeModal();askRunPC(\'' + realmId + '\',\'' + safeName + '\')"><span class="action-icon">▶</span>Run for Real</div>';
+    html += '<div class="action-btn" onclick="closeModal();viewFlagged(\'' + realmId + '\')"><span class="action-icon">⚑</span>View Flagged</div>';
+  } else {
+    html += '<div class="action-btn"><span class="action-icon">👑</span>Main Company<div class="text-xs opacity-60 mt-1">Runs affect this org as source</div></div>';
+  }
+  html += '</div>';
+  openModal(org.name, html);
 }
 
 async function syncPC(realmId) {
@@ -292,7 +383,7 @@ async function runAll() {
   const summary = { success: 0, error: 0, partial: 0 };
   for (const pc of pcs) {
     const row = document.createElement('div');
-    row.className = 'pc-row';
+    row.className = 'p-3 rounded-lg border-2 border-black bg-white flex items-center gap-3';
     row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs opacity-60">running...</span>';
     results.appendChild(row);
     try {
@@ -352,21 +443,20 @@ async function viewFlagged(realmId) {
 
 async function loadRuns() {
   const el = document.getElementById('runsList');
-  el.innerHTML = '<div class="text-center py-4"><div class="loader-small"></div></div>';
+  el.innerHTML = '<div class="text-center py-4 col-span-full"><div class="loader-small"></div></div>';
   try {
     const runs = await api('/runs');
-    if (!runs.length) { el.innerHTML = '<p class="text-center py-4 opacity-60">No runs yet</p>'; return; }
-    let html = '<div class="space-y-1">';
+    if (!runs.length) { el.innerHTML = '<p class="text-center py-4 opacity-60 col-span-full">No runs yet</p>'; return; }
+    let html = '';
     for (const r of runs) {
       const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
       const when = new Date(r.started_at).toLocaleString();
       const org = r.companies || {};
       const runData = encodeURIComponent(JSON.stringify(r));
-      html += '<div class="run-item flex items-center gap-3 text-sm" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs opacity-70">' + r.period_start + ' to ' + r.period_end + '</div></div><div class="text-xs opacity-70 text-right flex-shrink-0"><div>' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged</div><div>' + when + '</div></div></div>';
+      html += '<div class="run-strip" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs opacity-70">' + r.period_start + ' → ' + r.period_end + '</div><div class="text-xs opacity-60 mt-1">' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged · ' + when + '</div></div></div>';
     }
-    html += '</div>';
     el.innerHTML = html;
-  } catch (e) { el.innerHTML = '<p class="text-red-600">' + e.message + '</p>'; }
+  } catch (e) { el.innerHTML = '<p class="text-red-600 col-span-full">' + e.message + '</p>'; }
 }
 
 function viewRunDetail(encoded) {
