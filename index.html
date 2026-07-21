@@ -4,459 +4,435 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carease Intercompany</title>
-<link rel="icon" href="logo.png" type="image/png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%232a2a2a'/%3E%3Ctext x='50' y='72' font-family='sans-serif' font-size='55' font-weight='900' fill='white' text-anchor='middle'%3Ec%3C/text%3E%3Cpath d='M 42 22 Q 50 18 58 22 L 55 32 L 45 32 Z' fill='%23F5C518'/%3E%3C/svg%3E">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body {
-    font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif;
-    background: #F5C518;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
-
-  .bg-shape {
-    position: fixed;
-    border-radius: 50%;
-    opacity: 0.4;
-    z-index: 0;
-    pointer-events: none;
-    filter: blur(40px);
-  }
-  .shape-1 { width: 400px; height: 400px; background: #FF6B9D; top: -100px; left: -100px; animation: float1 18s ease-in-out infinite; }
-  .shape-2 { width: 500px; height: 500px; background: #4ECDC4; top: 40%; right: -150px; animation: float2 22s ease-in-out infinite; }
-  .shape-3 { width: 350px; height: 350px; background: #A78BFA; bottom: -50px; left: 30%; animation: float3 20s ease-in-out infinite; }
-  .shape-4 { width: 280px; height: 280px; background: #FB923C; top: 20%; left: 45%; animation: float4 25s ease-in-out infinite; }
-  .shape-5 { width: 300px; height: 300px; background: #10B981; bottom: 25%; right: 20%; animation: float5 24s ease-in-out infinite; }
-
-  @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(150px, 100px) scale(1.15); } }
-  @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-120px, -80px) scale(0.9); } }
-  @keyframes float3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(80px, -120px) scale(1.1); } }
-  @keyframes float4 { 0%,100% { transform: translate(0,0) rotate(0deg); } 50% { transform: translate(-100px, 80px) rotate(180deg); } }
-  @keyframes float5 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px, -60px) scale(1.2); } }
-
-  .glass {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
-
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #1a1a1a; color: #f5f5f5; overflow-x: hidden; min-height: 100vh; margin: 0; }
+  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #1a1a1a 0%, #2a2517 50%, #1a1a1a 100%); }
+  .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: drift 30s ease-in-out infinite; }
+  .orb1 { width: 500px; height: 500px; background: #F5C518; top: -100px; left: -100px; animation-duration: 25s; }
+  .orb2 { width: 600px; height: 600px; background: #FF9500; top: 30%; right: -200px; animation-duration: 35s; animation-delay: -5s; }
+  .orb3 { width: 400px; height: 400px; background: #F5C518; bottom: -100px; left: 30%; animation-duration: 28s; animation-delay: -10s; }
+  .orb4 { width: 350px; height: 350px; background: #FFB800; top: 50%; left: 40%; animation-duration: 32s; animation-delay: -15s; }
+  @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 25% { transform: translate(100px, -80px) scale(1.1); } 50% { transform: translate(-80px, 100px) scale(0.95); } 75% { transform: translate(80px, 80px) scale(1.05); } }
   .content { position: relative; z-index: 10; }
-
-  .logo-c {
-    display: inline-block;
-    background: #F5C518;
-    color: #1a1a1a;
-    font-weight: 900;
-    font-size: 44px;
-    line-height: 1;
-    padding: 4px 12px 8px 12px;
-    border-radius: 8px;
-    border: 3px solid #1a1a1a;
-    box-shadow: 4px 4px 0 #1a1a1a;
-  }
-
-  .btn-primary {
-    background: #1a1a1a;
-    color: #F5C518;
-    font-weight: 700;
-    transition: all 0.15s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 #F5C518; }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-
-  .btn-secondary {
-    background: white;
-    color: #1a1a1a;
-    font-weight: 600;
-    border: 2px solid #1a1a1a;
-    transition: all 0.15s;
-  }
-  .btn-secondary:hover { background: #F5C518; }
-
-  .status-dot {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 6px;
-  }
-  .status-done { background: #10B981; }
-  .status-error { background: #EF4444; }
-  .status-running { background: #F59E0B; animation: pulse 1.5s infinite; }
-  .status-idle { background: #94A3B8; }
-
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-  .spinner {
-    border: 3px solid rgba(0,0,0,0.1);
-    border-top-color: #1a1a1a;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-  }
+  .glass { background: rgba(30, 30, 30, 0.65); backdrop-filter: blur(20px); border: 1px solid rgba(245, 197, 24, 0.15); border-radius: 16px; }
+  .btn-primary { background: #F5C518; color: #1a1a1a; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
+  .btn-primary:hover { background: #FFD230; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,197,24,0.35); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-secondary { background: rgba(255,255,255,0.08); color: #f5f5f5; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
+  .btn-secondary:hover { background: rgba(245,197,24,0.15); border-color: rgba(245,197,24,0.4); }
+  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+  .status-done { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
+  .status-error { background: #EF4444; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
+  .status-running { background: #F5C518; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .loader-ring { display: inline-block; width: 60px; height: 60px; position: relative; }
+  .loader-ring::before, .loader-ring::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid transparent; }
+  .loader-ring::before { border-top-color: #F5C518; border-right-color: #F5C518; animation: spin 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  .loader-ring::after { border-bottom-color: #FFD230; animation: spin 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite reverse; inset: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+  .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(245,197,24,0.2); border-top-color: #F5C518; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
   .modal-backdrop.open { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 16px;
-    max-width: 900px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border: 3px solid #1a1a1a;
-    box-shadow: 8px 8px 0 #F5C518;
-  }
+  .modal { background: linear-gradient(180deg, #252525 0%, #1e1e1e 100%); border-radius: 20px; max-width: 900px; width: 100%; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(245,197,24,0.25); box-shadow: 0 20px 60px rgba(0,0,0,0.7); }
+  .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #F5C518, #FFD230); color: #1a1a1a; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 0 8px 24px rgba(245,197,24,0.4); display: none; align-items: center; gap: 8px; }
+  .modal-minimized.show { display: flex; }
+  .splash { position: fixed; inset: 0; z-index: 200; background: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: splashFade 2.2s forwards; animation-delay: 1.5s; }
+  .splash-logo { font-size: 64px; font-weight: 900; color: white; letter-spacing: -0.03em; display: flex; align-items: center; animation: logoIn 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .splash-c { position: relative; display: inline-block; margin-right: 2px; }
+  .splash-crown { position: absolute; top: -8px; left: 50%; transform: translateX(-50%) rotate(-15deg); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 16px solid #F5C518; animation: crownDrop 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .splash-sub { color: rgba(245,197,24,0.9); font-size: 14px; letter-spacing: 0.3em; margin-top: 20px; text-transform: uppercase; animation: fadeInUp 1s ease 0.4s both; }
+  @keyframes logoIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes crownDrop { from { transform: translateX(-50%) rotate(-15deg) translateY(-30px); opacity: 0; } to { transform: translateX(-50%) rotate(-15deg) translateY(0); opacity: 1; } }
+  @keyframes fadeInUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes splashFade { 0%, 70% { opacity: 1; pointer-events: auto; } 100% { opacity: 0; pointer-events: none; visibility: hidden; } }
+  .login-card { max-width: 400px; width: 100%; padding: 40px; background: linear-gradient(180deg, rgba(35,35,35,0.9), rgba(25,25,25,0.9)); border: 1px solid rgba(245,197,24,0.25); border-radius: 20px; backdrop-filter: blur(30px); }
+  .input-field { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
+  .input-field:focus { border-color: #F5C518; background: rgba(255,255,255,0.08); }
+  .date-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 8px 12px; border-radius: 8px; font-family: inherit; color-scheme: dark; }
+  .date-input:focus { border-color: #F5C518; outline: none; }
+  .pc-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; transition: all 0.15s; }
+  .pc-row:hover { background: rgba(255,255,255,0.05); border-color: rgba(245,197,24,0.2); }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .badge-done { background: rgba(16,185,129,0.15); color: #10B981; border: 1px solid rgba(16,185,129,0.3); }
+  .badge-error { background: rgba(239,68,68,0.15); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.3); }
+  .badge-partial { background: rgba(245,158,11,0.15); color: #FBBF24; border: 1px solid rgba(245,158,11,0.3); }
+  .run-item { padding: 12px 16px; border-radius: 10px; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+  .run-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(245,197,24,0.2); }
+  .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #F5C518, #FFD230); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 0 8px 24px rgba(245,197,24,0.4); }
 </style>
 </head>
 <body>
-
-<div class="bg-shape shape-1"></div>
-<div class="bg-shape shape-2"></div>
-<div class="bg-shape shape-3"></div>
-<div class="bg-shape shape-4"></div>
-<div class="bg-shape shape-5"></div>
-
-<div class="content max-w-6xl mx-auto px-4 py-8">
-
-  <header class="flex items-center justify-between mb-8">
-    <div class="flex items-center gap-4">
-      <div class="logo-c">c</div>
-      <div>
-        <h1 class="text-3xl font-black text-black">CAREASE INTERCOMPANY</h1>
-        <p class="text-sm text-black/70 font-medium">Automated monthly intercompany billing</p>
-      </div>
+<div class="splash" id="splash"><div class="splash-logo"><span class="splash-c">c<span class="splash-crown"></span></span>arease</div><div class="splash-sub">Intercompany</div></div>
+<div class="bg-container"><div class="bg-orb orb1"></div><div class="bg-orb orb2"></div><div class="bg-orb orb3"></div><div class="bg-orb orb4"></div></div>
+<div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
+  <div class="login-card">
+    <div class="text-center mb-6"><div class="splash-logo" style="font-size: 40px; justify-content: center;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:8px;border-right-width:8px;border-bottom-width:11px;top:-5px;"></span></span>arease</div><div class="text-xs text-yellow-400 tracking-widest uppercase mt-2">Intercompany</div></div>
+    <div id="loginError" class="text-red-400 text-sm mb-3 text-center" style="display:none;"></div>
+    <div class="space-y-3">
+      <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
+      <input id="loginPass" type="password" class="input-field" placeholder="Password" autocomplete="current-password">
+      <label class="flex items-center gap-2 text-sm text-gray-300"><input id="rememberMe" type="checkbox" class="w-4 h-4 accent-yellow-400" checked>Remember me for 30 days</label>
+      <button onclick="doLogin()" id="loginBtn" class="btn-primary w-full">Sign In</button>
     </div>
-    <div class="flex gap-2">
-      <button onclick="connectMain()" class="btn-secondary px-4 py-2 rounded-lg text-sm">+ Main</button>
-      <button onclick="connectPC()" class="btn-primary px-4 py-2 rounded-lg text-sm">+ PC</button>
-    </div>
-  </header>
-
-  <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
-    <h2 class="text-xl font-black mb-4">Run Period</h2>
-    <div class="flex flex-wrap gap-4 items-end">
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wide mb-1">Start Date</label>
-        <input id="startDate" type="date" class="border-2 border-black rounded-lg px-3 py-2 font-mono">
-      </div>
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wide mb-1">End Date</label>
-        <input id="endDate" type="date" class="border-2 border-black rounded-lg px-3 py-2 font-mono">
-      </div>
-      <div class="flex items-center gap-2">
-        <input id="dryRunToggle" type="checkbox" checked class="w-5 h-5 accent-black">
-        <label for="dryRunToggle" class="font-bold">Dry Run (preview only)</label>
-      </div>
-      <button onclick="runAll()" class="btn-primary px-6 py-2 rounded-lg ml-auto">▶ RUN ALL PCS</button>
-    </div>
-    <p class="text-xs text-black/60 mt-3">Dry Run shows what would happen without touching QBO. Uncheck to run for real.</p>
   </div>
-
-  <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-black">Connected Organizations</h2>
-      <button onclick="loadOrgs()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
+</div>
+<div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
+  <header class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <div class="flex items-center gap-3"><div class="splash-logo" style="font-size: 30px;"><span class="splash-c">c<span class="splash-crown" style="border-left-width:6px;border-right-width:6px;border-bottom-width:8px;top:-4px;"></span></span>arease</div><div class="hidden md:block"><div class="text-xs text-yellow-400 tracking-widest uppercase">Intercompany</div></div></div>
+    <div class="flex gap-2 items-center"><span id="loggedInAs" class="text-xs text-gray-400 mr-2"></span><button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button><button onclick="connectPC()" class="btn-primary text-sm">+ PC</button><button onclick="doLogout()" class="btn-secondary text-sm">Logout</button></div>
+  </header>
+  <div class="glass p-5 mb-5">
+    <div class="flex items-center justify-between mb-4"><h2 class="text-lg font-bold">Run Period</h2><div class="text-xs text-gray-400">Set your billing window</div></div>
+    <div class="flex flex-wrap gap-3 items-end">
+      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1 text-gray-400">Start</label><input id="startDate" type="date" class="date-input"></div>
+      <div><label class="block text-xs font-semibold uppercase tracking-wider mb-1 text-gray-400">End</label><input id="endDate" type="date" class="date-input"></div>
+      <label class="flex items-center gap-2 text-sm cursor-pointer"><input id="dryRunToggle" type="checkbox" checked class="w-4 h-4 accent-yellow-400"><span>Dry Run</span></label>
+      <button onclick="askRunAll()" class="btn-primary ml-auto">▶ Run All PCs</button>
     </div>
-    <div id="orgsLoading" class="text-center py-8"><div class="spinner"></div></div>
+  </div>
+  <div class="glass p-5 mb-5">
+    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Connected Organizations</h2><button onclick="loadOrgs()" class="btn-secondary text-xs">↻</button></div>
+    <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
     <div id="orgsList"></div>
   </div>
-
-  <div class="glass rounded-2xl p-6 shadow-xl">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-black">Recent Runs</h2>
-      <button onclick="loadRuns()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
-    </div>
-    <div id="runsList" class="text-black/60 text-sm">Loading...</div>
-  </div>
-
-</div>
-
-<div id="modal" class="modal-backdrop" onclick="if(event.target===this) closeModal()">
-  <div class="modal p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 id="modalTitle" class="text-xl font-black">Result</h3>
-      <button onclick="closeModal()" class="text-2xl leading-none">×</button>
-    </div>
-    <div id="modalBody"></div>
+  <div class="glass p-5">
+    <div class="flex items-center justify-between mb-3"><h2 class="text-lg font-bold">Recent Runs</h2><button onclick="loadRuns()" class="btn-secondary text-xs">↻</button></div>
+    <div id="runsList" class="text-gray-400 text-sm">Loading...</div>
   </div>
 </div>
-
-<script>
+<div id="confirmModal" class="modal-backdrop"><div class="modal p-6" style="max-width: 480px;"><div class="confirm-icon" id="confirmIcon">▶</div><h3 class="text-xl font-bold text-center mb-2" id="confirmTitle">Confirm Run</h3><p class="text-center text-gray-300 mb-6" id="confirmBody"></p><div class="flex gap-3"><button onclick="closeConfirm()" class="btn-secondary flex-1">Cancel</button><button onclick="acceptConfirm()" class="btn-primary flex-1">Continue</button></div></div></div>
+<div id="modal" class="modal-backdrop"><div class="modal p-6"><div class="flex items-center justify-between mb-4"><h3 id="modalTitle" class="text-xl font-bold">Result</h3><div class="flex gap-2"><button onclick="minimizeModal()" class="btn-secondary text-sm">−</button><button onclick="closeModal()" class="btn-secondary text-sm">×</button></div></div><div id="modalBody"></div></div></div>
+<div id="modalChip" class="modal-minimized" onclick="reopenModal()"><span id="modalChipText">Results ready</span><span style="opacity:0.7;">↗</span></div><script>
 const API = 'https://carease-intercompany-production.up.railway.app';
+const TOKEN_KEY = 'carease_session_token';
+let sessionToken = localStorage.getItem(TOKEN_KEY) || null;
+let orgs = [];
+let currentUsername = null;
+let currentModalContent = null;
+let audioCtx = null;
 
-(function initDates() {
+setTimeout(() => {
+  document.getElementById('splash').style.display = 'none';
+  if (sessionToken) checkSession(); else showLogin();
+}, 3800);
+
+function initDates() {
   const now = new Date();
   const first = new Date(now.getFullYear(), now.getMonth(), 1);
   const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   document.getElementById('startDate').value = first.toISOString().slice(0,10);
   document.getElementById('endDate').value = last.toISOString().slice(0,10);
-})();
+}
+initDates();
+
+async function checkSession() {
+  try {
+    const r = await fetch(API + '/auth/me', {headers: {'X-Session-Token': sessionToken}});
+    if (r.ok) { const data = await r.json(); currentUsername = data.username; showApp(); }
+    else { localStorage.removeItem(TOKEN_KEY); sessionToken = null; showLogin(); }
+  } catch (e) { showLogin(); }
+}
+
+async function doLogin() {
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const remember = document.getElementById('rememberMe').checked;
+  const errEl = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  errEl.style.display = 'none';
+  if (!username || !password) { errEl.textContent = 'Enter username and password'; errEl.style.display = 'block'; return; }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader-small"></span> Signing in...';
+  try {
+    const r = await fetch(API + '/auth/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password})
+    });
+    const data = await r.json();
+    if (r.ok && data.token) {
+      sessionToken = data.token;
+      if (remember) localStorage.setItem(TOKEN_KEY, sessionToken);
+      currentUsername = data.username;
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+      showApp();
+    } else { errEl.textContent = 'Invalid username or password'; errEl.style.display = 'block'; }
+  } catch (e) { errEl.textContent = 'Connection error'; errEl.style.display = 'block'; }
+  btn.disabled = false;
+  btn.innerHTML = 'Sign In';
+}
+
+document.addEventListener('keypress', e => {
+  if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') doLogin();
+});
+
+async function doLogout() {
+  if (!confirm('Log out?')) return;
+  try { await fetch(API + '/auth/logout', {method: 'POST', headers: {'X-Session-Token': sessionToken}}); } catch (e) {}
+  localStorage.removeItem(TOKEN_KEY);
+  sessionToken = null;
+  currentUsername = null;
+  showLogin();
+}
+
+function showLogin() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('loggedInAs').textContent = currentUsername ? '@' + currentUsername : '';
+  loadOrgs();
+  loadRuns();
+}
 
 async function api(path) {
-  const r = await fetch(API + path);
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  const r = await fetch(API + path, {headers: {'X-Session-Token': sessionToken}});
+  if (r.status === 401) { showLogin(); throw new Error('Session expired'); }
+  if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
   return r.json();
 }
 
-function connectMain() { window.location.href = `${API}/connect?role=main`; }
-function connectPC() { window.location.href = `${API}/connect?role=pc`; }
-
-let orgs = [];
+function connectMain() { window.location.href = API + '/connect?role=main'; }
+function connectPC() { window.location.href = API + '/connect?role=pc'; }
 
 async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
   document.getElementById('orgsList').innerHTML = '';
-  try {
-    orgs = await api('/orgs');
-    render();
-  } catch (e) {
-    document.getElementById('orgsList').innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
-  } finally {
-    document.getElementById('orgsLoading').style.display = 'none';
-  }
+  try { orgs = await api('/orgs'); renderOrgs(); }
+  catch (e) { document.getElementById('orgsList').innerHTML = '<p class="text-red-400">' + e.message + '</p>'; }
+  finally { document.getElementById('orgsLoading').style.display = 'none'; }
 }
 
-function render() {
+function renderOrgs() {
   const main = orgs.find(c => c.role === 'main');
   const pcs = orgs.filter(c => c.role === 'pc');
-  const container = document.getElementById('orgsList');
-
   let html = '';
   if (main) {
-    html += `
-      <div class="bg-black text-yellow-300 rounded-xl p-4 mb-4 flex items-center justify-between">
-        <div>
-          <span class="text-xs uppercase font-bold tracking-widest opacity-70">Main Company</span>
-          <div class="text-lg font-bold">${main.name}</div>
-          <div class="text-xs opacity-70 font-mono">Realm ${main.realm_id}</div>
-        </div>
-        <span class="status-dot status-done"></span>
-      </div>`;
+    html += '<div class="p-4 rounded-xl mb-4 flex items-center justify-between" style="background:linear-gradient(135deg,rgba(245,197,24,0.15),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.3);"><div><div class="text-xs text-yellow-400 tracking-widest uppercase font-bold">Main</div><div class="text-lg font-bold text-white">' + main.name + '</div><div class="text-xs text-gray-400 font-mono">Realm ' + main.realm_id + '</div></div><span class="status-dot status-done"></span></div>';
   } else {
-    html += `<div class="border-2 border-dashed border-black rounded-xl p-4 mb-4 text-center">
-      <p class="font-bold mb-2">No Main connected</p>
-      <button onclick="connectMain()" class="btn-primary px-4 py-2 rounded">Connect Main QBO</button>
-    </div>`;
+    html += '<div class="border-2 border-dashed border-yellow-500/30 rounded-xl p-4 mb-4 text-center"><p class="font-bold mb-2 text-gray-300">No Main connected</p><button onclick="connectMain()" class="btn-primary">Connect Main QBO</button></div>';
   }
-
-  html += `<h3 class="text-sm uppercase font-bold tracking-widest mb-2 mt-4">Professional Corporations (${pcs.length})</h3>`;
-
+  html += '<h3 class="text-xs uppercase font-bold tracking-widest mb-3 mt-4 text-gray-400">Professional Corporations (' + pcs.length + ')</h3>';
   if (!pcs.length) {
-    html += `<div class="border-2 border-dashed border-black rounded-xl p-4 text-center">
-      <p class="mb-2">No PCs connected yet</p>
-      <button onclick="connectPC()" class="btn-primary px-4 py-2 rounded">Connect First PC</button>
-    </div>`;
+    html += '<div class="border-2 border-dashed border-yellow-500/30 rounded-xl p-4 text-center"><p class="mb-2 text-gray-300">No PCs connected yet</p><button onclick="connectPC()" class="btn-primary">Connect First PC</button></div>';
   } else {
     html += '<div class="space-y-2">';
     for (const pc of pcs) {
-      html += `
-        <div class="bg-white/70 rounded-xl p-3 flex items-center justify-between gap-3">
-          <div class="flex-1 min-w-0">
-            <div class="font-bold truncate">${pc.name}</div>
-            <div class="text-xs opacity-60 font-mono">Realm ${pc.realm_id}</div>
-          </div>
-          <div class="flex gap-2 flex-shrink-0">
-            <button onclick="syncPC('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">Sync</button>
-            <button onclick="dryRunPC('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">Dry Run</button>
-            <button onclick="runPC('${pc.realm_id}')" class="btn-primary text-xs px-3 py-1 rounded">Run</button>
-            <button onclick="viewFlagged('${pc.realm_id}')" class="btn-secondary text-xs px-3 py-1 rounded">⚑</button>
-          </div>
-        </div>`;
+      const safeName = pc.name.replace(/'/g, "\\'");
+      html += '<div class="pc-row"><div class="flex-1 min-w-0"><div class="font-bold text-white truncate">' + pc.name + '</div><div class="text-xs text-gray-500 font-mono">' + pc.realm_id + '</div></div><div class="flex gap-2 flex-shrink-0"><button onclick="syncPC(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">Sync</button><button onclick="askDryRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-secondary text-xs">Dry Run</button><button onclick="askRunPC(\'' + pc.realm_id + '\', \'' + safeName + '\')" class="btn-primary text-xs">Run</button><button onclick="viewFlagged(\'' + pc.realm_id + '\')" class="btn-secondary text-xs">⚑</button></div></div>';
     }
     html += '</div>';
   }
-  container.innerHTML = html;
+  document.getElementById('orgsList').innerHTML = html;
 }
 
 async function syncPC(realmId) {
-  openModal('Syncing...', '<div class="text-center py-8"><div class="spinner"></div></div>');
+  openModal('Syncing...', '<div class="text-center py-8"><div class="loader-ring"></div></div>');
   try {
-    const r = await api(`/sync/${realmId}`);
-    openModal('Synced', `<div class="space-y-2"><p><b>${r.name}</b></p><p>Items: ${r.items}</p><p>Accounts: ${r.accounts}</p></div>`);
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
+    const r = await api('/sync/' + realmId);
+    openModal('Synced ✓', '<div class="space-y-2"><p class="font-bold text-lg">' + r.name + '</p><p>Items: ' + r.items + '</p><p>Accounts: ' + r.accounts + '</p></div>');
+  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
+}
+
+function askDryRunPC(realmId, name) { showConfirm('Dry Run', 'Preview what would happen for <b>' + name + '</b>? Nothing will be posted to QBO.', '👁', () => dryRunPC(realmId)); }
+function askRunPC(realmId, name) { showConfirm('Confirm Real Run', 'This will create a real invoice and bill in QBO for <b>' + name + '</b>. Continue?', '⚠', () => runPC(realmId)); }
+function askRunAll() {
+  const dry = document.getElementById('dryRunToggle').checked;
+  const pcs = orgs.filter(c => c.role === 'pc');
+  if (!pcs.length) return alert('No PCs to run');
+  if (dry) showConfirm('Dry Run All PCs', 'Preview all ' + pcs.length + ' PCs. Nothing posted.', '👁', runAll);
+  else showConfirm('REAL Run All PCs', 'Create REAL invoices and bills for ALL ' + pcs.length + ' PCs?', '⚠', runAll);
 }
 
 async function dryRunPC(realmId) {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range first');
-  openModal('Running dry-run...', '<div class="text-center py-8"><div class="spinner"></div></div>');
+  if (!start || !end) return alert('Pick a date range');
+  openModal('Running dry-run...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4 text-gray-400">Analyzing expenses...</p></div>');
   try {
-    const r = await api(`/run/${realmId}?start=${start}&end=${end}&dry_run=true`);
+    const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end + '&dry_run=true');
     openModal('Dry Run Result', renderRunResult(r));
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
+  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
 }
 
 async function runPC(realmId) {
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
-  if (!start || !end) return alert('Pick a date range first');
-  if (!confirm('This will create a real invoice and bill in QBO. Continue?')) return;
-  openModal('Running...', '<div class="text-center py-8"><div class="spinner"></div><p class="mt-2">This can take up to a minute...</p></div>');
+  if (!start || !end) return alert('Pick a date range');
+  openModal('Running...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4 text-gray-400">Creating invoice and bill...</p></div>');
   try {
-    const r = await api(`/run/${realmId}?start=${start}&end=${end}`);
-    openModal('Done', renderRunResult(r));
+    const r = await api('/run/' + realmId + '?start=' + start + '&end=' + end);
+    if (r.status === 'done') playDing();
+    openModal('Done ✓', renderRunResult(r));
     loadRuns();
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
+  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
 }
 
 async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = orgs.filter(c => c.role === 'pc');
-  if (!pcs.length) return alert('No PCs to run');
-  if (!dry && !confirm(`This will create REAL invoices and bills for ${pcs.length} PCs. Continue?`)) return;
-
   const start = document.getElementById('startDate').value;
   const end = document.getElementById('endDate').value;
-  openModal(dry ? 'Dry running all PCs...' : 'Running all PCs...', '<div id="allResults" class="space-y-3"></div>');
-
+  openModal(dry ? 'Dry Running All PCs' : 'Running All PCs', '<div id="allResults" class="space-y-2"></div>');
   const results = document.getElementById('allResults');
+  const summary = { success: 0, error: 0, partial: 0 };
   for (const pc of pcs) {
     const row = document.createElement('div');
-    row.className = 'flex items-center gap-3 p-2 border-b';
-    row.innerHTML = `<span class="spinner"></span><span class="font-bold flex-1 truncate">${pc.name}</span>`;
+    row.className = 'pc-row';
+    row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-gray-400">running...</span>';
     results.appendChild(row);
     try {
-      const r = await api(`/run/${pc.realm_id}?start=${start}&end=${end}${dry ? '&dry_run=true' : ''}`);
-      const badge = r.status === 'error' ? '❌' : (r.status === 'partial' ? '⚠️' : (r.dry_run ? '👁' : '✓'));
-      const detail = r.dry_run
-        ? `${r.billable_expenses_found || 0} lines, subtotal $${r.subtotal || 0}, MSA $${r.msa_amount_20pct || 0}`
-        : (r.status === 'done' ? `#${r.doc_number}, ${r.lines_total} lines, ${r.lines_flagged || 0} flagged` : (r.error || r.status || ''));
-      row.innerHTML = `<span>${badge}</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-black/60">${detail}</span>`;
+      const r = await api('/run/' + pc.realm_id + '?start=' + start + '&end=' + end + (dry ? '&dry_run=true' : ''));
+      let badge, detail;
+      if (r.status === 'error') { badge = '<span class="badge badge-error">Error</span>'; detail = r.error || 'Failed'; summary.error++; }
+      else if (r.status === 'partial') { badge = '<span class="badge badge-partial">Partial</span>'; detail = r.error || 'Partial'; summary.partial++; }
+      else if (r.dry_run) { badge = '<span class="badge badge-done">Preview</span>'; detail = (r.billable_expenses_found||0) + ' lines · $' + (r.subtotal||0).toFixed(2) + ' · MSA $' + (r.msa_amount_20pct||0).toFixed(2); summary.success++; }
+      else { badge = '<span class="badge badge-done">Done</span>'; detail = '#' + r.doc_number + ' · ' + r.lines_total + ' lines · ' + (r.lines_flagged||0) + ' flagged'; summary.success++; playDing(); }
+      row.innerHTML = badge + '<span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-gray-400">' + detail + '</span>';
     } catch (e) {
-      row.innerHTML = `<span>❌</span><span class="font-bold flex-1 truncate">${pc.name}</span><span class="text-sm text-red-600">${e.message}</span>`;
+      row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-red-400">' + e.message + '</span>';
+      summary.error++;
     }
   }
+  const banner = document.createElement('div');
+  banner.className = 'mt-4 p-4 rounded-xl';
+  banner.style = 'background: linear-gradient(135deg, rgba(245,197,24,0.1), rgba(245,197,24,0.05)); border: 1px solid rgba(245,197,24,0.3);';
+  banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm"><span>✓ <b>' + summary.success + '</b> success</span><span class="text-orange-400">⚠ <b>' + summary.partial + '</b> partial</span><span class="text-red-400">✗ <b>' + summary.error + '</b> failed</span></div>';
+  results.appendChild(banner);
   if (!dry) loadRuns();
 }
 
 function renderRunResult(r) {
-  if (r.error && !r.status) return `<p class="text-red-600 font-bold">${r.error}: ${r.detail || ''}</p>`;
+  if (r.error && !r.status) return '<p class="text-red-400 font-bold">' + r.error + ': ' + (r.detail || '') + '</p>';
   if (r.dry_run) {
-    let html = `
-      <div class="grid grid-cols-2 gap-2 mb-4 text-sm">
-        <div><b>PC:</b> ${r.pc}</div>
-        <div><b>State:</b> ${r.state_code}</div>
-        <div><b>Period:</b> ${r.period}</div>
-        <div><b>Expenses:</b> ${r.billable_expenses_found}</div>
-        <div><b>Subtotal:</b> $${r.subtotal}</div>
-        <div><b>MSA (20%):</b> $${r.msa_amount_20pct}</div>
-        <div class="col-span-2 text-lg"><b>Invoice Total:</b> $${r.invoice_total}</div>
-        <div class="col-span-2"><b>Next Invoice #:</b> ${r.next_doc_number || '?'}</div>
-        <div class="col-span-2"><b>MSA in Main:</b> ${r.msa_item_lookup_main || 'undefined'}</div>
-        <div class="col-span-2"><b>MSA in PC:</b> ${r.msa_item_lookup_pc || 'undefined'}</div>
-      </div>
-      <h4 class="font-bold mb-2">Line Categorizations:</h4>
-      <div class="space-y-2">`;
+    let html = '<div class="grid grid-cols-2 gap-3 mb-4 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">State:</span> <b>' + r.state_code + '</b></div><div><span class="text-gray-400">Period:</span> ' + r.period + '</div><div><span class="text-gray-400">Expenses:</span> ' + r.billable_expenses_found + '</div><div><span class="text-gray-400">Subtotal:</span> $' + r.subtotal.toFixed(2) + '</div><div><span class="text-gray-400">MSA (20%):</span> $' + r.msa_amount_20pct.toFixed(2) + '</div><div class="col-span-2 pt-2 border-t border-gray-700"><span class="text-gray-400">Invoice Total:</span> <span class="text-lg text-yellow-400 font-bold">$' + r.invoice_total.toFixed(2) + '</span></div><div class="col-span-2 text-xs text-gray-400">Next #: <span class="text-white">' + (r.next_doc_number || '?') + '</span></div><div class="col-span-2 text-xs text-gray-400">MSA Main: <span class="text-white">' + (r.msa_item_lookup_main || '?') + '</span></div><div class="col-span-2 text-xs text-gray-400">MSA PC: <span class="text-white">' + (r.msa_item_lookup_pc || '?') + '</span></div></div><h4 class="font-bold mb-2 text-sm text-yellow-400 uppercase tracking-wide">Line Items</h4><div class="space-y-2">';
     for (const l of r.line_previews) {
-      const badge = l.confidence === 'high' ? '🟢' : (l.confidence === 'low' ? '🟡' : '🔴');
-      html += `<div class="border rounded p-2 text-sm">
-        <div class="flex justify-between"><span>${badge} ${l.description}</span><b>$${l.amount}</b></div>
-        <div class="text-xs opacity-70">${l.reasoning || ''}</div>
-      </div>`;
+      const dot = l.confidence === 'high' ? '🟢' : (l.confidence === 'low' ? '🟡' : '🔴');
+      html += '<div class="p-3 rounded-lg" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);"><div class="flex justify-between items-start gap-2"><span class="text-sm">' + dot + ' ' + l.description + '</span><b class="text-yellow-400">$' + l.amount.toFixed(2) + '</b></div><div class="text-xs text-gray-500 mt-1">' + (l.reasoning || '') + '</div></div>';
     }
-    html += `</div><p class="mt-4 text-xs italic">${r.note}</p>`;
+    html += '</div><p class="mt-4 text-xs italic text-gray-500 text-center">' + r.note + '</p>';
     return html;
   }
   if (r.status === 'done') {
-    return `<div class="space-y-2">
-      <p><b>PC:</b> ${r.pc}</p>
-      <p><b>Invoice:</b> #${r.doc_number || r.invoice_id}</p>
-      <p><b>Bill created in PC:</b> id ${r.bill_id || '?'}</p>
-      <p><b>Lines:</b> ${r.lines_total}, flagged: ${r.lines_flagged || 0}</p>
-      <p class="text-green-700 font-bold mt-3">✓ Done</p>
-    </div>`;
+    return '<div class="space-y-3 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">Invoice:</span> <b class="text-yellow-400">#' + (r.doc_number || r.invoice_id) + '</b></div><div><span class="text-gray-400">Bill created:</span> id ' + (r.bill_id || '?') + '</div><div><span class="text-gray-400">Lines:</span> ' + r.lines_total + ' · <span class="text-orange-400">' + (r.lines_flagged || 0) + ' flagged</span></div><div class="pt-3 mt-3 border-t border-gray-700 text-center"><span class="badge badge-done">✓ Complete</span></div></div>';
   }
   if (r.status === 'partial') {
-    return `<div class="space-y-2">
-      <p><b>PC:</b> ${r.pc}</p>
-      <p><b>Invoice created:</b> #${r.doc_number || r.invoice_id}</p>
-      <p class="text-orange-600"><b>But:</b> ${r.error}</p>
-    </div>`;
+    return '<div class="space-y-2 text-sm"><div><span class="text-gray-400">PC:</span> <b>' + r.pc + '</b></div><div><span class="text-gray-400">Invoice created:</span> <b>#' + (r.doc_number || r.invoice_id) + '</b></div><div class="text-orange-400"><b>Issue:</b> ' + r.error + '</div></div>';
   }
-  return `<pre class="text-xs bg-gray-100 p-3 rounded overflow-x-auto">${JSON.stringify(r, null, 2)}</pre>`;
+  return '<pre class="text-xs bg-black/40 p-3 rounded overflow-x-auto text-gray-300">' + JSON.stringify(r, null, 2) + '</pre>';
 }
 
 async function viewFlagged(realmId) {
-  openModal('Loading flagged...', '<div class="text-center py-8"><div class="spinner"></div></div>');
+  openModal('Loading flagged...', '<div class="text-center py-8"><div class="loader-ring"></div></div>');
   try {
-    const r = await api(`/flagged/${realmId}`);
-    if (!r.flagged.length) {
-      openModal(`${r.name} — Flagged`, '<p>No flagged items 🎉</p>');
-      return;
-    }
-    let html = `<div class="space-y-2">`;
+    const r = await api('/flagged/' + realmId);
+    if (!r.flagged.length) { openModal(r.name + ' — Flagged', '<p class="text-center py-4">No flagged items 🎉</p>'); return; }
+    let html = '<div class="space-y-2">';
     for (const f of r.flagged) {
-      html += `<div class="border rounded p-3 text-sm">
-        <div class="font-bold">${f.description}</div>
-        <div class="text-xs opacity-70">${f.reasoning}</div>
-        <div class="text-xs mt-1">Confidence: <b>${f.confidence}</b></div>
-      </div>`;
+      html += '<div class="p-3 rounded-lg" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);"><div class="font-bold text-sm">' + f.description + '</div><div class="text-xs text-gray-400 mt-1">' + f.reasoning + '</div><div class="text-xs mt-2">Confidence: <b class="' + (f.confidence==='low'?'text-orange-400':'text-red-400') + '">' + f.confidence + '</b></div></div>';
     }
     html += '</div>';
-    openModal(`${r.name} — Flagged`, html);
-  } catch (e) {
-    openModal('Error', `<p class="text-red-600">${e.message}</p>`);
-  }
+    openModal(r.name + ' — Flagged', html);
+  } catch (e) { openModal('Error', '<p class="text-red-400">' + e.message + '</p>'); }
 }
 
 async function loadRuns() {
   const el = document.getElementById('runsList');
-  el.innerHTML = 'Loading...';
+  el.innerHTML = '<div class="text-center py-4"><div class="loader-small"></div></div>';
   try {
     const runs = await api('/runs');
-    if (!runs.length) { el.innerHTML = '<p class="text-black/60">No runs yet</p>'; return; }
-    let html = '<div class="space-y-2">';
+    if (!runs.length) { el.innerHTML = '<p class="text-gray-500 text-center py-4">No runs yet</p>'; return; }
+    let html = '<div class="space-y-1">';
     for (const r of runs) {
       const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
       const when = new Date(r.started_at).toLocaleString();
       const org = r.companies || {};
-      html += `<div class="flex items-center gap-3 p-2 border-b border-black/10 text-sm">
-        <span class="status-dot ${cls}"></span>
-        <span class="flex-1"><b>${org.name || '?'}</b> — ${r.period_start} to ${r.period_end}</span>
-        <span class="opacity-60">${r.lines_total || 0} lines, ${r.lines_flagged || 0} flagged</span>
-        <span class="opacity-60 text-xs">${when}</span>
-      </div>`;
+      const runData = encodeURIComponent(JSON.stringify(r));
+      html += '<div class="run-item flex items-center gap-3 text-sm" onclick="viewRunDetail(\'' + runData + '\')"><span class="status-dot ' + cls + '"></span><div class="flex-1 min-w-0"><div class="font-bold truncate">' + (org.name || '?') + '</div><div class="text-xs text-gray-500">' + r.period_start + ' to ' + r.period_end + '</div></div><div class="text-xs text-gray-400 text-right flex-shrink-0"><div>' + (r.lines_total || 0) + ' lines · ' + (r.lines_flagged || 0) + ' flagged</div><div class="opacity-70">' + when + '</div></div></div>';
     }
     html += '</div>';
     el.innerHTML = html;
-  } catch (e) {
-    el.innerHTML = `<p class="text-red-600">${e.message}</p>`;
-  }
+  } catch (e) { el.innerHTML = '<p class="text-red-400">' + e.message + '</p>'; }
+}
+
+function viewRunDetail(encoded) {
+  const r = JSON.parse(decodeURIComponent(encoded));
+  const org = r.companies || {};
+  const cls = r.status === 'done' ? 'badge-done' : (r.status === 'error' ? 'badge-error' : 'badge-partial');
+  let html = '<div class="space-y-3 text-sm"><div><span class="text-gray-400">Company:</span> <b>' + (org.name || '?') + '</b></div><div><span class="text-gray-400">Period:</span> ' + r.period_start + ' to ' + r.period_end + '</div><div><span class="text-gray-400">Status:</span> <span class="badge ' + cls + '">' + r.status + '</span></div><div><span class="text-gray-400">Started:</span> ' + new Date(r.started_at).toLocaleString() + '</div>';
+  if (r.finished_at) html += '<div><span class="text-gray-400">Finished:</span> ' + new Date(r.finished_at).toLocaleString() + '</div>';
+  if (r.invoice_id) html += '<div><span class="text-gray-400">Invoice ID:</span> <b>' + r.invoice_id + '</b></div>';
+  if (r.bill_id) html += '<div><span class="text-gray-400">Bill ID:</span> <b>' + r.bill_id + '</b></div>';
+  html += '<div><span class="text-gray-400">Lines total:</span> ' + (r.lines_total || 0) + '</div><div><span class="text-gray-400">Lines flagged:</span> ' + (r.lines_flagged || 0) + '</div>';
+  if (r.error_message) html += '<div class="text-red-400 pt-2 border-t border-gray-700"><b>Error:</b> ' + r.error_message + '</div>';
+  html += '</div>';
+  openModal('Run Details', html);
 }
 
 function openModal(title, body) {
   document.getElementById('modalTitle').textContent = title;
   document.getElementById('modalBody').innerHTML = body;
   document.getElementById('modal').classList.add('open');
+  currentModalContent = {title: title, body: body};
+  document.getElementById('modalChip').classList.remove('show');
 }
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
+  document.getElementById('modalChip').classList.remove('show');
+  currentModalContent = null;
+}
+function minimizeModal() {
+  document.getElementById('modal').classList.remove('open');
+  if (currentModalContent) {
+    document.getElementById('modalChipText').textContent = currentModalContent.title;
+    document.getElementById('modalChip').classList.add('show');
+  }
+}
+function reopenModal() {
+  if (currentModalContent) {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('modalChip').classList.remove('show');
+  }
 }
 
-loadOrgs();
-loadRuns();
-</script>
+let confirmCallback = null;
+function showConfirm(title, body, icon, callback) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmBody').innerHTML = body;
+  document.getElementById('confirmIcon').textContent = icon || '▶';
+  confirmCallback = callback;
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.remove('open');
+  confirmCallback = null;
+}
+function acceptConfirm() {
+  const cb = confirmCallback;
+  closeConfirm();
+  if (cb) cb();
+}
 
+function playDing() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.1);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.start(now);
+    osc.stop(now + 0.5);
+  } catch (e) {}
+}
+</script>
 </body>
 </html>
