@@ -8,13 +8,13 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   * { box-sizing: border-box; }
-  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #FAF6E8; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
-  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #FAF6E8; }
-  .bg-wash { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; animation: drift 32s ease-in-out infinite; }
-  .wash1 { width: 700px; height: 700px; background: #E8B4B8; top: -180px; left: -180px; animation-duration: 26s; }
-  .wash2 { width: 800px; height: 800px; background: #9BB5C4; top: 20%; right: -250px; animation-duration: 30s; animation-delay: -5s; }
-  .wash3 { width: 600px; height: 600px; background: #C9B896; bottom: -150px; left: 25%; animation-duration: 28s; animation-delay: -10s; }
-  .wash4 { width: 550px; height: 550px; background: #A8C4A2; top: 25%; left: 45%; animation-duration: 34s; animation-delay: -15s; opacity: 0.3; }
+  body { font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif; background: #F5C518; color: #1a1a1a; overflow-x: hidden; min-height: 100vh; margin: 0; }
+  .bg-container { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: linear-gradient(135deg, #F5C518 0%, #FFD449 100%); }
+  .bg-wash { position: absolute; border-radius: 50%; filter: blur(110px); opacity: 0.55; animation: drift 32s ease-in-out infinite; }
+  .wash1 { width: 700px; height: 700px; background: #C62828; top: -200px; left: -200px; animation-duration: 26s; }
+  .wash2 { width: 800px; height: 800px; background: #00838F; top: 20%; right: -280px; animation-duration: 30s; animation-delay: -5s; }
+  .wash3 { width: 600px; height: 600px; background: #4527A0; bottom: -180px; left: 25%; animation-duration: 28s; animation-delay: -10s; }
+  .wash4 { width: 550px; height: 550px; background: #EF6C00; top: 25%; left: 45%; animation-duration: 34s; animation-delay: -15s; opacity: 0.4; }
   @keyframes drift {
     0%,100% { transform: translate(0,0) scale(1); }
     25% { transform: translate(160px,-120px) scale(1.15); }
@@ -29,13 +29,27 @@
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
 
   /* HUGE header logo */
-  .logo-header { background: #1a1a1a; padding: 24px 40px; border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 28px rgba(0,0,0,0.22); flex: 1; max-width: 100%; }
-  .logo-header img { height: 90px; display: block; max-width: 100%; }
+  .logo-header { background: #1a1a1a; padding: 14px 40px; border-radius: 26px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 32px rgba(0,0,0,0.28); margin: 0 auto; max-width: 500px; }
+  .logo-header img { height: 180px; display: block; max-width: 100%; }
 
-  /* WHEEL — SDG-style ring around black hub */
-  .wheel-container { position: relative; width: 100%; max-width: 720px; aspect-ratio: 1 / 1; margin: 30px auto 20px; }
+  /* Floating menu button — replaces the top-actions row */
+  .fab-menu { position: fixed; top: 20px; right: 20px; z-index: 60; }
+  .fab-btn { width: 52px; height: 52px; border-radius: 50%; background: #1a1a1a; color: #F5C518; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 22px; transition: all 0.2s; }
+  .fab-btn:hover { transform: rotate(90deg) scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .fab-panel { position: absolute; top: 62px; right: 0; background: white; border: 3px solid #1a1a1a; border-radius: 16px; padding: 10px; box-shadow: 6px 6px 0 #1a1a1a; min-width: 200px; display: none; flex-direction: column; gap: 6px; }
+  .fab-panel.open { display: flex; }
+  .fab-item { padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; text-align: left; background: transparent; border: none; color: #1a1a1a; transition: all 0.1s; }
+  .fab-item:hover { background: #F5C518; }
+  .fab-item.primary { background: #1a1a1a; color: #F5C518; }
+  .fab-item.primary:hover { background: #333; }
+  .fab-user { padding: 8px 14px; font-size: 12px; opacity: 0.6; border-bottom: 1px solid #eee; margin-bottom: 4px; font-weight: 700; }
+
+  /* 3D WHEEL */
+  .wheel-outer { perspective: 1400px; margin: 20px auto 30px; max-width: 720px; }
+  .wheel-container { position: relative; width: 100%; aspect-ratio: 1 / 1; transform: rotateX(18deg); animation: breathe 5s ease-in-out infinite; filter: drop-shadow(0 14px 0 rgba(0,0,0,0.35)) drop-shadow(0 22px 30px rgba(0,0,0,0.4)); }
+  @keyframes breathe { 0%,100% { transform: rotateX(18deg) scale(1); } 50% { transform: rotateX(18deg) scale(1.015); } }
   .wheel-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .wheel-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 46%; height: 46%; background: #1a1a1a; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 0 40px rgba(245,197,24,0.08); color: #F5C518; z-index: 5; }
+  .wheel-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 46%; height: 46%; background: radial-gradient(circle at 35% 30%, #2a2a2a 0%, #0a0a0a 100%); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; box-shadow: 0 14px 40px rgba(0,0,0,0.5), inset 0 4px 20px rgba(245,197,24,0.08), inset 0 -4px 20px rgba(0,0,0,0.5); color: #F5C518; z-index: 5; border: 3px solid #F5C518; }
   .hub-label { font-size: 10px; font-weight: 800; letter-spacing: 0.3em; opacity: 0.7; }
   .hub-name { font-size: 15px; font-weight: 800; margin: 6px 0 14px; }
   .hub-dates { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
@@ -43,21 +57,25 @@
   .hub-input:focus { outline: none; box-shadow: 0 0 0 2px #F5C518; }
   .hub-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; margin-bottom: 14px; cursor: pointer; }
   .hub-toggle input { width: 14px; height: 14px; accent-color: #F5C518; }
-  .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 12px 22px; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.5); }
-  .hub-run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,24,0.7); }
+  .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 12px 22px; cursor: pointer; font-size: 13px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.6); }
+  .hub-run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,24,0.8); }
 
   /* PC segments */
-  .wheel-segment { cursor: pointer; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; transform-origin: center; opacity: 0; animation: segIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-  .wheel-segment:hover { transform: scale(1.06); filter: brightness(1.1) drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
-  .wheel-segment text { fill: white; font-weight: 800; pointer-events: none; user-select: none; }
+  .wheel-segment { cursor: pointer; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; transform-origin: center; opacity: 0; animation: segIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards, segWave 4s ease-in-out infinite; }
+  .wheel-segment:hover { transform: scale(1.06); filter: brightness(1.15) drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
+  .wheel-segment text { fill: white; font-weight: 800; pointer-events: none; user-select: none; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
   .seg-code { font-size: 15px; }
   .seg-num { font-size: 10px; opacity: 0.85; }
   @keyframes segIn {
-    from { opacity: 0; transform: scale(0.4) rotate(-20deg); }
-    to { opacity: 1; transform: scale(1) rotate(0); }
+    from { opacity: 0; transform: scale(0.3); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes segWave {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.12); }
   }
 
-  /* Recent runs — clean vertical list */
+  /* Recent runs */
   .runs-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
   .run-strip { background: #1a1a1a; color: #F5C518; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.25); }
   .run-strip:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); border-color: rgba(245,197,24,0.6); }
@@ -86,12 +104,12 @@
   .modal-minimized { position: fixed; bottom: 20px; right: 20px; background: #1a1a1a; color: #F5C518; padding: 12px 20px; border-radius: 999px; font-weight: 700; cursor: pointer; z-index: 99; box-shadow: 4px 4px 0 white; display: none; align-items: center; gap: 8px; }
   .modal-minimized.show { display: flex; }
 
-  /* NEW intro — segments fly in around a growing hub */
-  .splash { position: fixed; inset: 0; z-index: 200; background: #FAF6E8; display: flex; align-items: center; justify-content: center; animation: splashFade 0.6s forwards; animation-delay: 2.6s; }
-  .splash-wheel { position: relative; width: 340px; height: 340px; }
-  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 140px; height: 140px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 40px rgba(0,0,0,0.3); animation: hubScale 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.6s forwards; }
-  .splash-hub img { width: 80%; max-width: 100px; }
-  .splash-seg { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; opacity: 0; }
+  /* NEW intro: hub scales, then segments fan out */
+  .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; align-items: center; justify-content: center; animation: splashFade 0.6s forwards; animation-delay: 2.8s; }
+  .splash-wheel { position: relative; width: 360px; height: 360px; }
+  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 160px; height: 160px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(0,0,0,0.3); animation: hubScale 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards; border: 3px solid #F5C518; }
+  .splash-hub img { width: 80%; max-width: 120px; }
+  .splash-seg { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; opacity: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
   @keyframes hubScale { to { transform: translate(-50%,-50%) scale(1); } }
   @keyframes splashFade { to { opacity: 0; pointer-events: none; visibility: hidden; } }
 
@@ -104,18 +122,17 @@
   .badge-error { background: #EF4444; color: white; }
   .badge-partial { background: #F59E0B; color: white; }
 
-  .top-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-  .top-actions { display: flex; gap: 8px; align-items: center; }
-
   @media (max-width: 640px) {
-    .logo-header { padding: 16px 24px; }
-    .logo-header img { height: 64px; }
-    .wheel-container { max-width: 380px; }
+    .logo-header { padding: 10px 24px; }
+    .logo-header img { height: 110px; }
+    .wheel-outer { max-width: 380px; }
     .hub-name { font-size: 12px; }
     .hub-input { width: 88px; font-size: 10px; }
     .hub-run-btn { padding: 10px 16px; font-size: 12px; }
     .seg-code { font-size: 12px; }
     .seg-num { font-size: 8px; }
+    .fab-menu { top: 12px; right: 12px; }
+    .fab-btn { width: 44px; height: 44px; font-size: 20px; }
   }
 </style>
 </head>
@@ -125,7 +142,7 @@
 
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><div style="background:#1a1a1a;padding:20px;border-radius:16px;display:inline-block;"><img src="logo.png" alt="Carease Command Corner" style="height:100px;"></div></div>
+    <div class="text-center mb-6"><div style="background:#1a1a1a;padding:20px;border-radius:16px;display:inline-block;"><img src="logo.png" alt="Carease Command Corner" style="height:120px;"></div></div>
     <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
@@ -137,15 +154,17 @@
 </div>
 
 <div id="app" class="content max-w-6xl mx-auto px-4 py-6" style="display:none;">
-  <div class="top-bar">
-    <div class="logo-header"><img src="logo.png" alt="Carease Command Corner"></div>
-  </div>
-  <div class="top-actions mb-6 flex-wrap">
-    <span id="loggedInAs" class="text-xs mr-2 font-bold"></span>
-    <button onclick="connectMain()" class="btn-secondary text-sm">+ Main</button>
-    <button onclick="connectPC()" class="btn-primary text-sm">+ PC</button>
-    <button onclick="doLogout()" class="btn-secondary text-sm">Logout</button>
-    <button onclick="loadOrgs()" class="btn-secondary text-sm ml-auto">↻ Refresh</button>
+  <div class="logo-header"><img src="logo.png" alt="Carease Command Corner"></div>
+
+  <div class="fab-menu" id="fabMenu">
+    <button class="fab-btn" onclick="toggleFab()" title="Menu">⋮</button>
+    <div class="fab-panel" id="fabPanel">
+      <div class="fab-user" id="fabUser"></div>
+      <button class="fab-item primary" onclick="connectPC()">+ Add PC</button>
+      <button class="fab-item" onclick="connectMain()">+ Add Main</button>
+      <button class="fab-item" onclick="loadOrgs();closeFab()">↻ Refresh</button>
+      <button class="fab-item" onclick="doLogout()">Logout</button>
+    </div>
   </div>
 
   <div id="orgsLoading" class="text-center py-8"><div class="loader-ring"></div></div>
@@ -168,19 +187,33 @@ let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
 
-// SDG-style rich jewel palette (17 colors, muted/serious)
+// DEEP jewel palette — NO yellow-adjacent tones (contrasts against yellow bg)
 const SEG_COLORS = [
-  '#C9433E', '#D6A429', '#4C9F38', '#26BDE2', '#FD6925', '#A21942', '#FCC30B',
-  '#FD9D24', '#DDA63A', '#3F7E44', '#0A97D9', '#56C02B', '#00689D', '#19486A',
-  '#8F1838', '#E5243B', '#7F4E80'
+  '#B71C1C', // deep crimson
+  '#4A148C', // deep purple
+  '#01579B', // deep sky
+  '#004D40', // deep teal
+  '#3E2723', // dark cocoa
+  '#880E4F', // deep magenta
+  '#0D47A1', // navy
+  '#1B5E20', // forest
+  '#4E342E', // walnut
+  '#311B92', // indigo
+  '#00695C', // pine
+  '#4A148C', // violet
+  '#37474F', // slate
+  '#6A1B9A', // eggplant
+  '#0277BD', // ocean
+  '#33691E', // moss
+  '#78909C'  // cool grey
 ];
 
-// Intro segments animation
+// Intro segments animation — fan out from hub
 function playIntroSegments() {
   const wheel = document.getElementById('splashWheel');
   if (!wheel) return;
   const n = 14;
-  const R = 130;
+  const R = 140;
   for (let i = 0; i < n; i++) {
     const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
     const x = Math.cos(angle) * R;
@@ -188,7 +221,7 @@ function playIntroSegments() {
     const seg = document.createElement('div');
     seg.className = 'splash-seg';
     seg.style.background = SEG_COLORS[i % SEG_COLORS.length];
-    const delay = i * 80;
+    const delay = 800 + i * 80;
     seg.animate([
       { transform: 'translate(0,0) scale(0.3)', opacity: 0 },
       { transform: 'translate(' + x + 'px,' + y + 'px) scale(1)', opacity: 1 }
@@ -201,7 +234,7 @@ playIntroSegments();
 setTimeout(() => {
   document.getElementById('splash').style.display = 'none';
   if (sessionToken) checkSession(); else showLogin();
-}, 3300);
+}, 3400);
 
 function initDates() {
   const now = new Date();
@@ -267,7 +300,7 @@ function showLogin() {
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  document.getElementById('loggedInAs').textContent = currentUsername ? '@' + currentUsername : '';
+  document.getElementById('fabUser').textContent = currentUsername ? '@' + currentUsername : '';
   loadOrgs();
   loadRuns();
 }
@@ -281,6 +314,13 @@ async function api(path) {
 
 function connectMain() { window.location.href = API + '/connect?role=main'; }
 function connectPC() { window.location.href = API + '/connect?role=pc'; }
+
+function toggleFab() { document.getElementById('fabPanel').classList.toggle('open'); }
+function closeFab() { document.getElementById('fabPanel').classList.remove('open'); }
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('fabMenu');
+  if (menu && !menu.contains(e.target)) closeFab();
+});
 
 async function loadOrgs() {
   document.getElementById('orgsLoading').style.display = 'block';
@@ -302,7 +342,6 @@ function polarToCart(cx, cy, r, angle) {
   return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
 }
 
-// Build donut-slice path
 function slicePath(cx, cy, rIn, rOut, a1, a2) {
   const p1 = polarToCart(cx, cy, rOut, a1);
   const p2 = polarToCart(cx, cy, rOut, a2);
@@ -312,13 +351,24 @@ function slicePath(cx, cy, rIn, rOut, a1, a2) {
   return `M ${p1.x} ${p1.y} A ${rOut} ${rOut} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rIn} ${rIn} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
 }
 
+// Darken/lighten hex color for 3D bevel gradients
+function shade(hex, pct) {
+  const n = parseInt(hex.slice(1), 16);
+  let r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
+  const factor = 1 + pct / 100;
+  r = Math.max(0, Math.min(255, Math.round(r * factor)));
+  g = Math.max(0, Math.min(255, Math.round(g * factor)));
+  b = Math.max(0, Math.min(255, Math.round(b * factor)));
+  return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+}
+
 function renderWheel() {
   const main = orgs.find(c => c.role === 'main');
   const pcs = orgs.filter(c => c.role === 'pc');
   const container = document.getElementById('orgsContainer');
 
   if (!main && !pcs.length) {
-    container.innerHTML = '<p class="text-center py-8 opacity-70">No organizations connected. Click <b>+ Main</b> and <b>+ PC</b> above.</p>';
+    container.innerHTML = '<p class="text-center py-8 opacity-70">No organizations connected. Use the menu (top-right) to add Main and PCs.</p>';
     return;
   }
 
@@ -326,33 +376,54 @@ function renderWheel() {
   const cx = size / 2, cy = size / 2;
   const rOut = 340;
   const rIn = 195;
-  const gap = 0.012; // radians between segs
+  const gap = 0.010;
   const n = Math.max(pcs.length, 1);
 
+  // Build gradient defs for 3D bevel
+  let defs = '<defs>';
+  for (let i = 0; i < pcs.length; i++) {
+    const c = SEG_COLORS[i % SEG_COLORS.length];
+    const light = shade(c, 22);
+    const dark = shade(c, -35);
+    defs += `<radialGradient id="segGrad${i}" cx="50%" cy="30%" r="80%">`
+      + `<stop offset="0%" stop-color="${light}"/>`
+      + `<stop offset="60%" stop-color="${c}"/>`
+      + `<stop offset="100%" stop-color="${dark}"/>`
+      + `</radialGradient>`;
+  }
+  // Inner ring shadow (creates hub depth)
+  defs += `<radialGradient id="innerShadow" cx="50%" cy="50%" r="50%">`
+    + `<stop offset="80%" stop-color="rgba(0,0,0,0)"/>`
+    + `<stop offset="100%" stop-color="rgba(0,0,0,0.5)"/>`
+    + `</radialGradient>`;
+  defs += '</defs>';
+
   let svgSegs = '';
-  let labels = '';
   for (let i = 0; i < pcs.length; i++) {
     const a1 = (i / n) * Math.PI * 2 - Math.PI / 2 + gap;
     const a2 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2 - gap;
-    const color = SEG_COLORS[i % SEG_COLORS.length];
     const path = slicePath(cx, cy, rIn, rOut, a1, a2);
     const mid = (a1 + a2) / 2;
     const labelR = (rIn + rOut) / 2;
     const lp = polarToCart(cx, cy, labelR, mid);
     const s = shortLabel(pcs[i].name);
-    const delay = (i * 0.04);
+    const delay = (i * 0.05);
+    const waveDelay = (i * 0.15);
     const escapedName = pcs[i].name.replace(/'/g, "\\'").replace(/"/g,'&quot;');
-    svgSegs += `<g class="wheel-segment" style="animation-delay:${delay}s;" onclick="openPCActions('${pcs[i].realm_id}')">`
+    svgSegs += `<g class="wheel-segment" style="animation-delay:${delay}s, ${waveDelay}s;" onclick="openPCActions('${pcs[i].realm_id}')">`
       + `<title>${escapedName}</title>`
-      + `<path d="${path}" fill="${color}"/>`
+      + `<path d="${path}" fill="url(#segGrad${i})"/>`
+      + `<path d="${path}" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1.5"/>`
       + `<text class="seg-code" x="${lp.x}" y="${lp.y - 4}" text-anchor="middle" dominant-baseline="middle">${s.top}</text>`
       + (s.bottom ? `<text class="seg-num" x="${lp.x}" y="${lp.y + 12}" text-anchor="middle" dominant-baseline="middle">${s.bottom}</text>` : '')
       + `</g>`;
   }
+  // Inner shadow ring overlay for hub depth
+  svgSegs += `<circle cx="${cx}" cy="${cy}" r="${rIn + 3}" fill="url(#innerShadow)" pointer-events="none"/>`;
 
   const mainName = main ? main.name : 'No Main';
-  let html = '<div class="wheel-container">';
-  html += `<svg class="wheel-svg" viewBox="0 0 ${size} ${size}">${svgSegs}</svg>`;
+  let html = '<div class="wheel-outer"><div class="wheel-container">';
+  html += `<svg class="wheel-svg" viewBox="0 0 ${size} ${size}">${defs}${svgSegs}</svg>`;
   html += '<div class="wheel-hub">';
   html += `<div class="hub-label">MAIN</div>`;
   html += `<div class="hub-name">${mainName}</div>`;
@@ -364,7 +435,7 @@ function renderWheel() {
   html += '<label class="hub-toggle"><input id="dryRunToggle" type="checkbox" checked>Dry Run</label>';
   html += `<button class="hub-run-btn" onclick="askRunAll()">▶ RUN ALL PCs</button>`;
   html += '</div>';
-  html += '</div>';
+  html += '</div></div>';
 
   container.innerHTML = html;
 }
