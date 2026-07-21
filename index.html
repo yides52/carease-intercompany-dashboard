@@ -100,11 +100,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  details summary { cursor: pointer; user-select: none; }
-  details summary::-webkit-details-marker { display: none; }
-  details[open] summary .arrow { transform: rotate(90deg); }
-  .arrow { display: inline-block; transition: transform 0.2s; }
-
   .modal-backdrop {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.6);
@@ -173,11 +168,11 @@
 
   <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-xl font-black">Connected Companies</h2>
-      <button onclick="loadCompanies()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
+      <h2 class="text-xl font-black">Connected Organizations</h2>
+      <button onclick="loadOrgs()" class="btn-secondary px-3 py-1 rounded text-sm">↻ Refresh</button>
     </div>
-    <div id="companiesLoading" class="text-center py-8"><div class="spinner"></div></div>
-    <div id="companiesList"></div>
+    <div id="orgsLoading" class="text-center py-8"><div class="spinner"></div></div>
+    <div id="orgsList"></div>
   </div>
 
   <div class="glass rounded-2xl p-6 shadow-xl">
@@ -220,25 +215,25 @@ async function api(path) {
 function connectMain() { window.location.href = `${API}/connect?role=main`; }
 function connectPC() { window.location.href = `${API}/connect?role=pc`; }
 
-let companies = [];
+let orgs = [];
 
-async function loadCompanies() {
-  document.getElementById('companiesLoading').style.display = 'block';
-  document.getElementById('companiesList').innerHTML = '';
+async function loadOrgs() {
+  document.getElementById('orgsLoading').style.display = 'block';
+  document.getElementById('orgsList').innerHTML = '';
   try {
-    companies = await api('/companies');
+    orgs = await api('/orgs');
     render();
   } catch (e) {
-    document.getElementById('companiesList').innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
+    document.getElementById('orgsList').innerHTML = `<p class="text-red-600">Error: ${e.message}</p>`;
   } finally {
-    document.getElementById('companiesLoading').style.display = 'none';
+    document.getElementById('orgsLoading').style.display = 'none';
   }
 }
 
 function render() {
-  const main = companies.find(c => c.role === 'main');
-  const pcs = companies.filter(c => c.role === 'pc');
-  const container = document.getElementById('companiesList');
+  const main = orgs.find(c => c.role === 'main');
+  const pcs = orgs.filter(c => c.role === 'pc');
+  const container = document.getElementById('orgsList');
 
   let html = '';
   if (main) {
@@ -253,7 +248,7 @@ function render() {
       </div>`;
   } else {
     html += `<div class="border-2 border-dashed border-black rounded-xl p-4 mb-4 text-center">
-      <p class="font-bold mb-2">No Main company connected</p>
+      <p class="font-bold mb-2">No Main connected</p>
       <button onclick="connectMain()" class="btn-primary px-4 py-2 rounded">Connect Main QBO</button>
     </div>`;
   }
@@ -291,7 +286,7 @@ async function syncPC(realmId) {
   openModal('Syncing...', '<div class="text-center py-8"><div class="spinner"></div></div>');
   try {
     const r = await api(`/sync/${realmId}`);
-    openModal('Synced', `<div class="space-y-2"><p><b>${r.company}</b></p><p>Items: ${r.items}</p><p>Accounts: ${r.accounts}</p></div>`);
+    openModal('Synced', `<div class="space-y-2"><p><b>${r.name}</b></p><p>Items: ${r.items}</p><p>Accounts: ${r.accounts}</p></div>`);
   } catch (e) {
     openModal('Error', `<p class="text-red-600">${e.message}</p>`);
   }
@@ -327,7 +322,7 @@ async function runPC(realmId) {
 
 async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
-  const pcs = companies.filter(c => c.role === 'pc');
+  const pcs = orgs.filter(c => c.role === 'pc');
   if (!pcs.length) return alert('No PCs to run');
   if (!dry && !confirm(`This will create REAL invoices and bills for ${pcs.length} PCs. Continue?`)) return;
 
@@ -407,7 +402,7 @@ async function viewFlagged(realmId) {
   try {
     const r = await api(`/flagged/${realmId}`);
     if (!r.flagged.length) {
-      openModal(`${r.company} — Flagged`, '<p>No flagged items 🎉</p>');
+      openModal(`${r.name} — Flagged`, '<p>No flagged items 🎉</p>');
       return;
     }
     let html = `<div class="space-y-2">`;
@@ -419,7 +414,7 @@ async function viewFlagged(realmId) {
       </div>`;
     }
     html += '</div>';
-    openModal(`${r.company} — Flagged`, html);
+    openModal(`${r.name} — Flagged`, html);
   } catch (e) {
     openModal('Error', `<p class="text-red-600">${e.message}</p>`);
   }
@@ -435,9 +430,10 @@ async function loadRuns() {
     for (const r of runs) {
       const cls = r.status === 'done' ? 'status-done' : (r.status === 'error' ? 'status-error' : 'status-running');
       const when = new Date(r.started_at).toLocaleString();
+      const org = r.companies || {};
       html += `<div class="flex items-center gap-3 p-2 border-b border-black/10 text-sm">
         <span class="status-dot ${cls}"></span>
-        <span class="flex-1"><b>${r.companies?.name || '?'}</b> — ${r.period_start} to ${r.period_end}</span>
+        <span class="flex-1"><b>${org.name || '?'}</b> — ${r.period_start} to ${r.period_end}</span>
         <span class="opacity-60">${r.lines_total || 0} lines, ${r.lines_flagged || 0} flagged</span>
         <span class="opacity-60 text-xs">${when}</span>
       </div>`;
@@ -458,7 +454,7 @@ function closeModal() {
   document.getElementById('modal').classList.remove('open');
 }
 
-loadCompanies();
+loadOrgs();
 loadRuns();
 </script>
 
