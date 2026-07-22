@@ -28,10 +28,11 @@
   .btn-secondary { background: white; color: #1a1a1a; font-weight: 600; border-radius: 10px; padding: 8px 14px; transition: all 0.15s; border: 2px solid #1a1a1a; cursor: pointer; }
   .btn-secondary:hover { background: #F5C518; transform: translateY(-1px); }
 
-  /* Logo — corner, no wrapper */
-  .logo-corner { position: fixed; top: 20px; left: 20px; z-index: 55; }
-  .logo-corner img { height: 78px; display: block; border-radius: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); transition: transform 0.2s; }
-  .logo-corner img:hover { transform: scale(1.05); }
+  /* Logo — corner, MUCH bigger with tagline */
+  .logo-corner { position: fixed; top: 20px; left: 20px; z-index: 55; display: flex; align-items: center; gap: 12px; }
+  .logo-corner img { height: 130px; display: block; border-radius: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); transition: transform 0.2s; }
+  .logo-corner img:hover { transform: scale(1.04); }
+  .logo-tagline { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.55; line-height: 1.4; max-width: 80px; }
 
   /* Floating menu button */
   .fab-menu { position: fixed; top: 20px; right: 20px; z-index: 60; }
@@ -45,8 +46,8 @@
   .fab-item.primary:hover { background: #333; }
   .fab-user { padding: 8px 14px; font-size: 12px; opacity: 0.6; border-bottom: 1px solid #eee; margin-bottom: 4px; font-weight: 700; }
 
-  /* Main stage — wheel centered, huge */
-  .wheel-stage { min-height: calc(100vh - 260px); display: flex; align-items: center; justify-content: center; padding: 20px 0; }
+  /* Main stage */
+  .wheel-stage { min-height: calc(100vh - 260px); display: flex; align-items: center; justify-content: center; padding: 20px 0; padding-top: 160px; }
   .wheel-outer { perspective: 1600px; width: 100%; max-width: min(92vw, 880px); margin: 0 auto; }
   .wheel-container { position: relative; width: 100%; aspect-ratio: 1 / 1; transform: rotateX(18deg); animation: breathe 5s ease-in-out infinite; filter: drop-shadow(0 16px 0 rgba(0,0,0,0.35)) drop-shadow(0 26px 34px rgba(0,0,0,0.42)); }
   @keyframes breathe { 0%,100% { transform: rotateX(18deg) scale(1); } 50% { transform: rotateX(18deg) scale(1.015); } }
@@ -62,7 +63,6 @@
   .hub-run-btn { background: #F5C518; color: #1a1a1a; font-weight: 900; border: none; border-radius: 10px; padding: 13px 26px; cursor: pointer; font-size: 14px; letter-spacing: 0.05em; transition: all 0.15s; box-shadow: 0 4px 12px rgba(245,197,24,0.6); }
   .hub-run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,197,24,0.8); }
 
-  /* PC segments */
   .wheel-segment { cursor: pointer; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s; transform-origin: center; opacity: 0; animation: segIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards, segWave 4s ease-in-out infinite; }
   .wheel-segment:hover { transform: scale(1.06); filter: brightness(1.15) drop-shadow(0 4px 10px rgba(0,0,0,0.4)); }
   .wheel-segment text { fill: white; font-weight: 800; pointer-events: none; user-select: none; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
@@ -71,7 +71,6 @@
   @keyframes segIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
   @keyframes segWave { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.12); } }
 
-  /* Recent runs */
   .runs-list { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
   .run-strip { background: #1a1a1a; color: #F5C518; padding: 14px 18px; border-radius: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.15s; border: 1px solid rgba(245,197,24,0.25); }
   .run-strip:hover { transform: translateX(4px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); border-color: rgba(245,197,24,0.6); }
@@ -97,7 +96,6 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loader-small { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.15); border-top-color: #1a1a1a; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; }
 
-  /* Floating result card — replaces the tiny pill */
   .result-float { position: fixed; bottom: 20px; right: 20px; width: 320px; max-width: calc(100vw - 40px); background: #1a1a1a; color: #F5C518; border: 2px solid #F5C518; border-radius: 16px; padding: 14px 16px; z-index: 99; box-shadow: 0 12px 32px rgba(0,0,0,0.4); cursor: pointer; display: none; animation: slideUp 0.3s ease-out; transition: all 0.2s; }
   .result-float:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5); }
   .result-float.show { display: block; }
@@ -111,16 +109,16 @@
   .result-float-cta { font-size: 11px; margin-top: 8px; opacity: 0.6; font-weight: 700; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* Splash intro */
   .splash { position: fixed; inset: 0; z-index: 200; background: #F5C518; display: flex; align-items: center; justify-content: center; animation: splashFade 0.6s forwards; animation-delay: 2.8s; }
-  .splash-wheel { position: relative; width: 360px; height: 360px; }
-  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 160px; height: 160px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(0,0,0,0.3); animation: hubScale 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards; overflow: hidden; }
+  .splash-wheel { position: relative; width: 480px; height: 480px; }
+  .splash-hub { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(0); width: 240px; height: 240px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 40px rgba(0,0,0,0.3); animation: hubScale 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards; overflow: hidden; }
   .splash-hub img { width: 100%; height: 100%; object-fit: cover; }
   .splash-seg { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; opacity: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
   @keyframes hubScale { to { transform: translate(-50%,-50%) scale(1); } }
   @keyframes splashFade { to { opacity: 0; pointer-events: none; visibility: hidden; } }
 
-  .login-card { max-width: 400px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
+  .login-card { max-width: 460px; width: 100%; padding: 40px; background: white; border: 3px solid #1a1a1a; border-radius: 20px; box-shadow: 8px 8px 0 #1a1a1a; color: #1a1a1a; }
+  .login-tagline { text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.55; margin-top: 10px; }
   .input-field { width: 100%; background: white; border: 2px solid #1a1a1a; color: #1a1a1a; padding: 12px 16px; border-radius: 10px; outline: none; transition: all 0.15s; font-size: 15px; }
   .input-field:focus { box-shadow: 4px 4px 0 #F5C518; transform: translate(-1px,-1px); }
   .confirm-icon { width: 60px; height: 60px; border-radius: 50%; background: #F5C518; border: 3px solid #1a1a1a; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #1a1a1a; font-size: 32px; font-weight: 900; box-shadow: 4px 4px 0 #1a1a1a; }
@@ -135,17 +133,20 @@
   .runs-section { padding: 0 20px; }
 
   @media (max-width: 640px) {
-    .logo-corner img { height: 56px; }
-    .logo-corner { top: 12px; left: 12px; }
+    .logo-corner img { height: 90px; }
+    .logo-corner { top: 12px; left: 12px; gap: 8px; }
+    .logo-tagline { font-size: 8px; max-width: 65px; }
     .fab-menu { top: 12px; right: 12px; }
     .fab-btn { width: 44px; height: 44px; font-size: 20px; }
-    .wheel-stage { min-height: calc(100vh - 200px); }
+    .wheel-stage { min-height: calc(100vh - 200px); padding-top: 130px; }
     .hub-name { font-size: 13px; margin: 6px 0 12px; }
     .hub-input { width: 92px; font-size: 10px; padding: 5px 8px; }
     .hub-run-btn { padding: 10px 18px; font-size: 12px; }
     .seg-code { font-size: 12px; }
     .seg-num { font-size: 8px; }
     .result-float { width: calc(100vw - 24px); bottom: 12px; right: 12px; }
+    .splash-wheel { width: 340px; height: 340px; }
+    .splash-hub { width: 170px; height: 170px; }
   }
 </style>
 </head>
@@ -155,7 +156,8 @@
 
 <div id="loginScreen" class="content min-h-screen flex items-center justify-center p-4" style="display:none;">
   <div class="login-card">
-    <div class="text-center mb-6"><img src="logo.png" alt="Carease Command Corner" style="height:140px; border-radius:16px; margin:0 auto; box-shadow:0 8px 24px rgba(0,0,0,0.2);"></div>
+    <div class="text-center mb-2"><img src="logo.png" alt="Carease Command Corner" style="height:200px; border-radius:18px; margin:0 auto; box-shadow:0 10px 28px rgba(0,0,0,0.22);"></div>
+    <div class="login-tagline mb-6">Built for the Revamp Team</div>
     <div id="loginError" class="text-red-500 text-sm mb-3 text-center" style="display:none;"></div>
     <div class="space-y-3">
       <input id="loginUser" class="input-field" placeholder="Username" autocomplete="username">
@@ -167,7 +169,7 @@
 </div>
 
 <div id="app" class="content" style="display:none;">
-  <div class="logo-corner"><img src="logo.png" alt="Carease Command Corner"></div>
+  <div class="logo-corner"><img src="logo.png" alt="Carease Command Corner"><div class="logo-tagline">Built for the Revamp Team</div></div>
 
   <div class="fab-menu" id="fabMenu">
     <button class="fab-btn" onclick="toggleFab()" title="Menu">⋮</button>
@@ -200,8 +202,7 @@
     <span id="resultFloatStatus" class="result-float-status running">Running</span>
   </div>
   <div id="resultFloatBody" class="result-float-body">Task in progress...</div>
-  <div class="result-float-cta">Click to expand ↗</div>
-</div><script>
+  <div class="result-float-cta">Click to expand ↗</div><script>
 const API = 'https://carease-intercompany-production.up.railway.app';
 const TOKEN_KEY = 'carease_session_token';
 let sessionToken = localStorage.getItem(TOKEN_KEY) || null;
@@ -209,21 +210,19 @@ let orgs = [];
 let currentUsername = null;
 let currentModalContent = null;
 let audioCtx = null;
-let isTaskRunning = false; // blocks closing modal during dry-run/run
+let isTaskRunning = false;
 
-// DEEP jewel palette
 const SEG_COLORS = [
   '#B71C1C','#4A148C','#01579B','#004D40','#3E2723','#880E4F','#0D47A1',
   '#1B5E20','#4E342E','#311B92','#00695C','#4A148C','#37474F','#6A1B9A',
   '#0277BD','#33691E','#78909C'
 ];
 
-// Intro segments animation — fan out from hub
 function playIntroSegments() {
   const wheel = document.getElementById('splashWheel');
   if (!wheel) return;
   const n = 14;
-  const R = 140;
+  const R = 190;
   for (let i = 0; i < n; i++) {
     const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
     const x = Math.cos(angle) * R;
@@ -467,7 +466,6 @@ function openPCActions(realmId) {
   openModal(org.name, html);
 }
 
-// ---- Running state — locks close button ----
 function setRunning(flag, title, body) {
   isTaskRunning = flag;
   const closeBtn = document.getElementById('modalCloseBtn');
@@ -736,3 +734,4 @@ function playDing() {
 </script>
 </body>
 </html>
+</div>
