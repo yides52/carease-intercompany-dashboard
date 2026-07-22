@@ -15,12 +15,7 @@
   .wash2 { width: 800px; height: 800px; background: #00838F; top: 20%; right: -280px; animation-duration: 30s; animation-delay: -5s; }
   .wash3 { width: 600px; height: 600px; background: #4527A0; bottom: -180px; left: 25%; animation-duration: 28s; animation-delay: -10s; }
   .wash4 { width: 550px; height: 550px; background: #EF6C00; top: 25%; left: 45%; animation-duration: 34s; animation-delay: -15s; opacity: 0.4; }
-  @keyframes drift {
-    0%,100% { transform: translate(0,0) scale(1); }
-    25% { transform: translate(160px,-120px) scale(1.15); }
-    50% { transform: translate(-140px,160px) scale(0.9); }
-    75% { transform: translate(120px,100px) scale(1.1); }
-  }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(160px,-120px) scale(1.15); } 50% { transform: translate(-140px,160px) scale(0.9); } 75% { transform: translate(120px,100px) scale(1.1); } }
   .content { position: relative; z-index: 10; }
   .btn-primary { background: #1a1a1a; color: #F5C518; font-weight: 700; border-radius: 10px; padding: 10px 18px; transition: all 0.15s; border: none; cursor: pointer; }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 rgba(0,0,0,0.15); }
@@ -129,8 +124,8 @@
 
   .runs-section { padding: 0 20px; }
 
-  /* Flagged resolver */
-  .flag-item { padding: 16px; border: 2px solid #F59E0B; border-radius: 12px; background: #FFFBEB; margin-bottom: 12px; }
+  .flag-group-header { padding: 12px 16px; background: #1a1a1a; color: #F5C518; border-radius: 10px; font-weight: 800; margin: 16px 0 10px; font-size: 14px; }
+  .flag-item { padding: 16px; border: 2px solid #F59E0B; border-radius: 12px; background: #FFFBEB; margin-bottom: 10px; }
   .flag-desc { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
   .flag-meta { font-size: 12px; opacity: 0.7; margin-bottom: 10px; }
   .flag-reason { font-size: 11px; font-style: italic; opacity: 0.6; margin-bottom: 10px; }
@@ -227,20 +222,17 @@ const SEG_COLORS = [
 function playIntroSegments() {
   const wheel = document.getElementById('splashWheel');
   if (!wheel) return;
-  const n = 14;
-  const R = 190;
+  const n = 14; const R = 190;
   for (let i = 0; i < n; i++) {
     const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-    const x = Math.cos(angle) * R;
-    const y = Math.sin(angle) * R;
+    const x = Math.cos(angle) * R, y = Math.sin(angle) * R;
     const seg = document.createElement('div');
     seg.className = 'splash-seg';
     seg.style.background = SEG_COLORS[i % SEG_COLORS.length];
-    const delay = 800 + i * 80;
     seg.animate([
       { transform: 'translate(0,0) scale(0.3)', opacity: 0 },
       { transform: 'translate(' + x + 'px,' + y + 'px) scale(1)', opacity: 1 }
-    ], { duration: 700, delay: delay, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' });
+    ], { duration: 700, delay: 800 + i * 80, easing: 'cubic-bezier(0.34,1.56,0.64,1)', fill: 'forwards' });
     wheel.appendChild(seg);
   }
 }
@@ -275,13 +267,9 @@ async function doLogin() {
   const btn = document.getElementById('loginBtn');
   errEl.style.display = 'none';
   if (!username || !password) { errEl.textContent = 'Enter username and password'; errEl.style.display = 'block'; return; }
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader-small"></span> Signing in...';
+  btn.disabled = true; btn.innerHTML = '<span class="loader-small"></span> Signing in...';
   try {
-    const r = await fetch(API + '/auth/login', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username, password})
-    });
+    const r = await fetch(API + '/auth/login', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username, password}) });
     const data = await r.json();
     if (r.ok && data.token) {
       sessionToken = data.token;
@@ -291,8 +279,7 @@ async function doLogin() {
       showApp();
     } else { errEl.textContent = 'Invalid username or password'; errEl.style.display = 'block'; }
   } catch (e) { errEl.textContent = 'Connection error'; errEl.style.display = 'block'; }
-  btn.disabled = false;
-  btn.innerHTML = 'Sign In';
+  btn.disabled = false; btn.innerHTML = 'Sign In';
 }
 
 document.addEventListener('keypress', e => {
@@ -303,8 +290,7 @@ async function doLogout() {
   if (!confirm('Log out?')) return;
   try { await fetch(API + '/auth/logout', {method: 'POST', headers: {'X-Session-Token': sessionToken}}); } catch (e) {}
   localStorage.removeItem(TOKEN_KEY);
-  sessionToken = null;
-  currentUsername = null;
+  sessionToken = null; currentUsername = null;
   showLogin();
 }
 
@@ -353,10 +339,8 @@ function shortLabel(name) {
 }
 function polarToCart(cx, cy, r, angle) { return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r }; }
 function slicePath(cx, cy, rIn, rOut, a1, a2) {
-  const p1 = polarToCart(cx, cy, rOut, a1);
-  const p2 = polarToCart(cx, cy, rOut, a2);
-  const p3 = polarToCart(cx, cy, rIn, a2);
-  const p4 = polarToCart(cx, cy, rIn, a1);
+  const p1 = polarToCart(cx, cy, rOut, a1), p2 = polarToCart(cx, cy, rOut, a2);
+  const p3 = polarToCart(cx, cy, rIn, a2), p4 = polarToCart(cx, cy, rIn, a1);
   const large = (a2 - a1) > Math.PI ? 1 : 0;
   return `M ${p1.x} ${p1.y} A ${rOut} ${rOut} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rIn} ${rIn} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
 }
@@ -465,7 +449,7 @@ function askRunAll() {
   const pcs = orgs.filter(c => c.role === 'pc');
   if (!pcs.length) return alert('No PCs to run');
   if (dry) showConfirm('Dry Run All PCs', 'Preview all ' + pcs.length + ' PCs. Nothing posted.', '👁', runAll);
-  else showConfirm('REAL Run All PCs', 'Create REAL invoices and bills for ALL ' + pcs.length + ' PCs? Flagged lines will be auto-skipped.', '⚠', runAll);
+  else showConfirm('REAL Run All PCs', 'Create invoices and bills for ALL ' + pcs.length + ' PCs. At the end, you\'ll be asked to categorize any flagged lines in one screen.', '▶', runAll);
 }
 function getDates() { return { start: document.getElementById('startDate').value, end: document.getElementById('endDate').value }; }
 
@@ -484,7 +468,6 @@ async function dryRunPC(realmId) {
   } catch (e) { setRunning(false); openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); showFloat('Dry Run failed', e.message, 'error'); }
 }
 
-// ===== Interactive run: preflight → resolve flagged → commit =====
 async function runPCInteractive(realmId, name) {
   const d = getDates();
   if (!d.start || !d.end) return alert('Pick a date range');
@@ -494,18 +477,15 @@ async function runPCInteractive(realmId, name) {
   try {
     const preflight = await api('/preflight/' + realmId + '?start=' + d.start + '&end=' + d.end);
     if (preflight.error) throw new Error(preflight.error);
-
     if (preflight.total_charges === 0) {
       setRunning(false);
       openModal('No Expenses', '<p class="text-center py-4">No billable expenses in this period for <b>' + orgName + '</b>.</p>');
       showFloat('No Expenses: ' + orgName, 'Nothing to invoice', 'done');
       return;
     }
-
     if (preflight.flagged && preflight.flagged.length > 0) {
-      // Play attention ding
       playDing(); setTimeout(playDing, 250);
-      await showFlaggedResolver(realmId, orgName, d, preflight);
+      await showSinglePCFlaggedResolver(realmId, orgName, d, preflight);
     } else {
       await commitAndFinish(realmId, orgName, d, preflight.categorized, []);
     }
@@ -516,18 +496,15 @@ async function runPCInteractive(realmId, name) {
   }
 }
 
-async function showFlaggedResolver(realmId, orgName, dates, preflight) {
-  // Fetch dropdown of PC accounts
+async function showSinglePCFlaggedResolver(realmId, orgName, dates, preflight) {
   showFloat('Awaiting input: ' + orgName, preflight.flagged.length + ' lines need categorization', 'running');
   openModal('Loading account list...', '<div class="text-center py-8"><div class="loader-ring"></div></div>');
   const accountsResp = await api('/pc-accounts/' + realmId);
   const accounts = accountsResp.accounts || [];
-
   let optionsHtml = '<option value="">-- Select account --</option>';
   for (const a of accounts) {
     optionsHtml += '<option value="' + a.id + '">' + a.name + ' (' + (a.subtype || a.type) + ')</option>';
   }
-
   let html = '<p class="mb-4 text-sm"><b>' + preflight.flagged.length + ' line(s)</b> couldn\'t be auto-categorized for <b>' + orgName + '</b>. Pick an account for each. Your choices will be remembered for future runs.</p>';
   html += '<div id="flaggedContainer">';
   for (let i = 0; i < preflight.flagged.length; i++) {
@@ -541,17 +518,15 @@ async function showFlaggedResolver(realmId, orgName, dates, preflight) {
   }
   html += '</div>';
   html += '<div class="flex gap-3 mt-4"><button onclick="cancelFlagged()" class="btn-secondary flex-1">Cancel Run</button><button onclick="submitFlagged(\'' + realmId + '\', \'' + orgName.replace(/'/g,"\\'") + '\')" class="btn-primary flex-1">Continue & Post</button></div>';
-
   openModal('⚑ Action Required: ' + preflight.flagged.length + ' Flagged Line(s)', html);
   window._pendingPreflight = { realmId, orgName, dates, preflight };
-  isTaskRunning = false; // allow interaction
+  isTaskRunning = false;
   document.getElementById('modalCloseBtn').classList.remove('hidden');
 }
 
 function cancelFlagged() {
   window._pendingPreflight = null;
-  closeModal();
-  hideFloat();
+  closeModal(); hideFloat();
   showFloat('Run Cancelled', 'No changes made', 'error');
 }
 
@@ -566,9 +541,7 @@ async function submitFlagged(realmId, orgName) {
     const f = pending.preflight.flagged[idx];
     resolutions.push({
       reimburse_charge_id: f.reimburse_charge_id,
-      description: f.description,
-      amount: f.amount,
-      txn_date: f.txn_date,
+      description: f.description, amount: f.amount, txn_date: f.txn_date,
       account_id: s.value
     });
   }
@@ -581,23 +554,18 @@ async function commitAndFinish(realmId, orgName, dates, categorized, flaggedReso
   openModal('Posting to QBO...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Creating invoice and bill...</p></div>');
   try {
     const r = await api('/commit/' + realmId, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        start: dates.start, end: dates.end,
-        categorized: categorized,
-        flagged_resolutions: flaggedResolutions
-      })
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ start: dates.start, end: dates.end, categorized, flagged_resolutions: flaggedResolutions })
     });
     setRunning(false);
     if (r.status === 'done') playDing();
     openModal('Done ✓', renderRunResult(r));
-    const summary = '#' + (r.doc_number || r.invoice_id) + ' · ' + (r.lines_total || 0) + ' lines';
-    showFloat('Done: ' + orgName, summary, r.status === 'done' ? 'done' : 'error');
+    showFloat('Done: ' + orgName, '#' + (r.doc_number || r.invoice_id) + ' · ' + (r.lines_total || 0) + ' lines', r.status === 'done' ? 'done' : 'error');
     loadRuns();
   } catch (e) { setRunning(false); openModal('Error', '<p class="text-red-600">' + e.message + '</p>'); showFloat('Commit failed', e.message, 'error'); }
 }
 
+// ===== Run All: batch, collect flagged at end =====
 async function runAll() {
   const dry = document.getElementById('dryRunToggle').checked;
   const pcs = orgs.filter(c => c.role === 'pc');
@@ -606,7 +574,9 @@ async function runAll() {
   openModal(dry ? 'Dry Running All PCs' : 'Running All PCs', '<div id="allResults" class="space-y-2"></div>');
   const results = document.getElementById('allResults');
   const summary = { success: 0, error: 0, partial: 0 };
+  const batchFlagged = []; // { realmId, pcName, billId, flagged: [] }
   let done = 0;
+
   for (const pc of pcs) {
     const row = document.createElement('div');
     row.className = 'p-3 rounded-lg border-2 border-black bg-white flex items-center gap-3';
@@ -618,7 +588,17 @@ async function runAll() {
       if (r.status === 'error') { badge = '<span class="badge badge-error">Error</span>'; detail = r.error || 'Failed'; summary.error++; }
       else if (r.status === 'partial') { badge = '<span class="badge badge-partial">Partial</span>'; detail = r.error || 'Partial'; summary.partial++; }
       else if (r.dry_run) { badge = '<span class="badge badge-done">Preview</span>'; detail = (r.billable_expenses_found||0) + ' lines · $' + (r.subtotal||0).toFixed(2); summary.success++; }
-      else { badge = '<span class="badge badge-done">Done</span>'; detail = '#' + r.doc_number + ' · ' + r.lines_total + ' lines · ' + (r.lines_flagged||0) + ' flagged'; summary.success++; playDing(); }
+      else {
+        badge = '<span class="badge badge-done">Done</span>';
+        detail = '#' + r.doc_number + ' · ' + r.lines_total + ' lines';
+        if (r.lines_flagged) detail += ' · ' + r.lines_flagged + ' flagged';
+        summary.success++;
+        playDing();
+        // Collect flagged for batch resolution
+        if (r.flagged_lines && r.flagged_lines.length > 0 && r.bill_id) {
+          batchFlagged.push({ realmId: pc.realm_id, pcName: pc.name, billId: r.bill_id, flagged: r.flagged_lines });
+        }
+      }
       row.innerHTML = badge + '<span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs opacity-70">' + detail + '</span>';
     } catch (e) {
       row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + pc.name + '</span><span class="text-xs text-red-600">' + e.message + '</span>';
@@ -634,7 +614,129 @@ async function runAll() {
   banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm font-bold"><span>✓ ' + summary.success + ' success</span><span>⚠ ' + summary.partial + ' partial</span><span>✗ ' + summary.error + ' failed</span></div>';
   results.appendChild(banner);
   showFloat(dry ? 'Dry Run All Done' : 'Run All Done', '✓ ' + summary.success + ' · ⚠ ' + summary.partial + ' · ✗ ' + summary.error, summary.error ? 'error' : 'done');
-  if (!dry) loadRuns();
+
+  if (!dry) {
+    loadRuns();
+    // If any flagged lines across PCs, show batch resolver
+    if (batchFlagged.length > 0) {
+      const totalFlagged = batchFlagged.reduce((sum, b) => sum + b.flagged.length, 0);
+      playDing(); setTimeout(playDing, 250); setTimeout(playDing, 500);
+      await showBatchFlaggedResolver(batchFlagged, totalFlagged);
+    }
+  }
+}
+
+async function showBatchFlaggedResolver(batchFlagged, totalFlagged) {
+  setRunning(true, 'Batch Flagged: ' + totalFlagged + ' lines', 'Loading accounts for each PC...');
+  openModal('Loading accounts...', '<div class="text-center py-8"><div class="loader-ring"></div><p class="mt-4">Fetching account lists for ' + batchFlagged.length + ' PCs...</p></div>');
+
+  // Fetch accounts for each PC in parallel
+  const accountMap = {};
+  await Promise.all(batchFlagged.map(async (b) => {
+    try {
+      const resp = await api('/pc-accounts/' + b.realmId);
+      accountMap[b.realmId] = resp.accounts || [];
+    } catch (e) {
+      accountMap[b.realmId] = [];
+    }
+  }));
+
+  let html = '<p class="mb-4 text-sm"><b>' + totalFlagged + ' line(s)</b> across <b>' + batchFlagged.length + ' PC(s)</b> need categorization. Pick an account for each. Your choices will be remembered for future runs.</p>';
+  let globalIdx = 0;
+  window._batchFlagged = batchFlagged;
+  window._batchIdxMap = {};
+
+  for (let bi = 0; bi < batchFlagged.length; bi++) {
+    const b = batchFlagged[bi];
+    const accounts = accountMap[b.realmId] || [];
+    let optionsHtml = '<option value="">-- Select account --</option>';
+    for (const a of accounts) {
+      optionsHtml += '<option value="' + a.id + '">' + a.name + ' (' + (a.subtype || a.type) + ')</option>';
+    }
+    html += '<div class="flag-group-header">' + b.pcName + ' — Bill ' + b.billId + ' · ' + b.flagged.length + ' line(s)</div>';
+    for (let fi = 0; fi < b.flagged.length; fi++) {
+      const f = b.flagged[fi];
+      window._batchIdxMap[globalIdx] = { batchIdx: bi, flaggedIdx: fi };
+      html += '<div class="flag-item">'
+        + '<div class="flag-desc">' + (f.description || '(no description)') + '</div>'
+        + '<div class="flag-meta">$' + f.amount.toFixed(2) + ' · ' + (f.txn_date || '') + '</div>'
+        + '<div class="flag-reason">🤖 ' + (f.reasoning || '') + '</div>'
+        + '<select class="flag-select" data-gidx="' + globalIdx + '">' + optionsHtml + '</select>'
+        + '</div>';
+      globalIdx++;
+    }
+  }
+  html += '<div class="flex gap-3 mt-4"><button onclick="cancelBatchFlagged()" class="btn-secondary flex-1">Skip All (keep bills as-is)</button><button onclick="submitBatchFlagged()" class="btn-primary flex-1">Add Lines to Bills</button></div>';
+
+  setRunning(false);
+  openModal('⚑ Batch Categorization: ' + totalFlagged + ' Flagged Line(s)', html);
+}
+
+function cancelBatchFlagged() {
+  window._batchFlagged = null;
+  window._batchIdxMap = null;
+  closeModal(); hideFloat();
+  showFloat('Batch cancelled', 'Bills left as-is with flagged lines missing', 'error');
+}
+
+async function submitBatchFlagged() {
+  const batch = window._batchFlagged;
+  const idxMap = window._batchIdxMap;
+  if (!batch || !idxMap) return;
+  const selects = document.querySelectorAll('.flag-select');
+
+  // Group resolutions by batchIdx
+  const resolutionsByBatch = {};
+  for (const s of selects) {
+    const gidx = parseInt(s.dataset.gidx);
+    if (!s.value) { alert('Pick an account for all flagged lines'); return; }
+    const map = idxMap[gidx];
+    const f = batch[map.batchIdx].flagged[map.flaggedIdx];
+    if (!resolutionsByBatch[map.batchIdx]) resolutionsByBatch[map.batchIdx] = [];
+    resolutionsByBatch[map.batchIdx].push({
+      description: f.description,
+      amount: f.amount,
+      account_id: s.value
+    });
+  }
+
+  window._batchFlagged = null;
+  window._batchIdxMap = null;
+
+  setRunning(true, 'Adding to bills', '0 / ' + Object.keys(resolutionsByBatch).length);
+  openModal('Adding lines to bills...', '<div id="batchAddResults" class="space-y-2"></div>');
+  const results = document.getElementById('batchAddResults');
+
+  let done = 0, ok = 0, err = 0;
+  for (const bi in resolutionsByBatch) {
+    const b = batch[bi];
+    const row = document.createElement('div');
+    row.className = 'p-3 rounded-lg border-2 border-black bg-white flex items-center gap-3';
+    row.innerHTML = '<span class="loader-small"></span><span class="font-bold flex-1 truncate">' + b.pcName + '</span><span class="text-xs opacity-60">adding...</span>';
+    results.appendChild(row);
+    try {
+      const r = await api('/add-lines-to-bill/' + b.realmId, {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ bill_id: b.billId, resolutions: resolutionsByBatch[bi] })
+      });
+      row.innerHTML = '<span class="badge badge-done">Done</span><span class="font-bold flex-1 truncate">' + b.pcName + '</span><span class="text-xs opacity-70">+' + r.lines_added + ' lines</span>';
+      ok++;
+    } catch (e) {
+      row.innerHTML = '<span class="badge badge-error">Error</span><span class="font-bold flex-1 truncate">' + b.pcName + '</span><span class="text-xs text-red-600">' + e.message + '</span>';
+      err++;
+    }
+    done++;
+    showFloat('Adding to bills', done + ' / ' + Object.keys(resolutionsByBatch).length, 'running');
+  }
+  setRunning(false);
+  const banner = document.createElement('div');
+  banner.className = 'mt-4 p-4 rounded-xl';
+  banner.style = 'background: #1a1a1a; color: #F5C518; border: 3px solid #1a1a1a;';
+  banner.innerHTML = '<div class="flex items-center gap-4 justify-center text-sm font-bold"><span>✓ ' + ok + ' bills updated</span><span>✗ ' + err + ' failed</span></div>';
+  results.appendChild(banner);
+  showFloat('Batch complete', '✓ ' + ok + ' · ✗ ' + err, err ? 'error' : 'done');
+  playDing();
+  loadRuns();
 }
 
 function renderRunResult(r) {
@@ -714,8 +816,7 @@ function openModal(title, body) {
 function closeModal() {
   if (isTaskRunning) return;
   document.getElementById('modal').classList.remove('open');
-  hideFloat();
-  currentModalContent = null;
+  hideFloat(); currentModalContent = null;
 }
 function minimizeModal() {
   document.getElementById('modal').classList.remove('open');
